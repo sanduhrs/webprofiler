@@ -1,0 +1,13 @@
+webprofiler.profiler:
+  path: '/admin/profiler/view/{token}'
+  defaults:
+    _content: '\Drupal\webprofiler\Controller\WebprofilerController::profilerAction'
+    _title: 'Drupal Profiler'
+  requirements:
+    _permission: 'access web profiler'
+webprofiler.toolbar:
+  path: '/profiler/{token}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\WebprofilerController::toolbarAction'
+  requirements:
+    _permission: 'access web profiler'

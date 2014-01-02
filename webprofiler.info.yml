@@ -1,0 +1,6 @@
+name: Web Profiler
+type: module
+description: 'Drupal Web Profiler.'
+package: Other
+version: 0.1
+core: 8.x

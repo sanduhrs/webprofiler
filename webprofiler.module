@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function webprofiler_theme() {
+  return array(
+    'webprofiler_loader' => array(
+      'template' => 'Profiler/webprofiler_loader',
+      'variables' => array('token' => NULL),
+    ),
+    'webprofiler_toolbar' => array(
+      'template' => 'Profiler/webprofiler_toolbar',
+      'variables' => array('token' => NULL, 'templates' => array(), 'profile' => NULL, 'profiler_url' => NULL),
+    ),
+    'webprofiler_panel' => array(
+      'template' => 'Profiler/webprofiler_panel',
+      'variables' => array(
+        'token' => NULL,
+        'templates' => array(),
+        'profile' => NULL,
+        'collector' => NULL,
+        'panel' => NULL,
+        'page' => NULL,
+        'request' => NULL
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function webprofiler_permission() {
+  $perms = array(
+    'access web profiler' => array(
+      'title' => t('Access web profiler'),
+      'description' => t('Access web profiler.'),
+    ),
+  );
+
+  return $perms;
+}
+
+/**
+ * Implements hook_cache_flush().
+ */
+function webprofiler_cache_flush() {
+  // TODO there is a better method to get the service container within a module?
+  // Or we can move this code somewhere else?
+  $profiler = drupal_container()->get('profiler');
+  $profiler->purge();
+}
+
+/**
+ * Implements hook_library_info().
+ */
+function webprofiler_library_info() {
+  $libraries['webprofiler'] = array(
+    'title' => 'Web Profiler',
+    'version' => \Drupal::VERSION,
+    'dependencies' => array(
+      array('system', 'jquery'),
+      array('system', 'drupal'),
+      array('system', 'drupalSettings'),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_page_build().
+ */
+function webprofiler_page_build(&$page) {
+  if (!\Drupal::currentUser()->hasPermission('access developer toolbar')) {
+    return;
+  }
+
+  $page['#attached']['library'][] = array('webprofiler', 'webprofiler');
+}
