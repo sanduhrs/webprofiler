@@ -28,7 +28,9 @@ class DatabaseDataCollector extends DataCollector {
    * @api
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-    $this->data['queries'] = $this->database->getLogger()->get('webprofiler');
+    $queries = $this->database->getLogger()->get('webprofiler');
+    usort($queries, array("Drupal\\webprofiler\\DataCollector\\DatabaseDataCollector", "orderQuery"));
+    $this->data['queries'] = $queries;
 
     $options = $this->database->getConnectionOptions();
 
@@ -36,6 +38,22 @@ class DatabaseDataCollector extends DataCollector {
     unset($options['password']);
 
     $this->data['database'] = $options;
+  }
+
+  /**
+   * @param $a
+   * @param $b
+   *
+   * @return int
+   */
+  private function orderQuery($a, $b) {
+    $at = $a['time'];
+    $bt = $b['time'];
+
+    if ($at == $bt) {
+      return 0;
+    }
+    return ($at < $bt) ? 1 : -1;
   }
 
   /**

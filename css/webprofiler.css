@@ -1,0 +1,243 @@
+#menu-profiler {
+    border-right: 1px solid #dfdfdf;
+    margin: 0;
+    padding: 0;
+}
+
+#menu-profiler li {
+    border-bottom: 1px solid #dfdfdf;
+    position: relative;
+    padding-bottom: 0;
+    display: block;
+    background-color: #f6f6f6;
+    z-index: 10;
+    height: 52px;
+}
+
+#menu-profiler li a {
+    color: #404040;
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#menu-profiler li a span.label {
+    display: block;
+    padding: 20px 0px 16px 65px;
+    min-height: 16px;
+    overflow: hidden;
+}
+
+#menu-profiler li a span.icon {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 60px;
+    text-align: center;
+}
+
+#menu-profiler li.selected a,
+#menu-profiler li a:hover {
+    background: #d1d1d1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA7CAAAAACfn7+eAAAACXZwQWcAAAABAAAAOwDiPIGUAAAAJElEQVQIW2N4y8TA9B+KGZDYEP5/FD4Eo7IgNLJqZDUIMRRTAcmVHUZf/1g/AAAAAElFTkSuQmCC) repeat-x 0 0;
+}
+
+#navigation div:first-child,
+#menu-profiler li:first-child,
+#menu-profiler li:first-child a,
+#menu-profiler li:first-child a span.label {
+    border-radius: 16px 0 0 0;
+}
+
+#menu-profiler li a span.count {
+    padding: 0;
+    position: absolute;
+    right: 10px;
+    top: 20px;
+}
+
+#collector-wrapper {
+    float: left;
+    width: 100%;
+}
+
+#collector-content {
+    margin-left: 250px;
+    padding: 30px 40px 40px;
+    background-color: #eee;
+}
+
+#navigation {
+    float: left;
+    width: 250px;
+    margin-left: -100%;
+}
+
+#collector-content table td {
+    background-color: white;
+}
+
+#menu-profiler span.count span {
+    display: inline-block;
+    background-color: #aacd4e;
+    border-radius: 6px;
+    padding: 4px;
+    color: #fff;
+    margin-right: 2px;
+    font-size: 11px;
+}
+
+#resume {
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #dfdfdf;
+    padding: 18px 10px 0px;
+    margin-left: 250px;
+    height: 34px;
+    color: #313131;
+    font-size: 12px;
+    border-top-right-radius: 16px;
+}
+
+a#resume-view-all {
+    display: inline-block;
+    padding: 0.2em 0.7em;
+    margin-right: 0.5em;
+    background-color: #666;
+    border-radius: 16px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+table th.value {
+    width: 450px;
+    background-color: #dfeeb8;
+}
+
+#content h2 {
+    font-size: 24px;
+    color: #313131;
+    font-weight: bold;
+}
+
+#content #main p {
+    color: #313131;
+    font-size: 14px;
+    padding-bottom: 20px;
+}
+
+.sf-reset .block-exception-detected .text-exception {
+    left: 10px;
+    right: 10px;
+    width: 95%;
+}
+
+.sf-reset .block-exception-detected .illustration-exception {
+    display: none;
+}
+
+ul.alt {
+    margin: 10px 0 30px;
+}
+
+ul.alt li {
+    padding: 5px 7px;
+    font-size: 13px;
+}
+
+ul.alt li.even {
+    background: #f1f7e2;
+}
+
+ul.alt li.error {
+    background-color: #f66;
+    margin-bottom: 1px;
+}
+
+ul.alt li.warning {
+    background-color: #ffcc00;
+    margin-bottom: 1px;
+}
+
+ul.sf-call-stack li {
+    text-size: small;
+    padding: 0 0 0 20px;
+}
+
+td.main, td.menu {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: top;
+}
+
+#navigation div:first-child {
+    margin: 0 0 20px;
+    border-top: 0;
+}
+
+#navigation .import label {
+    float: none;
+    display: inline;
+}
+
+#navigation .import input {
+    width: 100px;
+}
+
+#collector-content .routing tr.matches td {
+    background-color: #0e0;
+}
+
+#collector-content .routing tr.almost td {
+    background-color: #fa0;
+}
+
+.collapsed-menu-parents #resume,
+.collapsed-menu-parents #collector-content {
+    margin-left: 60px !important;
+}
+
+.collapsed-menu {
+    width: 60px !important;
+}
+
+.collapsed-menu span :not(.icon) {
+    display: none !important;
+}
+
+.collapsed-menu span.icon img {
+    display: inline !important;
+}
+
+/* query panel */
+
+#collector-content .query {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#collector-content .query-info {
+    margin: 10px 0;
+}
+
+#collector-content .query-info-button {
+    background-color: #CCC;
+    color: #fff;
+    padding: 3px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#collector-content .query-info-button.open {
+    background-color: #AAA;
+}
+
+#collector-content .query-data {
+    display: none;
+    margin: 10px 0;
+}
