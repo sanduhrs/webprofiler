@@ -46,9 +46,7 @@ function webprofiler_permission() {
  * Implements hook_cache_flush().
  */
 function webprofiler_cache_flush() {
-  // TODO there is a better method to get the service container within a module?
-  // Or we can move this code somewhere else?
-  $profiler = drupal_container()->get('profiler');
+  $profiler = \Drupal::service('profiler');
   $profiler->purge();
 }
 

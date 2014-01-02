@@ -30,8 +30,5 @@
 
 {% block panel %}
     <h2>Rendered forms</h2>
-
-    {% for form in collector.forms %}
-        {{ form }}<br/>
-    {% endfor %}
+    {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.forms } only %}
 {% endblock %}
