@@ -30,6 +30,12 @@ class DatabaseDataCollector extends DataCollector {
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $queries = $this->database->getLogger()->get('webprofiler');
     usort($queries, array("Drupal\\webprofiler\\DataCollector\\DatabaseDataCollector", "orderQuery"));
+
+    foreach ($queries as &$query) {
+      // remove caller
+      unset($query['caller']['args']);
+    }
+
     $this->data['queries'] = $queries;
 
     $options = $this->database->getConnectionOptions();
