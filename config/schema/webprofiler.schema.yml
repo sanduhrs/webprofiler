@@ -1,0 +1,7 @@
+webprofiler.config:
+  type: mapping
+  label: 'Webprofiler configuration'
+  mapping:
+    purge_on_cache_clear:
+      type: boolean
+      label: 'Purge profiles on cache clear'

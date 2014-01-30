@@ -2,7 +2,10 @@
 
 namespace Drupal\webprofiler\Controller;
 
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Datetime\Date;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,12 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Cmf\Component\Routing\ChainRouter;
 use Twig_Loader_Filesystem;
 
-class WebprofilerController implements ContainerInjectionInterface {
+class WebprofilerController extends ControllerBase implements ContainerInjectionInterface {
 
   private $profiler;
   private $router;
   private $templateManager;
   private $twig_loader;
+  private $date;
+  private $form_builder;
 
   /**
    * {@inheritdoc}
@@ -26,7 +31,9 @@ class WebprofilerController implements ContainerInjectionInterface {
       $container->get('profiler'),
       $container->get('router'),
       $container->get('templateManager'),
-      $container->get('twig.loader')
+      $container->get('twig.loader'),
+      $container->get('date'),
+      $container->get('form_builder')
     );
   }
 
@@ -35,12 +42,16 @@ class WebprofilerController implements ContainerInjectionInterface {
    * @param ChainRouter $router
    * @param TemplateManager $templateManager
    * @param Twig_Loader_Filesystem $twig_loader
+   * @param Date $date
+   * @param FormBuilderInterface $form_builder
    */
-  public function __construct(Profiler $profiler, ChainRouter $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader) {
+  public function __construct(Profiler $profiler, ChainRouter $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader, Date $date, FormBuilderInterface $form_builder) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
     $this->twig_loader = $twig_loader;
+    $this->date = $date;
+    $this->form_builder = $form_builder;
   }
 
   /**
@@ -118,6 +129,34 @@ class WebprofilerController implements ContainerInjectionInterface {
     );
 
     return new Response(render($toolbar));
+  }
+
+  /**
+   *
+   */
+  public function listAction(Request $request) {
+    $limit = $request->get('limit', 10);
+    $this->profiler->disable();
+
+    $tokens = $this->profiler->find('', '', $limit, '', '', '');
+
+    $rows = array();
+    foreach ($tokens as $token) {
+      $row = array();
+      $row[] = l($token['token'], "admin/config/development/profiler/view/{$token['token']}");
+      $row[] = $token['ip'];
+      $row[] = $token['method'];
+      $row[] = $token['url'];
+      $row[] = $this->date->format($token['time']);
+
+      $rows[] = $row;
+    }
+
+    return array(
+      '#theme' => 'table',
+      '#rows' => $rows,
+      '#header' => array($this->t('Token'), $this->t('Ip'), $this->t('Method'), $this->t('Url'), $this->t('Time')),
+    );
   }
 
 }

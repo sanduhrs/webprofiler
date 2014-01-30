@@ -8,7 +8,7 @@
     {% endset %}
     {% set text %}
     <div class="sf-toolbar-info-piece">
-        <b>Memory usage</b>
+        <b>{{ 'Memory usage'|t }}</b>
         <span>{{ '%.1f'|format(collector.memory / 1024 / 1024) }}
             / {{ collector.memoryLimit == -1 ? '&infin;' : '%.1f'|format(collector.memoryLimit / 1024 / 1024)|escape }}
             MB</span>

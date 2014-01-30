@@ -9,11 +9,11 @@
     {% set text %}
     {% spaceless %}
         <div class="sf-toolbar-info-piece">
-            <b>Drupal version</b>
+            <b>{{ 'Drupal version'|t }}</b>
             <span>{{ collector.version }}</span>
         </div>
         <div class="sf-toolbar-info-piece">
-            <b>Installed profile</b>
+            <b>{{ 'Installed profile'|t }}</b>
             <span>{{ collector.profile }}</span>
         </div>
     {% endspaceless %}

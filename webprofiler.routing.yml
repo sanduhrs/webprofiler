@@ -1,13 +1,43 @@
+# toolbar
+webprofiler.toolbar:
+  path: '/profiler/{token}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\WebprofilerController::toolbarAction'
+  requirements:
+    _permission: 'access web profiler'
+
+# view profile
 webprofiler.profiler:
-  path: '/admin/profiler/view/{token}'
+  path: '/admin/config/development/profiler/view/{token}'
   defaults:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::profilerAction'
     _title: 'Drupal Profiler'
   requirements:
     _permission: 'access web profiler'
-webprofiler.toolbar:
-  path: '/profiler/{token}'
+
+# list stored profiles
+webprofiler.admin_list:
+  path: '/admin/config/development/profiler/list'
   defaults:
-    _controller: '\Drupal\webprofiler\Controller\WebprofilerController::toolbarAction'
+    _content: '\Drupal\webprofiler\Controller\WebprofilerController::listAction'
+    _title: 'List'
+  requirements:
+    _permission: 'access web profiler'
+
+# manage profiles (import/export/purge)
+webprofiler.admin_manage:
+  path: '/admin/config/development/profiler/manage'
+  defaults:
+    _form: 'Drupal\webprofiler\Form\PurgeForm'
+    _title: 'Manage'
+  requirements:
+    _permission: 'access web profiler'
+
+# configure webprofiler
+webprofiler.admin_configure:
+  path: '/admin/config/development/profiler/configure'
+  defaults:
+    _form: 'Drupal\webprofiler\Form\ConfigForm'
+    _title: 'Configure'
   requirements:
     _permission: 'access web profiler'

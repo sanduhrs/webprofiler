@@ -1,16 +1,16 @@
 <table {% if class is defined %}class='{{ class }}'{% endif %} >
     <thead>
-        <tr>
-            <th scope="col">Key</th>
-            <th scope="col">Value</th>
-        </tr>
+    <tr>
+        <th scope="col">{{ 'Key'|t }}</th>
+        <th scope="col">{{ 'Value'|t }}</th>
+    </tr>
     </thead>
     <tbody>
-        {% for key in data|keys|sort %}
-            <tr>
-                <td>{{ key }}</td>
-                <td>{{ data[key] }}</td>
-            </tr>
-        {% endfor %}
+    {% for key in data|keys|sort %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ data[key] }}</td>
+        </tr>
+    {% endfor %}
     </tbody>
 </table>

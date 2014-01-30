@@ -5,8 +5,8 @@
 (function ($, Drupal, drupalSettings) {
 
     Drupal.behaviors.webprofiler = {
-        attach: function(context) {
-            $('.query-info-button').click(function() {
+        attach: function (context) {
+            $('.query-info-button').click(function () {
                 $(this).toggleClass('open');
                 $('.query-data', $(this).parent()).toggle();
             });

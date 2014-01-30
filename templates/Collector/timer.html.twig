@@ -8,7 +8,7 @@
     {% endset %}
     {% set text %}
     <div class="sf-toolbar-info-piece">
-        <b>Total time</b>
+        <b>{{ 'Total time'|t }}</b>
         <span>{{ '%.0f ms'|format(collector.timer) }}</span>
     </div>
     {% endset %}

@@ -1,16 +1,21 @@
 <table {% if class is defined %}class='{{ class }}'{% endif %} >
     <thead>
-        <tr>
-            <th scope="col">Key</th>
-            <th scope="col">Value</th>
-        </tr>
+    <tr>
+        <th scope="col">{{ 'Key'|t }}</th>
+        <th scope="col">{{ 'Value'|t }}</th>
+    </tr>
     </thead>
     <tbody>
-        {% for key in bag.keys|sort %}
-            <tr>
-                <td>{{ key }}</td>
+    {% for key in bag.keys|sort %}
+        <tr>
+            <td>{{ key }}</td>
+
+            {% if bag.get(key) is iterable %}
+                <td>{{ bag.get(key)|join(', ') }}</td>
+            {% else %}
                 <td>{{ bag.get(key) }}</td>
-            </tr>
-        {% endfor %}
+            {% endif %}
+        </tr>
+    {% endfor %}
     </tbody>
 </table>

@@ -1,6 +1,20 @@
 <?php
 
 /**
+ * Implements hook_menu().
+ */
+function webprofiler_menu() {
+  $items = array();
+
+  $items['admin/config/development/profiler/list'] = array(
+    'title' => 'Webprofiler',
+    'description' => 'List saved profiles, import/export profiles and manage configuration.',
+    'route_name' => 'webprofiler.admin_list',
+  );
+  return $items;
+}
+
+/**
  * Implements hook_theme().
  */
 function webprofiler_theme() {
@@ -46,8 +60,12 @@ function webprofiler_permission() {
  * Implements hook_cache_flush().
  */
 function webprofiler_cache_flush() {
-  $profiler = \Drupal::service('profiler');
-  $profiler->purge();
+  $config = \Drupal::configFactory()->get('webprofiler.config');
+
+  if ($config->get('purge_on_cache_clear')) {
+    $profiler = \Drupal::service('profiler');
+    $profiler->purge();
+  }
 }
 
 /**

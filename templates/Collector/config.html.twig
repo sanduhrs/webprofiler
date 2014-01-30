@@ -13,12 +13,12 @@
             <span>{{ collector.phpversion }}</span>
         </div>
         <div class="sf-toolbar-info-piece sf-toolbar-info-php-ext">
-            <b>PHP Extensions</b>
+            <b>{{ 'PHP Extensions'|t }}</b>
             <span class="sf-toolbar-status sf-toolbar-status-{{ collector.hasxdebug ? 'green' : 'red' }}">xdebug</span>
             <span class="sf-toolbar-status sf-toolbar-status-{{ collector.hasaccelerator ? 'green' : 'red' }}">accel</span>
         </div>
         <div class="sf-toolbar-info-piece">
-            <b>PHP SAPI</b>
+            <b>{{ 'PHP SAPI'|t }}</b>
             <span>{{ collector.sapiName }}</span>
         </div>
     {% endspaceless %}
@@ -31,16 +31,16 @@
 
     {# Environment #}
     {% set icon %}
-    <a href="/admin/profiler/view/{{ token }}?panel=config">
-    <img width="21" height="28" alt="Environment"
-         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAcCAMAAAC5xgRsAAAAZlBMVEX///////////////////////////////////////////////////////////////////////////////////////////+ZmZmZmZlISEhJSUmdnZ1HR0fR0dFZWVlpaWlfX18/Pz+puygPAAAAIXRSTlMACwwlJygpLzIzNjs8QEtMUmd6e32AucDBw8fIydTm6u5l8MjvAAAAo0lEQVR42r2P2Q6CMBBFL6XsZRGRfZv//0nbDBNEE19MnJeTc5ILKf58ahiUwzy/AJpIWwREwQnEXRdbGCLjrO+djWRvVMiJcigxB7viGogxDdJpSmHEmCVPS7YczJvgUu+CS30IvtbNYZMvsGVo2mVpG/kbm4auiCpdcC3YPCAhSpAdUzaAn6qPKZtUT6ZSzb4bi2hdo9MQ1nX4ASjfV+/4/Z40pyCHrNTbIgAAAABJRU5ErkJggg==">
-    <span class="sf-toolbar-info-piece-additional sf-toolbar-status">{{ token }}</span>
+    <a href="/admin/config/development/profiler/view/{{ token }}?panel=config">
+        <img width="21" height="28" alt="Environment"
+             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAcCAMAAAC5xgRsAAAAZlBMVEX///////////////////////////////////////////////////////////////////////////////////////////+ZmZmZmZlISEhJSUmdnZ1HR0fR0dFZWVlpaWlfX18/Pz+puygPAAAAIXRSTlMACwwlJygpLzIzNjs8QEtMUmd6e32AucDBw8fIydTm6u5l8MjvAAAAo0lEQVR42r2P2Q6CMBBFL6XsZRGRfZv//0nbDBNEE19MnJeTc5ILKf58ahiUwzy/AJpIWwREwQnEXRdbGCLjrO+djWRvVMiJcigxB7viGogxDdJpSmHEmCVPS7YczJvgUu+CS30IvtbNYZMvsGVo2mVpG/kbm4auiCpdcC3YPCAhSpAdUzaAn6qPKZtUT6ZSzb4bi2hdo9MQ1nX4ASjfV+/4/Z40pyCHrNTbIgAAAABJRU5ErkJggg==">
+        <span class="sf-toolbar-info-piece-additional sf-toolbar-status">{{ token }}</span>
     </a>
     {% endset %}
     {% set text %}
     {% spaceless %}
         <div class="sf-toolbar-info-piece">
-            <b>Token</b>
+            <b>{{ 'Token'|t }}</b>
                 <span>
                     {% if profiler_url %}
                         <a href="{{ profiler_url }}">{{ collector.token }}</a>
@@ -69,14 +69,14 @@
 {% endblock %}
 
 {% block panel %}
-    <h2>PHP configuration</h2>
+    <h2>{{ 'PHP configuration'|t }}</h2>
     <table>
         <tr>
-            <th>Key</th>
-            <th>Value</th>
+            <th>{{ 'Key'|t }}</th>
+            <th>{{ 'Value'|t }}</th>
         </tr>
         <tr>
-            <th>PHP version</th>
+            <th>{{ 'PHP version'|t }}</th>
             <td>{{ collector.phpversion }}</td>
         </tr>
         <tr>
@@ -84,7 +84,7 @@
             <td>{{ collector.hasxdebug ? 'enabled' : 'disabled' }}</td>
         </tr>
         <tr>
-            <th>PHP acceleration</th>
+            <th>{{ 'PHP acceleration'|t }}</th>
             <td>{{ collector.hasaccelerator ? 'enabled' : 'disabled' }}</td>
         </tr>
         <tr>
@@ -104,17 +104,17 @@
             <td>{{ collector.haseaccelerator ? 'enabled' : 'disabled' }}</td>
         </tr>
         <tr>
-            <th>Full PHP configuration</th>
+            <th>{{ 'Full PHP configuration'|t }}</th>
             <td><a href="/admin/reports/status/php"><code>phpinfo</code></a></td>
         </tr>
     </table>
 
     {% if collector.modules %}
-        <h2>Active modules</h2>
+        <h2>{{ 'Active modules'|t }}</h2>
         <table>
             <tr>
-                <th>Name</th>
-                <th>Path</th>
+                <th>{{ 'Name'|t }}</th>
+                <th>{{ 'Path'|t }}</th>
             </tr>
             {% set modules = collector.modules %}
             {% for name in modules|keys|sort %}
