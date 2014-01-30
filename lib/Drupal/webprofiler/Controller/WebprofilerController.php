@@ -71,8 +71,6 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     // TODO remove this when https://drupal.org/node/2143557 comes in.
     $this->twig_loader->addPath(drupal_get_path('module', 'webprofiler') . '/templates', 'webprofiler');
 
-    //kpr($profile->getCollector($panel)->getQueries());
-
     $webprofiler_path = drupal_get_path('module', 'webprofiler');
 
     $profiler = array(
