@@ -32,7 +32,7 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config' }
   webprofiler.request:
-    class: Symfony\Component\HttpKernel\DataCollector\RequestDataCollector
+    class: Drupal\webprofiler\DataCollector\RequestDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/request.html.twig', id:'request' }
       - { name: event_subscriber }
