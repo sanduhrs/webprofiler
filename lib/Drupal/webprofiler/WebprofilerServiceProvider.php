@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Contains \Drupal\webprofiler\WebprofilerServiceProvider.
+ */
+
 namespace Drupal\webprofiler;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -7,9 +12,7 @@ use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Drupal\webprofiler\Compiler\ProfilerPass;
 
 /**
- * Class WebprofilerServiceProvider
- *
- * @package Drupal\webprofiler
+ * Defines a service profiler for the webprofiler module.
  */
 class WebprofilerServiceProvider extends ServiceProviderBase {
 
