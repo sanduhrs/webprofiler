@@ -10,6 +10,7 @@ namespace Drupal\webprofiler;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Drupal\webprofiler\Compiler\ProfilerPass;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Defines a service profiler for the webprofiler module.
@@ -21,6 +22,13 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
    */
   public function register(ContainerBuilder $container) {
     $container->addCompilerPass(new ProfilerPass());
+
+    // Replace the existing state service with a wrapper to collect the
+    // requested data.
+    $container->setDefinition('state.default', $container->getDefinition('state'));
+    $container->register('state', 'Drupal\webprofiler\DataCollector\StateDataCollector')
+      ->addArgument(new Reference(('state.default')))
+      ->addTag('data_collector', array('template' => '@webprofiler/Collector/state.html.twig', 'id' => 'state', 'priority' => -10));
   }
 
 }
