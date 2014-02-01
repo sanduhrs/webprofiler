@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Implements hook_menu().
+ * Implements hook_menu_default_links().
  */
-function webprofiler_menu() {
-  $items = array();
-
-  $items['admin/config/development/profiler/list'] = array(
-    'title' => 'Webprofiler',
+function webprofiler_menu_default_links() {
+  $links = array();
+  $links['webprofiler.admin_list'] = array(
+    'link_title' => 'Webprofiler',
     'description' => 'List saved profiles, import/export profiles and manage configuration.',
     'route_name' => 'webprofiler.admin_list',
+    'parent' => 'system.admin.config.development',
   );
-  return $items;
+  return $links;
 }
 
 /**
