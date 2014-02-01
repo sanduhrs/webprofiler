@@ -108,21 +108,4 @@
             <td><a href="{{ url("system.php") }}"><code>phpinfo</code></a></td>
         </tr>
     </table>
-
-    {% if collector.modules %}
-        <h2>{{ 'Active modules'|t }}</h2>
-        <table>
-            <tr>
-                <th>{{ 'Name'|t }}</th>
-                <th>{{ 'Path'|t }}</th>
-            </tr>
-            {% set modules = collector.modules %}
-            {% for name in modules|keys|sort %}
-                <tr>
-                    <th>{{ name }}</th>
-                    <td>{{ modules[name] }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
 {% endblock %}

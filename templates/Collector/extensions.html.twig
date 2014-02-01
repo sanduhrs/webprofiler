@@ -9,11 +9,11 @@
     {% endset %}
     {% set text %}
     <div class="sf-toolbar-info-piece">
-        <b>{{ 'Modules'|t }}</b>
+        <b>{{ 'Active Modules'|t }}</b>
         <span>{{ collector.moduleinfo|length }}</span>
     </div>
     <div class="sf-toolbar-info-piece">
-        <b>{{ 'Themes'|t }}</b>
+        <b>{{ 'Active Themes'|t }}</b>
         <span>{{ collector.themeinfo|length }}</span>
     </div>
     {% endset %}
@@ -38,8 +38,8 @@
 {% block panel %}
     <h2>Drupal extensions</h2>
 
-    <h3>Modules</h3>
+    <h3>{{ 'Active modules'|t }}</h3>
         {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.moduleinfo, 'class': 'inline' } only %}
-    <h3>Themes</h3>
+    <h3>{{ 'Active themes'|t }}</h3>
         {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.themeinfo, 'class': 'inline' } only %}
 {% endblock %}

@@ -13,17 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DrupalConfigDataCollector extends DataCollector {
 
-  private $module_handler;
-
-  /**
-   * Constructor.
-   *
-   * @param ModuleHandlerInterface $module_handler
-   */
-  public function __construct(ModuleHandlerInterface $module_handler) {
-    $this->module_handler = $module_handler;
-  }
-
   /**
    * {@inheritdoc}
    */
@@ -40,8 +29,6 @@ class DrupalConfigDataCollector extends DataCollector {
       'bundles' => array(),
       'sapi_name' => php_sapi_name()
     );
-
-    $this->data['modules'] = $this->module_handler->getModuleList();
   }
 
   /**
@@ -123,13 +110,6 @@ class DrupalConfigDataCollector extends DataCollector {
    */
   public function hasAccelerator() {
     return $this->hasApc() || $this->hasZendOpcache() || $this->hasEAccelerator() || $this->hasXCache() || $this->hasWinCache();
-  }
-
-  /**
-   * @return mixed
-   */
-  public function getModules() {
-    return $this->data['modules'];
   }
 
   /**
