@@ -27,8 +27,15 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // requested data.
     $container->setDefinition('state.default', $container->getDefinition('state'));
     $container->register('state', 'Drupal\webprofiler\DataCollector\StateDataCollector')
-      ->addArgument(new Reference(('state.default')))
+      ->addArgument(new Reference('state.default'))
       ->addTag('data_collector', array('template' => '@webprofiler/Collector/state.html.twig', 'id' => 'state', 'priority' => -10));
+
+    // Replace the existing config.factory service with a wrapper to collect the
+    // requested configs.
+    $container->setDefinition('config.factory.default', $container->getDefinition('config.factory'));
+    $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
+      ->addArgument(new Reference('webprofiler.config'))
+      ->addArgument(new Reference('config.factory.default'));
   }
 
 }
