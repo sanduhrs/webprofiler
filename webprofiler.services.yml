@@ -63,3 +63,7 @@ services:
     arguments: ['@router.route_provider']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/routing.html.twig', id:'routing' }
+  webprofiler.cache:
+    class: Drupal\webprofiler\DataCollector\CacheDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache' }
