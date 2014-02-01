@@ -54,3 +54,8 @@ services:
     arguments: ['@database']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/database.html.twig', id:'database' }
+  webprofiler.drupal_extensions:
+    class: Drupal\webprofiler\DataCollector\ExtensionDataCollector
+    arguments: ['@module_handler', '@theme_handler']
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/extensions.html.twig', id:'drupal_extension' }
