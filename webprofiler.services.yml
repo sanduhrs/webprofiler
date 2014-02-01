@@ -27,9 +27,9 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/drupal.html.twig', id:'drupal' }
   webprofiler.config:
-    class: Drupal\webprofiler\DataCollector\DrupalConfigDataCollector
+    class: Drupal\webprofiler\DataCollector\PhpConfigDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config' }
+      - { name: data_collector, template:'@webprofiler/Collector/php_config.html.twig', id:'php_config' }
   webprofiler.request:
     class: Drupal\webprofiler\DataCollector\RequestDataCollector
     tags:

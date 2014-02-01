@@ -2,16 +2,14 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * DrupalConfigDataCollector.
+ * Provides a data collector to collect all kind of php information.
  */
-class DrupalConfigDataCollector extends DataCollector {
+class PhpConfigDataCollector extends DataCollector {
 
   /**
    * {@inheritdoc}
@@ -125,6 +123,6 @@ class DrupalConfigDataCollector extends DataCollector {
    * {@inheritdoc}
    */
   public function getName() {
-    return 'config';
+    return 'php_config';
   }
 }
