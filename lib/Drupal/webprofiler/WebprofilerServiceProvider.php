@@ -62,5 +62,19 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
+
+    // Replaces the event dispatcher passed into the http kernel.
+    $definition = $container->findDefinition('http_kernel');
+    $arguments = $definition->getArguments();
+    $arguments[0] = new Reference('webprofiler.debug.event_dispatcher');
+    $arguments[2] = new Reference('webprofiler.debug.controller_resolver');
+    $definition->setArguments($arguments);
+
+    // Register an additional twig extension.
+    $container->getDefinition('twig')
+      ->addMethodCall('addExtension', array(new Reference('webprofiler.twig_extension')));
+
   }
+
 }
+

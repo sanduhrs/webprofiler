@@ -84,3 +84,18 @@ services:
     class: Drupal\webprofiler\DataCollector\ConfigDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config' }
+  stopwatch:
+    class: Symfony\Component\Stopwatch\Stopwatch
+  webprofiler.event:
+    class: Symfony\Component\HttpKernel\DataCollector\EventDataCollector
+    arguments: ['@event_dispatcher']
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', priority: 255 }
+  webprofiler.debug.event_dispatcher:
+    class: Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
+    arguments: ['@event_dispatcher', '@stopwatch']
+  webprofiler.debug.controller_resolver:
+    class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
+    arguments: ['@controller_resolver', '@stopwatch']
+  webprofiler.twig_extension:
+    class: Drupal\webprofiler\Twig\TwigExtension

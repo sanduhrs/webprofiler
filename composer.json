@@ -1,0 +1,9 @@
+{
+  "name": "drupal/webprofiler",
+  "description": "",
+  "type": "drupal-webprofiler",
+  "license": "GPL-2.0+",
+  "require": {
+    "symfony/stopwatch": "2.4.*"
+  }
+}
