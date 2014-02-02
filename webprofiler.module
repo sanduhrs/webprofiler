@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Implements hook_menu_default_links().
+ * Implements hook_menu_link_defaults().
  */
-function webprofiler_menu_default_links() {
+function webprofiler_menu_link_defaults() {
   $links = array();
   $links['webprofiler.admin_list'] = array(
     'link_title' => 'Webprofiler',
