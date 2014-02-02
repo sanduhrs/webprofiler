@@ -28,7 +28,7 @@ webprofiler.admin_list:
 webprofiler.admin_manage:
   path: '/admin/config/development/profiler/manage'
   defaults:
-    _form: 'Drupal\webprofiler\Form\PurgeForm'
+    _form: 'Drupal\webprofiler\Form\ManageForm'
     _title: 'Manage'
   requirements:
     _permission: 'access web profiler'
