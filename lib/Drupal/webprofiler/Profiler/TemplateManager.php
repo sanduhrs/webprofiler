@@ -90,9 +90,6 @@ class TemplateManager {
   protected function getNames(Profile $profile) {
     $templates = array();
 
-    // TODO remove this when https://drupal.org/node/2143557 comes in.
-    $this->twigLoader->addPath(drupal_get_path('module', 'webprofiler') . '/templates', 'webprofiler');
-
     foreach ($this->templates as $arguments) {
       if (NULL === $arguments) {
         continue;

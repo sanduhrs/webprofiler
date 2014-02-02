@@ -85,21 +85,12 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     }
 
     $template_manager = $this->templateManager;
-    $panel = $request->query->get('panel', 'request');
-
-    // TODO remove this when https://drupal.org/node/2143557 comes in.
-    $this->twig_loader->addPath(drupal_get_path('module', 'webprofiler') . '/templates', 'webprofiler');
-
     $webprofiler_path = drupal_get_path('module', 'webprofiler');
 
     $profiler = array(
       '#theme' => 'webprofiler_panel',
       '#token' => $token,
       '#profile' => $profile,
-      '#collector' => $profile->getCollector($panel),
-      '#panel' => $panel,
-      '#page' => '',
-      '#request' => $request,
       '#templates' => $template_manager->getTemplates($profile),
       '#attached' => array(
         'css' => array(
@@ -107,6 +98,12 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         ),
         'js' => array(
           $webprofiler_path . '/js/webprofiler.js' => array(),
+        ),
+        'library' => array(
+          array(
+            'system',
+            'drupal.vertical-tabs',
+          )
         )
       )
     );
