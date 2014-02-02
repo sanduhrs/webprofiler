@@ -13,7 +13,7 @@ use Drupal\webprofiler\DataCollector\CacheDataCollector;
 /**
  * Wraps a cache factory to register all calls to the cache system.
  */
-class CacheFactoryWrapper implements CacheFactoryInterface{
+class CacheFactoryWrapper implements CacheFactoryInterface {
 
   /**
    * The cache factory.

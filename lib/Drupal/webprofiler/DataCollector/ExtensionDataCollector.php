@@ -61,6 +61,9 @@ class ExtensionDataCollector extends DataCollector {
     return isset($this->data['drupal_extension']['count']) ? $this->data['drupal_extension']['count'] : 0;
   }
 
+  /**
+   * @return array
+   */
   public function moduleInfo() {
     if (!isset($this->data['drupal_extension']['modules'])) {
       return;
@@ -73,13 +76,20 @@ class ExtensionDataCollector extends DataCollector {
     return $data;
   }
 
+  /**
+   * @return array
+   */
   public function themeInfo() {
     if (!isset($this->data['drupal_extension']['themes'])) {
       return;
     }
     $data = array();
     foreach ($this->data['drupal_extension']['themes'] as $name => $info) {
-      $data[$name] = implode(' | ', array('Path: ' . $info->uri, 'Status: ' . $info->status, 'Engine: ' . $info->engine));
+      $data[$name] = implode(' | ', array(
+        'Path: ' . $info->uri,
+        'Status: ' . $info->status,
+        'Engine: ' . $info->engine
+      ));
     }
     return $data;
   }

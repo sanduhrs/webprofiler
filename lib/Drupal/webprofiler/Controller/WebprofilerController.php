@@ -157,7 +157,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     $rows = array();
     foreach ($tokens as $token) {
       $row = array();
-      $row[] = $this->linkGenerator->generate($token['token'], "webprofiler.profiler", array('token' => $token['token']));
+      $row[] = $this->linkGenerator->generate($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
       $row[] = $token['ip'];
       $row[] = $token['method'];
       $row[] = $token['url'];
