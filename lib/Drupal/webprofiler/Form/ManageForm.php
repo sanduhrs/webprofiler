@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 /**
  *
  */
-class PurgeForm extends FormBase {
+class ManageForm extends FormBase {
 
   private $profiler;
 
