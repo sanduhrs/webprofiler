@@ -25,7 +25,7 @@
 
         return {
             getPreference: getPreference,
-            setPreference: setPreference,
+            setPreference: setPreference
         }
     })();
 
@@ -38,7 +38,7 @@
                     url: Drupal.url('profiler/{{ token }}'),
                     type: 'GET',
                     success: function (results) {
-                        $("#webprofiler{{ token }}").html(results);
+                        $("#webprofiler{{ token }}").html(results[0].data);
                         $("#webprofiler{{ token }}").show();
 
                         if (Sfjs.getPreference('toolbar/displayState') == 'none') {
