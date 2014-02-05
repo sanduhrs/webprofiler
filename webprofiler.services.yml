@@ -71,3 +71,7 @@ services:
     class: Drupal\webprofiler\DataCollector\AssetDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset' }
+  webprofiler.page_cache:
+    class: Drupal\webprofiler\DataCollector\PageCacheDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/page_cache.html.twig', id:'asset' }

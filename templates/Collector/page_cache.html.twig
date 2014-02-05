@@ -1,0 +1,27 @@
+{% block menu %}
+    {{ 'Page cache'|t }}
+{% endblock %}
+
+{% block panel %}
+    <h2>{{ 'Page cache'|t }}</h2>
+    <h3>{{ 'Cache tags'|t }}</h3>
+    <ul>
+    {%  for tag in collector.getcachetags %}
+        <li>{{ tag }}</li>
+    {% endfor %}
+    </ul>
+    <h3>{{ 'Cache keys'|t }}</h3>
+    <ul>
+        {%  for key in collector.getcachekeys %}
+            <li>{{ key }}</li>
+        {% endfor %}
+    </ul>
+    <h3>{{ 'Cache bin'|t }}</h3>
+    {% if collector.getcachebin %}
+        {{ collector.getcachebin }}
+    {% endif %}
+    <h3>{{ 'Cache max age'|t }}</h3>
+    {% if collector.getcachemaxage %}
+        {{ collector.getcachemaxage  }}
+    {% endif %}
+{% endblock %}
