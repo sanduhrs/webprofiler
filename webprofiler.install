@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function webprofiler_schema() {
+  $schema['webprofiler_profiler'] = array(
+    'description' => 'The profiler storage table.',
+    'fields' => array(
+      'token' => array(
+        'description' => 'The profile token',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+      ),
+      'ip' => array(
+        'description' => 'The IP of the profile request.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+      ),
+      'url' => array(
+        'description' => 'The URL of the profile request.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+      ),
+      'method' => array(
+        'description' => 'The request method of the profile request.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+      ),
+      'profile' => array(
+        'description' => 'The actual serialized profile information',
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+      ),
+      'time' => array(
+        'description' => 'The create UNIX timestamp of this profile.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'parent' => array(
+        'description' => 'The parent profile token.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => FALSE,
+      ),
+    ),
+  );
+
+  return $schema;
+}
