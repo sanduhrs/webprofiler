@@ -66,7 +66,7 @@ class ExtensionDataCollector extends DataCollector {
    */
   public function moduleInfo() {
     if (!isset($this->data['drupal_extension']['modules'])) {
-      return;
+      return array();
     }
 
     $data = array();
@@ -81,7 +81,7 @@ class ExtensionDataCollector extends DataCollector {
    */
   public function themeInfo() {
     if (!isset($this->data['drupal_extension']['themes'])) {
-      return;
+      return array();
     }
     $data = array();
     foreach ($this->data['drupal_extension']['themes'] as $name => $info) {
