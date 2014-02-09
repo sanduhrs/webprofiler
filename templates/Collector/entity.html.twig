@@ -1,0 +1,41 @@
+{% block toolbar %}
+    {% set icon %}
+    <a href="{{ url("webprofiler.profiler", {token: token}, {fragment: 'entity'}) }}">
+        <img width="20" height="28" alt="Cache"
+             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQRJREFUeNpi/P//PwM1ARMDlcGogZQDlpMnT7pxc3NbA9nhQKxOpL5rQLwJiPeBsI6Ozl+YBOOOHTv+AOllQNwtLS39F2owKYZ/gRq8G4i3ggxEToggWzvc3d2Pk+1lNL4fFAs6ODi8JzdS7mMRVyDVoAMHDsANdAPiOCC+jCQvQKqBQB/BDbwBxK5AHA3E/kB8nKJkA8TMQBwLxaBIKQbi70AvTADSBiSadwFXpCikpKQU8PDwkGTaly9fHFigkaKIJid4584dkiMFFI6jkTJII0WVmpHCAixZQEXWYhDeuXMnyLsVlEQKI45qFBQZ8eRECi4DBaAlDqle/8A48ip6gAADANdQY88Uc0oGAAAAAElFTkSuQmCC"/>
+        <span>{{ collector.entityIds }}</span>
+    </a>
+    {% endset %}
+    {% set text %}
+
+    {% for entity_type, entity_ids in collector.entityids %}
+        <div class="sf-toolbar-info-piece">
+            <b>{{ entity_type }}</b>
+            <span>{{ entity_ids|length }}</span>
+        </div>
+    {% endfor %}
+    {% endset %}
+
+    <div class="sf-toolbar-block">
+        <div class="sf-toolbar-icon">{{ icon|default('') }}</div>
+        <div class="sf-toolbar-info">{{ text|default('') }}</div>
+    </div>
+{% endblock %}
+
+{% block menu %}
+    {{ 'Entity'|t }}
+{% endblock %}
+
+{% block menu_summary %}
+    {{ 'Entity'|t }}: {{ collector.entityids }}
+{% endblock %}
+
+{% block panel %}
+    <h2>{{ 'Entity'|t }}</h2>
+    {% for entity_type, entity_ids in collector.entityids %}
+        <details>
+            <summary>{{ entity_type }} ({{ entity_ids|length }})</summary>
+            {% include '@webprofiler/Profiler/table.html.twig' with { 'data': entity_ids, 'class': 'inline' } only %}
+        </details>
+    {% endfor %}
+{% endblock %}

@@ -95,3 +95,10 @@ function webprofiler_page_build(&$page) {
 
   $page['#attached']['library'][] = array('webprofiler', 'webprofiler');
 }
+
+/**
+ * Implements hook_entity_load.
+ */
+function webprofiler_entity_load($entities, $entity_type) {
+  \Drupal::service('webprofiler.entity')->addLoadedEntities($entities, $entity_type);
+}

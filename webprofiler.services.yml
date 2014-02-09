@@ -71,3 +71,7 @@ services:
     class: Drupal\webprofiler\DataCollector\AssetDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset' }
+  webprofiler.entity:
+    class: Drupal\webprofiler\DataCollector\EntityDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/entity.html.twig', id:'asset' }
