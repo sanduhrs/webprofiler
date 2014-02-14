@@ -1,0 +1,52 @@
+{% block toolbar %}
+    {% set icon %}
+    <a href="{{ url("webprofiler.profiler", {token: token}, {fragment: 'asset'}) }}">
+        <img width="20" height="28" alt="Cache"
+             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQRJREFUeNpi/P//PwM1ARMDlcGogZQDlpMnT7pxc3NbA9nhQKxOpL5rQLwJiPeBsI6Ozl+YBOOOHTv+AOllQNwtLS39F2owKYZ/gRq8G4i3ggxEToggWzvc3d2Pk+1lNL4fFAs6ODi8JzdS7mMRVyDVoAMHDsANdAPiOCC+jCQvQKqBQB/BDbwBxK5AHA3E/kB8nKJkA8TMQBwLxaBIKQbi70AvTADSBiSadwFXpCikpKQU8PDwkGTaly9fHFigkaKIJid4584dkiMFFI6jkTJII0WVmpHCAixZQEXWYhDeuXMnyLsVlEQKI45qFBQZ8eRECi4DBaAlDqle/8A48ip6gAADANdQY88Uc0oGAAAAAElFTkSuQmCC"/>
+        <span>{{ collector.getcsscount + collector.getjscount}}</span>
+    </a>
+    {% endset %}
+    {% set text %}
+
+    <div class="sf-toolbar-info-piece">
+        <b>CSS</b>
+        <span>{{ collector.getcsscount }}</span>
+    </div>
+    <div class="sf-toolbar-info-piece">
+        <b>JS</b>
+        <span>{{ collector.getjscount }}</span>
+    </div>
+    {% endset %}
+
+    <div class="sf-toolbar-block">
+        <div class="sf-toolbar-icon">{{ icon|default('') }}</div>
+        <div class="sf-toolbar-info">{{ text|default('') }}</div>
+    </div>
+{% endblock %}
+
+{% block menu %}
+    {{ 'Assets'|t }}
+{% endblock %}
+
+{% block menu_summary %}
+    {{ 'Total assets'|t }}: {{ collector.getcsscount + collector.getjscount }}
+{% endblock %}
+
+{% block panel %}
+    <h2>{{ 'Assets'|t }}</h2>
+    <h3>{{ 'CSS'|t }}</h3>
+        <details>
+            <summary>{{ 'CSS'|t }} ({{ collector.getcsscount }})</summary>
+            {% include '@webprofiler/Profiler/table.html.twig' with { 'data':collector.getcssfiles, 'class': 'inline' } only %}
+        </details>
+    <h3>{{ 'JS'|t }}</h3>
+        <details>
+            <summary>{{ 'JS'|t }} ({{ collector.getjscount }})</summary>
+            {% include '@webprofiler/Profiler/table.html.twig' with { 'data':collector.getjsfiles, 'class': 'inline' } only %}
+        </details>
+    <h3>{{ 'JS settings'|t }}</h3>
+        <details>
+            <summary>{{ 'JS settings'|t }}</summary>
+            <pre>{{ collector.getjssettings }}</pre>
+        </details>
+{% endblock %}

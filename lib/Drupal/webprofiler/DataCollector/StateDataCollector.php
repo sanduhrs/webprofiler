@@ -58,15 +58,17 @@ class StateDataCollector extends DataCollector implements StateInterface {
    * {@inheritdoc}
    */
   public function get($key, $default = NULL) {
-    $result = $this->state->get($key, $default);
-    $this->data['state_get'][] = $key;
-    return $result;
+    $this->data['state_get'][$key] = isset($this->data['state_get'][$key]) ? $this->data['state_get'][$key] + 1 : 1;
+    return $this->state->get($key, $default);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getMultiple(array $keys) {
+    foreach ($keys as $key) {
+      $this->data['state_get'][$key] = isset($this->data['state_get'][$key]) ? $this->data['state_get'][$key] + 1 : 1;
+    }
     return $this->state->getMultiple($keys);
   }
 

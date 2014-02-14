@@ -9,7 +9,12 @@
     {% for key in data|keys|sort %}
         <tr>
             <td>{{ key }}</td>
-            <td>{{ data[key] }}</td>
+
+            {% if data[key] is iterable %}
+                <td>{{ data[key]|join(', ') }}</td>
+            {% else %}
+                <td>{{ data[key] }}</td>
+            {% endif %}
         </tr>
     {% endfor %}
     </tbody>

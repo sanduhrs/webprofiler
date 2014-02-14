@@ -13,6 +13,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +77,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    *
    */
-  public function profilerAction(Request $request, $token) {
+  public function profilerAction($token) {
     $this->profiler->disable();
     $profile = $this->profiler->loadProfile($token);
 
@@ -85,21 +86,12 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     }
 
     $template_manager = $this->templateManager;
-    $panel = $request->query->get('panel', 'request');
-
-    // TODO remove this when https://drupal.org/node/2143557 comes in.
-    $this->twig_loader->addPath(drupal_get_path('module', 'webprofiler') . '/templates', 'webprofiler');
-
     $webprofiler_path = drupal_get_path('module', 'webprofiler');
 
     $profiler = array(
       '#theme' => 'webprofiler_panel',
       '#token' => $token,
       '#profile' => $profile,
-      '#collector' => $profile->getCollector($panel),
-      '#panel' => $panel,
-      '#page' => '',
-      '#request' => $request,
       '#templates' => $template_manager->getTemplates($profile),
       '#attached' => array(
         'css' => array(
@@ -107,6 +99,12 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         ),
         'js' => array(
           $webprofiler_path . '/js/webprofiler.js' => array(),
+        ),
+        'library' => array(
+          array(
+            'system',
+            'drupal.vertical-tabs',
+          )
         )
       )
     );
@@ -117,7 +115,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    *
    */
-  public function toolbarAction(Request $request, $token) {
+  public function toolbarAction($token) {
     if (NULL === $token) {
       return new Response('', 200, array('Content-Type' => 'text/html'));
     }
@@ -160,11 +158,12 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     $rows = array();
     foreach ($tokens as $token) {
       $row = array();
-      $row[] = $this->linkGenerator->generate($token['token'], "webprofiler.profiler", array('token' => $token['token']));
+      $row[] = $this->linkGenerator->generate($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
       $row[] = $token['ip'];
       $row[] = $token['method'];
       $row[] = $token['url'];
       $row[] = $this->date->format($token['time']);
+      $row[] = $this->linkGenerator->generate($this->t('Export'), 'webprofiler.export', array('token' => $token['token']));
 
       $rows[] = $row;
     }
@@ -172,8 +171,35 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     return array(
       '#theme' => 'table',
       '#rows' => $rows,
-      '#header' => array($this->t('Token'), $this->t('Ip'), $this->t('Method'), $this->t('Url'), $this->t('Time')),
+      '#header' => array(
+        $this->t('Token'),
+        $this->t('Ip'),
+        $this->t('Method'),
+        $this->t('Url'),
+        $this->t('Time'),
+        $this->t('Actions')
+      ),
     );
+  }
+
+  /**
+   *
+   */
+  public function exportAction($token) {
+    if (NULL === $this->profiler) {
+      throw new NotFoundHttpException('The profiler must be enabled.');
+    }
+
+    $this->profiler->disable();
+
+    if (!$profile = $this->profiler->loadProfile($token)) {
+      throw new NotFoundHttpException(sprintf('Token "%s" does not exist.', $token));
+    }
+
+    return new Response($this->profiler->export($profile), 200, array(
+      'Content-Type' => 'text/plain',
+      'Content-Disposition' => 'attachment; filename= ' . $token . '.txt',
+    ));
   }
 
 }

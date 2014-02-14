@@ -7,6 +7,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Core\Controller\HtmlFormController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector as BaseRequestDataCollector;
@@ -24,7 +25,20 @@ class RequestDataCollector extends BaseRequestDataCollector {
 
     if (isset($this->data['controller']) && $request->attributes->has('_content')) {
       // @todo This would actually have to use the controller resolver.
-      $controller = explode('::', $request->attributes->get('_content'));
+      $_content = $request->attributes->get('_content');
+      if (is_string($_content)) {
+        $controller = explode('::', $_content);
+      }
+      // Forms.
+      elseif ($_content[0] instanceof HtmlFormController) {
+        $controller = array(
+          $request->attributes->get('_form'),
+          'buildForm',
+        );
+      }
+      else {
+        $controller = $_content;
+      }
       try {
         $r = new \ReflectionMethod($controller[0], $controller[1]);
         $this->data['controller'] = array(

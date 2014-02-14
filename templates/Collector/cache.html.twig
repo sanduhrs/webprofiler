@@ -1,16 +1,19 @@
 {% block toolbar %}
     {% set icon %}
-    <a href="{{ url("webprofiler.profiler", {token: token}, {fragment: 'state'}) }}">
-        <img width="20" height="28" alt="Database"
+    <a href="{{ url("webprofiler.profiler", {token: token}, {fragment: 'cache'}) }}">
+        <img width="20" height="28" alt="Cache"
              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAYAAABh2p9gAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQRJREFUeNpi/P//PwM1ARMDlcGogZQDlpMnT7pxc3NbA9nhQKxOpL5rQLwJiPeBsI6Ozl+YBOOOHTv+AOllQNwtLS39F2owKYZ/gRq8G4i3ggxEToggWzvc3d2Pk+1lNL4fFAs6ODi8JzdS7mMRVyDVoAMHDsANdAPiOCC+jCQvQKqBQB/BDbwBxK5AHA3E/kB8nKJkA8TMQBwLxaBIKQbi70AvTADSBiSadwFXpCikpKQU8PDwkGTaly9fHFigkaKIJid4584dkiMFFI6jkTJII0WVmpHCAixZQEXWYhDeuXMnyLsVlEQKI45qFBQZ8eRECi4DBaAlDqle/8A48ip6gAADANdQY88Uc0oGAAAAAElFTkSuQmCC"/>
-        <span>{{ collector.statekeys|length }}</span>
+        <span>{{ collector.countcachecids }}</span>
     </a>
     {% endset %}
     {% set text %}
-    <div class="sf-toolbar-info-piece">
-        <b>{{ 'Get'|t }}</b>
-        <span>{{ collector.statekeys|length }}</span>
-    </div>
+
+    {% for bin, cids in collector.cachecids %}
+        <div class="sf-toolbar-info-piece">
+            <b>{{ bin }}</b>
+            <span>{{ cids|length }}</span>
+        </div>
+    {% endfor %}
     {% endset %}
 
     <div class="sf-toolbar-block">
@@ -20,17 +23,19 @@
 {% endblock %}
 
 {% block menu %}
-    {{ 'State'|t }}
+    {{ 'Cache'|t }}
 {% endblock %}
 
 {% block menu_summary %}
-    {{ 'State variabiles'|t }}: {{ collector.statekeys|length }}
+    {{ 'Total cache'|t }}: {{ collector.countcachecids }}
 {% endblock %}
 
 {% block panel %}
-    <h2>State</h2>
-    <details>
-        <summary>{{ 'Get'|t }}</summary>
-        {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.statekeys, 'class': 'inline' } only %}
-    </details>
+    <h2>{{ 'Cache'|t }}</h2>
+    {% for bin, cids in collector.cachecids %}
+        <details>
+            <summary>{{ bin }} ({{ cids|length }})</summary>
+            {% include '@webprofiler/Profiler/table.html.twig' with { 'data': cids, 'class': 'inline' } only %}
+        </details>
+    {% endfor %}
 {% endblock %}

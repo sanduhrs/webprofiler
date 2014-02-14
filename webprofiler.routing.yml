@@ -15,6 +15,15 @@ webprofiler.profiler:
   requirements:
     _permission: 'access web profiler'
 
+# export profile
+webprofiler.export:
+  path: '/admin/config/development/profiler/export/{token}'
+  defaults:
+    _content: '\Drupal\webprofiler\Controller\WebprofilerController::exportAction'
+    _title: 'Export Profiler'
+  requirements:
+    _permission: 'access web profiler'
+
 # list stored profiles
 webprofiler.admin_list:
   path: '/admin/config/development/profiler/list'
@@ -28,7 +37,7 @@ webprofiler.admin_list:
 webprofiler.admin_manage:
   path: '/admin/config/development/profiler/manage'
   defaults:
-    _form: 'Drupal\webprofiler\Form\PurgeForm'
+    _form: 'Drupal\webprofiler\Form\ManageForm'
     _title: 'Manage'
   requirements:
     _permission: 'access web profiler'

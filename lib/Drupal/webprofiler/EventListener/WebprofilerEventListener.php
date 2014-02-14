@@ -16,7 +16,7 @@ class WebprofilerEventListener implements EventSubscriberInterface {
   private $current_user;
 
   /**
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param AccountInterface $current_user
    */
   public function __construct(AccountInterface $current_user) {
     $this->current_user = $current_user;

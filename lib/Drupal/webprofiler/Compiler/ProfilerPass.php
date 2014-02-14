@@ -20,10 +20,6 @@ class ProfilerPass implements CompilerPassInterface {
    * @throws \InvalidArgumentException
    */
   public function process(ContainerBuilder $container) {
-    // replace the class for form_builder service
-    $form_builder = $container->getDefinition('form_builder');
-    $form_builder->setClass('Drupal\webprofiler\Form\ProfilerFormBuilder');
-
     // configure the profiler service
     if (FALSE === $container->hasDefinition('profiler')) {
       return;
