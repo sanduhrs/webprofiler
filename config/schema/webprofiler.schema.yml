@@ -5,3 +5,6 @@ webprofiler.config:
     purge_on_cache_clear:
       type: boolean
       label: 'Purge profiles on cache clear'
+    storage:
+      type: string
+      label: 'Storage implementation'

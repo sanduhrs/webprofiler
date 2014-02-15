@@ -156,16 +156,18 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     $tokens = $this->profiler->find('', '', $limit, '', '', '');
 
     $rows = array();
-    foreach ($tokens as $token) {
-      $row = array();
-      $row[] = $this->linkGenerator->generate($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
-      $row[] = $token['ip'];
-      $row[] = $token['method'];
-      $row[] = $token['url'];
-      $row[] = $this->date->format($token['time']);
-      $row[] = $this->linkGenerator->generate($this->t('Export'), 'webprofiler.export', array('token' => $token['token']));
+    if (count($tokens)) {
+      foreach ($tokens as $token) {
+        $row = array();
+        $row[] = $this->linkGenerator->generate($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
+        $row[] = $token['ip'];
+        $row[] = $token['method'];
+        $row[] = $token['url'];
+        $row[] = $this->date->format($token['time']);
+        $row[] = $this->linkGenerator->generate($this->t('Export'), 'webprofiler.export', array('token' => $token['token']));
 
-      $rows[] = $row;
+        $rows[] = $row;
+      }
     }
 
     return array(

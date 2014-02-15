@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the webprofiler module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function webprofiler_schema() {
+  $schema['webprofiler'] = array(
+    'description' => 'Webprofiler profiles storage.',
+    'fields' => array(
+      'token' => array(
+        'description' => 'Profile token.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'data' => array(
+        'description' => 'Profile data.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ),
+      'ip' => array(
+        'description' => 'Request IP.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+      ),
+      'method' => array(
+        'description' => 'Request method.',
+        'type' => 'varchar',
+        'length' => 6,
+        'not null' => TRUE,
+      ),
+      'url' => array(
+        'description' => 'Requested URL.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'time' => array(
+        'description' => 'Request time.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'parent' => array(
+        'description' => 'Profile parent.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'created_at' => array(
+        'description' => 'Profile created time.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'indexes' => array(
+      'created_at' => array('created_at'),
+      'ip' => array('ip'),
+      'method' => array('method'),
+      'url' => array('url'),
+      'parent' => array('parent'),
+    ),
+    'primary key' => array('token'),
+  );
+
+  return $schema;
+}

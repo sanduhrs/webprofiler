@@ -9,12 +9,13 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 
 /**
  * Collects data about the used assets (CSS/JS).
  */
-class AssetDataCollector implements DataCollectorInterface {
+class AssetDataCollector extends DataCollector {
 
   /**
    * {@inheritdoc}
@@ -66,7 +67,7 @@ class AssetDataCollector implements DataCollectorInterface {
   public function getJsFiles() {
     $result = array();
     foreach ($this->data['js'] as $option) {
-      if ($option['type'] != 'settings') {
+      if ($option['type'] != 'setting') {
         $result[] = $option['data'];
       }
     }
@@ -79,5 +80,4 @@ class AssetDataCollector implements DataCollectorInterface {
   public function getJsSettings() {
     return json_encode($this->data['js']['settings']['data']);
   }
-
-} 
+}

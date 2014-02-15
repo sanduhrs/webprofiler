@@ -1,1 +1,2 @@
 purge_on_cache_clear: true
+storage: profiler.database_storage

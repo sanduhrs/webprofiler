@@ -1,7 +1,15 @@
 services:
-  profiler.storage:
+  profiler.file_storage:
     class: Symfony\Component\HttpKernel\Profiler\FileProfilerStorage
     arguments: ['%data_collector.storage%']
+  profiler.database_storage:
+    class: Drupal\webprofiler\Profiler\DatabaseProfilerStorage
+    arguments: ['@database']
+  profiler.storage:
+    class: Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface
+    factory_class: Drupal\webprofiler\Profiler\ProfilerStorageFactory
+    factory_method: getProfilerStorage
+    arguments: ['@config.factory', '@service_container']
   profiler.logger:
     class: Psr\Log\NullLogger
   profiler:

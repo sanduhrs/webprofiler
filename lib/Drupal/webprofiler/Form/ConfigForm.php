@@ -71,6 +71,14 @@ class ConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('purge_on_cache_clear'),
     );
 
+    $form['storage'] = array(
+      '#type' => 'select',
+      '#title' => $this->t('Storage backend'),
+      '#description' => $this->t('Choose were to store profiler data.'),
+      '#options' => array('profiler.file_storage' => $this->t('File'), 'profiler.database_storage' => $this->t('Database')),
+      '#default_value' => $config->get('storage'),
+    );
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -85,6 +93,7 @@ class ConfigForm extends ConfigFormBase {
   public function submitForm(array &$form, array &$form_state) {
     $this->configFactory->get('webprofiler.config')
       ->set('purge_on_cache_clear', $form_state['values']['purge_on_cache_clear'])
+      ->set('storage', $form_state['values']['storage'])
       ->save();
 
     parent::submitForm($form, $form_state);
