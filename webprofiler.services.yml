@@ -67,3 +67,11 @@ services:
     class: Drupal\webprofiler\DataCollector\CacheDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache' }
+  webprofiler.assets:
+    class: Drupal\webprofiler\DataCollector\AssetDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset' }
+  webprofiler.config:
+    class: Drupal\webprofiler\DataCollector\ConfigDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config' }
