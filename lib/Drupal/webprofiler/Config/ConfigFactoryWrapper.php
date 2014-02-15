@@ -148,4 +148,11 @@ class ConfigFactoryWrapper implements ConfigFactoryInterface {
     return $this->configFactory->getLanguageConfigName($langcode, $name);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function listAll($prefix = '') {
+    return $this->configFactory->listAll($prefix);
+  }
+
 } 
