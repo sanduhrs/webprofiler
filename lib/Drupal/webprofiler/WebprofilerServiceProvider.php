@@ -55,6 +55,13 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addArgument(new Reference('csrf_token', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))
       ->addArgument(new Reference('http_kernel', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))
       ->addMethodCall('setRequest', array(new Reference('request', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)));
+
+    // Replace the existing config.factory service with a wrapper to collect the
+    // requested configs.
+    $container->setDefinition('config.factory.default', $container->getDefinition('config.factory'));
+    $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
+      ->addArgument(new Reference('webprofiler.config'))
+      ->addArgument(new Reference('config.factory.default'));
   }
 
 }

@@ -76,35 +76,35 @@ class StateDataCollector extends DataCollector implements StateInterface {
    * {@inheritdoc}
    */
   public function set($key, $value) {
-    $this->state->set($key, $value);
+    return $this->state->set($key, $value);
   }
 
   /**
    * {@inheritdoc}
    */
   public function setMultiple(array $data) {
-    $this->state->setMultiple($data);
+    return $this->state->setMultiple($data);
   }
 
   /**
    * {@inheritdoc}
    */
   public function delete($key) {
-    $this->state->delete($key);
+    return $this->state->delete($key);
   }
 
   /**
    * {@inheritdoc}
    */
   public function deleteMultiple(array $keys) {
-    $this->state->resetCache();
+    return $this->state->resetCache();
   }
 
   /**
    * {@inheritdoc}
    */
   public function resetCache() {
-    $this->state->resetCache();
+    return $this->state->resetCache();
   }
 
 } 

@@ -1,32 +1,44 @@
 <?php
 
+/**
+ * @file
+ * Contains \Drupal\webprofiler\Profiler\DatabaseProfilerStorage.
+ */
+
 namespace Drupal\webprofiler\Profiler;
 
 use Drupal\Core\Database\Connection;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface;
 
+/**
+ * Implements a profiler storage using the DBTNG query api.
+ */
 class DatabaseProfilerStorage implements ProfilerStorageInterface {
 
-  private $connection;
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
 
-  public function __construct(Connection $connection) {
-    $this->connection = $connection;
+  /**
+   * Constructs a new DatabaseProfilerStorage instance.
+   *
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
+   */
+  function __construct(Connection $database) {
+    $this->database = $database;
   }
 
   /**
-   * Finds profiler tokens for the given criteria.
-   *
-   * @param string $ip The IP
-   * @param string $url The URL
-   * @param string $limit The maximum number of tokens to return
-   * @param string $method The request method
-   * @param int|null $start The start date to search from
-   * @param int|null $end The end date to search to
-   *
-   * @return array An array of tokens
+   * {@inheritdodc}
    */
   public function find($ip, $url, $limit, $method, $start = NULL, $end = NULL) {
+    $select = $this->database->select('webprofiler_profiler', 'wp');
+
     if (NULL === $start) {
       $start = 0;
     }
@@ -35,56 +47,38 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
       $end = time();
     }
 
-    $query = $this->connection
-      ->select('webprofiler', 'w', array('fetch' => \PDO::FETCH_ASSOC))
-      ->fields('w', array(
-        'token',
-        'ip',
-        'method',
-        'url',
-        'time',
-        'parent'
-      ));
-
     if ($ip = preg_replace('/[^\d\.]/', '', $ip)) {
-      $query->condition('ip', '%' . $ip . '%'. 'LIKE');
+      $select->condition('ip', '%' . $this->database->escapeLike($ip) . '%', 'LIKE');
     }
 
     if ($url) {
-      $query->condition('url', '%' . addcslashes($url, '%_\\') . '%', 'LIKE');
+      $select->condition('url', '%' . $this->database->escapeLike(addcslashes($url, '%_\\')) . '%', 'LIKE');
     }
 
     if ($method) {
-      $query->condition('method', $method);
+      $select->condition('method', $method);
     }
 
     if (!empty($start)) {
-      $query->condition('time', $start, '>=');
+      $select->condition('timestamp', $start, '>=');
     }
 
-    if (!empty($end)) {
-      $query->condition('time', $end, '<=');
+    if (!empty($send)) {
+      $select->condition('timestamp', $end, '<=');
     }
 
-    $tokens = $query->orderBy('time', 'DESC')
-      ->range(0, $limit)
-      ->execute()
-      ->fetchAll();
-
-    return $tokens;
+    $select->fields('wp', array('token', 'ip', 'method', 'url', 'timestamp', 'parent'));
+    $select->orderBy('time', 'DESC');
+    $select->range(0, $limit);
+    return $select->execute()
+      ->fetchAllAssoc('token');
   }
 
   /**
-   * Reads data associated with the given token.
-   *
-   * The method returns false if the token does not exist in the storage.
-   *
-   * @param string $token A token
-   *
-   * @return Profile The profile associated with token
+   * {@inheritdoc}
    */
   public function read($token) {
-    $record = $this->connection->select('webprofiler', 'w')->fields('w')->condition('token', $token)->execute()
+    $record = $this->database->select('webprofiler', 'w')->fields('w')->condition('token', $token)->execute()
       ->fetch();
     if (isset($record->data)) {
       return $this->createProfileFromData($token, $record);
@@ -92,11 +86,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   }
 
   /**
-   * Saves a Profile.
-   *
-   * @param Profile $profile A Profile instance
-   *
-   * @return Boolean Write operation successful
+   * {@inheritdodc}
    */
   public function write(Profile $profile) {
     $args = array(
@@ -111,7 +101,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
     );
 
     try {
-      $this->connection->insert('webprofiler')->fields($args)->execute();
+      $this->database->insert('webprofiler')->fields($args)->execute();
       $status = TRUE;
     } catch (\Exception $e) {
       $status = FALSE;
@@ -121,10 +111,10 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   }
 
   /**
-   * Purges all data from the database.
+   * {@inheritdoc}
    */
   public function purge() {
-    $this->connection->truncate('webprofiler')->execute();
+    $this->database->truncate('webprofiler_profiler');
   }
 
   /**
@@ -143,4 +133,4 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
 
     return $profile;
   }
-}
+} 
