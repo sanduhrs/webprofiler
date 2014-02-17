@@ -7,7 +7,7 @@
 
 namespace Drupal\webprofiler\Form;
 
-use Drupal\Core\Config\ConfigFactory;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -30,10 +30,10 @@ class ConfigForm extends ConfigFormBase {
   }
 
   /**
-   * @param ConfigFactory $config_factory
+   * @param ConfigFactoryInterface $config_factory
    * @param Profiler $profiler
    */
-  public function __construct(ConfigFactory $config_factory, Profiler $profiler) {
+  public function __construct(ConfigFactoryInterface $config_factory, Profiler $profiler) {
     parent::__construct($config_factory);
 
     $this->profiler = $profiler;
