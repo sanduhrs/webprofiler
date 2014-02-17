@@ -2,7 +2,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\webprofiler\Form\ProfilerFormBuilder;
+use Drupal\webprofiler\Form\FormBuilderWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -12,9 +12,9 @@ class FormDataCollector extends DataCollector {
   private $form_builder;
 
   /**
-   * @param ProfilerFormBuilder $form_builder
+   * @param FormBuilderWrapper $form_builder
    */
-  public function __construct(ProfilerFormBuilder $form_builder) {
+  public function __construct(FormBuilderWrapper $form_builder) {
     $this->form_builder = $form_builder;
   }
 

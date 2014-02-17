@@ -46,7 +46,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // Replaces the existing form_builder service to be able to collect the
     // requested data.
     $container->setDefinition('form_builder.default', $container->getDefinition('form_builder'));
-    $container->register('form_builder', 'Drupal\webprofiler\Form\ProfilerFormBuilder')
+    $container->register('form_builder', 'Drupal\webprofiler\Form\FormBuilderWrapper')
       ->addArgument(new Reference('module_handler'))
       ->addArgument(new Reference('keyvalue.expirable'))
       ->addArgument(new Reference('event_dispatcher'))
@@ -63,6 +63,4 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
   }
-
 }
-

@@ -37,7 +37,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
    * {@inheritdodc}
    */
   public function find($ip, $url, $limit, $method, $start = NULL, $end = NULL) {
-    $select = $this->database->select('webprofiler_profiler', 'wp');
+    $select = $this->database->select('webprofiler', 'wp', array('fetch' => \PDO::FETCH_ASSOC));
 
     if (NULL === $start) {
       $start = 0;
@@ -60,14 +60,14 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
     }
 
     if (!empty($start)) {
-      $select->condition('timestamp', $start, '>=');
+      $select->condition('time', $start, '>=');
     }
 
     if (!empty($send)) {
-      $select->condition('timestamp', $end, '<=');
+      $select->condition('time', $end, '<=');
     }
 
-    $select->fields('wp', array('token', 'ip', 'method', 'url', 'timestamp', 'parent'));
+    $select->fields('wp', array('token', 'ip', 'method', 'url', 'time', 'parent'));
     $select->orderBy('time', 'DESC');
     $select->range(0, $limit);
     return $select->execute()
@@ -86,7 +86,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   }
 
   /**
-   * {@inheritdodc}
+   * {@inheritdoc}
    */
   public function write(Profile $profile) {
     $args = array(
@@ -114,7 +114,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
    * {@inheritdoc}
    */
   public function purge() {
-    $this->database->truncate('webprofiler_profiler');
+    $this->database->truncate('webprofiler');
   }
 
   /**

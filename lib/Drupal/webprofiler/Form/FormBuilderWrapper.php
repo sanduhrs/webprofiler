@@ -5,11 +5,11 @@ namespace Drupal\webprofiler\Form;
 use Drupal\Core\Form\FormBuilder;
 
 /**
- * Class ProfilerFormBuilder
+ * Class FormBuilderWrapper
  *
  * @package Drupal\webprofiler\Form
  */
-class ProfilerFormBuilder extends FormBuilder {
+class FormBuilderWrapper extends FormBuilder {
 
   private $build_forms;
 
