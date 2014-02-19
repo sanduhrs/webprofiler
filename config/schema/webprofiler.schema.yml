@@ -8,3 +8,6 @@ webprofiler.config:
     storage:
       type: string
       label: 'Storage implementation'
+    exclude:
+      type: string
+      label: 'path to exclude'

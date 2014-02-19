@@ -32,28 +32,24 @@
     (function ($) {
         "use strict";
 
-        Drupal.behaviors.webprofiler_toolbar = {
-            attach: function (context, settings) {
-                $.ajax({
-                    url: Drupal.url('profiler/{{ token }}'),
-                    type: 'GET',
-                    success: function (result) {
-                        $("#webprofiler{{ token }}").html(result);
-                        $("#webprofiler{{ token }}").show();
+        $.ajax({
+            url: Drupal.url('profiler/{{ token }}'),
+            type: 'GET',
+            success: function (result) {
+                $("#webprofiler{{ token }}").html(result);
+                $("#webprofiler{{ token }}").show();
 
-                        if (Sfjs.getPreference('toolbar/displayState') == 'none') {
-                            $('#sfToolbarMainContent-{{ token }}').hide();
-                            $('#sfToolbarClearer-{{ token }}').hide();
-                            $('#sfMiniToolbar-{{ token }}').show();
-                        } else {
-                            $('#sfToolbarMainContent-{{ token }}').show();
-                            $('#sfToolbarClearer-{{ token }}').show();
-                            $('#sfMiniToolbar-{{ token }}').hide();
-                        }
-                    }
-                });
+                if (Sfjs.getPreference('toolbar/displayState') == 'none') {
+                    $('#sfToolbarMainContent-{{ token }}').hide();
+                    $('#sfToolbarClearer-{{ token }}').hide();
+                    $('#sfMiniToolbar-{{ token }}').show();
+                } else {
+                    $('#sfToolbarMainContent-{{ token }}').show();
+                    $('#sfToolbarClearer-{{ token }}').show();
+                    $('#sfMiniToolbar-{{ token }}').hide();
+                }
             }
-        }
+        });
 
     })(jQuery);
 </script>

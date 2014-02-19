@@ -7,11 +7,14 @@
 
 namespace Drupal\webprofiler\Controller;
 
+use Drupal\Component\Archiver\ArchiveTar;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
+use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -23,16 +26,47 @@ use Twig_Loader_Filesystem;
 
 class WebprofilerController extends ControllerBase implements ContainerInjectionInterface {
 
+  /**
+   * @var \Symfony\Component\HttpKernel\Profiler\Profiler
+   */
   private $profiler;
+
+  /**
+   * @var \Symfony\Cmf\Component\Routing\ChainRouter
+   */
   private $router;
+
+  /**
+   * @var \Drupal\webprofiler\Profiler\TemplateManager
+   */
   private $templateManager;
+
+  /**
+   * @var \Twig_Loader_Filesystem
+   */
   private $twig_loader;
+
+  /**
+   * @var \Drupal\Core\Datetime\Date
+   */
   private $date;
+
+  /**
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
   private $form_builder;
 
   /**
-   * The link generator.
-   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $config_factory;
+
+  /**
+   * @var \Drupal\system\FileDownloadController
+   */
+  private $file_download_controller;
+
+  /**
    * @var \Drupal\Core\Utility\LinkGeneratorInterface
    */
   protected $linkGenerator;
@@ -48,7 +82,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
       $container->get('twig.loader'),
       $container->get('date'),
       $container->get('form_builder'),
-      $container->get('link_generator')
+      $container->get('link_generator'),
+      new FileDownloadController()
     );
   }
 
@@ -63,8 +98,9 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
    * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
    * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
    *   The link generator.
+   * @param \Drupal\system\FileDownloadController $file_download_controller
    */
-  public function __construct(Profiler $profiler, ChainRouter $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader, Date $date, FormBuilderInterface $form_builder, LinkGeneratorInterface $link_generator) {
+  public function __construct(Profiler $profiler, ChainRouter $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader, Date $date, FormBuilderInterface $form_builder, LinkGeneratorInterface $link_generator, FileDownloadController $file_download_controller) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
@@ -72,6 +108,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     $this->date = $date;
     $this->form_builder = $form_builder;
     $this->linkGenerator = $link_generator;
+    $this->file_download_controller = $file_download_controller;
   }
 
   /**
@@ -147,7 +184,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   }
 
   /**
-   *
+   * Generate the list page.
    */
   public function listAction(Request $request) {
     $limit = $request->get('limit', 10);
@@ -164,7 +201,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         $row[] = $token['method'];
         $row[] = $token['url'];
         $row[] = $this->date->format($token['time']);
-        $row[] = $this->linkGenerator->generate($this->t('Export'), 'webprofiler.export', array('token' => $token['token']));
+        $row[] = $this->linkGenerator->generate($this->t('Export'), 'webprofiler.single_export', array('token' => $token['token']));
 
         $rows[] = $row;
       }
@@ -185,9 +222,9 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   }
 
   /**
-   *
+   * Downloads a single profile.
    */
-  public function exportAction($token) {
+  public function singleExportAction($token) {
     if (NULL === $this->profiler) {
       throw new NotFoundHttpException('The profiler must be enabled.');
     }
@@ -195,13 +232,34 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     $this->profiler->disable();
 
     if (!$profile = $this->profiler->loadProfile($token)) {
-      throw new NotFoundHttpException(sprintf('Token "%s" does not exist.', $token));
+      throw new NotFoundHttpException($this->t('Token @token does not exist.', array('@token' => $token)));
     }
 
     return new Response($this->profiler->export($profile), 200, array(
       'Content-Type' => 'text/plain',
       'Content-Disposition' => 'attachment; filename= ' . $token . '.txt',
     ));
+  }
+
+  /**
+   * Downloads a tarball with all stored profiles.
+   */
+  public function allExportAction() {
+    $archiver = new ArchiveTar(file_directory_temp() . '/profiles.tar.gz', 'gz');
+    $tokens = $this->profiler->find('', '', 100, '', '', '');
+
+    $files = array();
+    foreach ($tokens as $token) {
+      $data = $this->profiler->export($this->profiler->loadProfile($token));
+      $filename = file_directory_temp() . "/{$token['token']}.txt";
+      file_put_contents($filename, $data);
+      $files[] = $filename;
+    }
+
+    $archiver->createModify($files, '', file_directory_temp());
+
+    $request = new Request(array('file' => 'profiles.tar.gz'));
+    return $this->file_download_controller->download($request, 'temporary');
   }
 
 }

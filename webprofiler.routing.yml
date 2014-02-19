@@ -15,11 +15,20 @@ webprofiler.profiler:
   requirements:
     _permission: 'access web profiler'
 
-# export profile
-webprofiler.export:
+# export single profile
+webprofiler.single_export:
   path: '/admin/config/development/profiler/export/{token}'
   defaults:
-    _content: '\Drupal\webprofiler\Controller\WebprofilerController::exportAction'
+    _content: '\Drupal\webprofiler\Controller\WebprofilerController::singleExportAction'
+    _title: 'Export Profiler'
+  requirements:
+    _permission: 'access web profiler'
+
+# export all profiles
+webprofiler.all_export:
+  path: '/admin/config/development/profiler/exportall'
+  defaults:
+    _content: '\Drupal\webprofiler\Controller\WebprofilerController::allExportAction'
     _title: 'Export Profiler'
   requirements:
     _permission: 'access web profiler'

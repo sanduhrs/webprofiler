@@ -79,6 +79,13 @@ class ConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('storage'),
     );
 
+    $form['exclude'] = array(
+      '#type' => 'textarea',
+      '#title' => $this->t('Exclude'),
+      '#default_value' => $config->get('exclude'),
+      '#description' => $this->t('Path to exclude for profiling. One path per line.')
+    );
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -94,6 +101,7 @@ class ConfigForm extends ConfigFormBase {
     $this->configFactory->get('webprofiler.config')
       ->set('purge_on_cache_clear', $form_state['values']['purge_on_cache_clear'])
       ->set('storage', $form_state['values']['storage'])
+      ->set('exclude', $form_state['values']['exclude'])
       ->save();
 
     parent::submitForm($form, $form_state);

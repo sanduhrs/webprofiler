@@ -2,10 +2,20 @@
 
 namespace Drupal\webprofiler\RequestMatcher;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
 class WebprofilerRequestMatcher implements RequestMatcherInterface {
+
+  private $config_factory;
+
+  /**
+   * @param ConfigFactoryInterface $config_factory
+   */
+  public function __construct(ConfigFactoryInterface $config_factory) {
+    $this->config_factory = $config_factory;
+  }
 
   /**
    * Decides whether the rule(s) implemented by the strategy matches the supplied request.
@@ -16,20 +26,7 @@ class WebprofilerRequestMatcher implements RequestMatcherInterface {
    */
   public function matches(Request $request) {
     $path = $request->getPathInfo();
-    $matches = NULL;
 
-    // exclude contextual request
-    preg_match('/\\/contextual\\/(.*)/', $path, $matches);
-    if ($matches) {
-      return FALSE;
-    }
-
-    // exclude admin toolbar request
-    preg_match('/\\/toolbar\\/(.*)/', $path, $matches);
-    if ($matches) {
-      return FALSE;
-    }
-
-    return TRUE;
+    return !drupal_match_path($path, $this->config_factory->get('webprofiler.config')->get('exclude'));
   }
 }

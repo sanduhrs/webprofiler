@@ -114,7 +114,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
    * {@inheritdoc}
    */
   public function purge() {
-    $this->database->truncate('webprofiler');
+    $this->database->truncate('webprofiler')->execute();
   }
 
   /**
