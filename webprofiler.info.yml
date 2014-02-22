@@ -6,3 +6,4 @@ version: 0.1
 core: 8.x
 dependencies:
   - twig_routing
+configure: webprofiler.admin_configure

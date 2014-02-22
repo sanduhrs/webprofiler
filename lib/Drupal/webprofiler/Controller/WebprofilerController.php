@@ -13,6 +13,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\Profiler\TemplateManager;
@@ -201,7 +202,24 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         $row[] = $token['method'];
         $row[] = $token['url'];
         $row[] = $this->date->format($token['time']);
-        $row[] = $this->linkGenerator->generate($this->t('Export'), 'webprofiler.single_export', array('token' => $token['token']));
+
+        $operations = array(
+          'export' => array(
+            'title' => $this->t('Export'),
+            'route_name' => 'webprofiler.single_export',
+            'route_parameters' => array('token' => $token['token']),
+          ),
+          'analyze' => array(
+            'title' => $this->t('Analyze'),
+            'route_name' => 'webprofiler.single_export',
+            'route_parameters' => array('token' => $token['token']),
+          ),
+        );
+        $dropbutton = array(
+          '#type' => 'operations',
+          '#links' => $operations,
+        );
+        $row[] = render($dropbutton);
 
         $rows[] = $row;
       }
@@ -212,10 +230,19 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
       '#rows' => $rows,
       '#header' => array(
         $this->t('Token'),
-        $this->t('Ip'),
-        $this->t('Method'),
+        array(
+          'data' => $this->t('Ip'),
+          'class' => array(RESPONSIVE_PRIORITY_LOW),
+        ),
+        array(
+          'data' => $this->t('Method'),
+          'class' => array(RESPONSIVE_PRIORITY_LOW),
+        ),
         $this->t('Url'),
-        $this->t('Time'),
+        array(
+          'data' => $this->t('Time'),
+          'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+        ),
         $this->t('Actions')
       ),
     );
