@@ -209,11 +209,6 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
             'route_name' => 'webprofiler.single_export',
             'route_parameters' => array('token' => $token['token']),
           ),
-          'analyze' => array(
-            'title' => $this->t('Analyze'),
-            'route_name' => 'webprofiler.single_export',
-            'route_parameters' => array('token' => $token['token']),
-          ),
         );
         $dropbutton = array(
           '#type' => 'operations',
