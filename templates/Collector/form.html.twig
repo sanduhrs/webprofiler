@@ -20,10 +20,6 @@
     </div>
 {% endblock %}
 
-{% block menu %}
-    {{ 'Forms'|t }}
-{% endblock %}
-
 {% block panel %}
     <h2>{{ 'Rendered forms'|t }}</h2>
     {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.forms } only %}

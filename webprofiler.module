@@ -42,13 +42,18 @@ function webprofiler_theme() {
     'webprofiler_panel' => array(
       'template' => 'Profiler/webprofiler_panel',
       'variables' => array(
-        'token' => NULL,
-        'templates' => array(),
+        'template' => array(),
         'profile' => NULL,
-        'collector' => NULL,
-        'panel' => NULL,
-        'page' => NULL,
-        'request' => NULL
+        'name' => NULL,
+        'summary' => NULL,
+      ),
+    ),
+    'webprofiler_resume' => array(
+      'template' => 'Profiler/webprofiler_resume',
+      'variables' => array(
+        'template' => array(),
+        'profile' => NULL,
+        'name' => NULL
       ),
     ),
   );

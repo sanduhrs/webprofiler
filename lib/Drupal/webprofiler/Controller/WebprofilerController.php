@@ -16,6 +16,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\system\FileDownloadController;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -125,12 +126,34 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
 
     $template_manager = $this->templateManager;
     $webprofiler_path = drupal_get_path('module', 'webprofiler');
+    $templates = $template_manager->getTemplates($profile);
 
-    $profiler = array(
-      '#theme' => 'webprofiler_panel',
-      '#token' => $token,
-      '#profile' => $profile,
-      '#templates' => $template_manager->getTemplates($profile),
+    $childrens = array();
+    foreach ($templates as $name => $template) {
+      /** @var DrupalDataCollectorInterface $collector */
+      $collector = $profile->getCollector($name);
+      $menu = $collector->getMenu();
+
+      if ($menu) {
+        $childrens[] = array(
+          '#theme' => 'details',
+          '#attributes' => array('id' => $name),
+          '#title' => $menu,
+          '#summary' => 'test',
+          '#value' => array(
+            '#theme' => 'webprofiler_panel',
+            '#template' => $template,
+            '#name' => $name,
+            '#profile' => $profile,
+            '#summary' => $collector->getSummary(),
+          )
+        );
+      }
+    }
+
+    $panels = array(
+      '#theme' => 'vertical_tabs',
+      '#children' => $childrens,
       '#attached' => array(
         'css' => array(
           $webprofiler_path . '/css/webprofiler.css' => array(),
@@ -140,14 +163,24 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         ),
         'library' => array(
           array(
-            'system',
+            'core',
             'drupal.vertical-tabs',
           )
         )
       )
     );
 
-    return $profiler;
+    $resume = array(
+      '#theme' => 'webprofiler_resume',
+      '#profile' => $profile,
+    );
+
+    $output = array(
+      '#theme' => 'container',
+      '#children' => drupal_render($resume) . drupal_render($panels),
+    );
+
+    return $output;
   }
 
   /**

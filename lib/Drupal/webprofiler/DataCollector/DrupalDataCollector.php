@@ -3,12 +3,27 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Component\Utility\String;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Drupal\Core\Database\Connection;
 
-class DrupalDataCollector extends DataCollector {
+class DrupalDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return NULL;
+  }
 
   /**
    * Collects data for the given Request and Response.

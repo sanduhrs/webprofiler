@@ -7,6 +7,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -14,7 +15,21 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 /**
  * Collects the used cache bins and cache CIDs.
  */
-class CacheDataCollector extends DataCollector {
+class CacheDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Cache');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return \Drupal::translation()->translate('Total cache: @cache', array('@cache' => $this->countCacheCids()));
+  }
 
   /**
    * Registers a cache get call on a specific cache bin.

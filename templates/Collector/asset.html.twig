@@ -24,14 +24,6 @@
     </div>
 {% endblock %}
 
-{% block menu %}
-    {{ 'Assets'|t }}
-{% endblock %}
-
-{% block menu_summary %}
-    {{ 'Total assets'|t }}: {{ collector.getcsscount + collector.getjscount }}
-{% endblock %}
-
 {% block panel %}
     <h2>{{ 'Assets'|t }}</h2>
     <h3>{{ 'CSS'|t }}</h3>

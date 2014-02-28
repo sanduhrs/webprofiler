@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 /**
  * Defines a data collector for the extension system.
  */
-class ExtensionDataCollector extends DataCollector {
+class ExtensionDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
   /**
    * The module handler.
@@ -31,6 +32,21 @@ class ExtensionDataCollector extends DataCollector {
    * @var \Drupal\Core\Extension\ThemeHandlerInterface
    */
   protected $themeHandler;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Extensions (modules/themes)');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return \Drupal::translation()
+      ->translate('Total active extensions: @extensions', array('@extensions' => $this->getExtensionsCount()));
+  }
 
   /**
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -57,7 +73,7 @@ class ExtensionDataCollector extends DataCollector {
    *
    * @return int
    */
-  public function countExtensions() {
+  public function getExtensionsCount() {
     return isset($this->data['drupal_extension']['count']) ? $this->data['drupal_extension']['count'] : 0;
   }
 

@@ -3,11 +3,26 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Component\Utility\Timer;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
-class TimerDataCollector extends DataCollector {
+class TimerDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return NULL;
+  }
 
   /**
    * Collects data for the given Request and Response.

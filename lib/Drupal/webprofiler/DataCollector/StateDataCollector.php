@@ -8,6 +8,7 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\KeyValueStore\StateInterface;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -15,7 +16,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 /**
  * Provides a data collector to get all requested state values.
  */
-class StateDataCollector extends DataCollector implements StateInterface {
+class StateDataCollector extends DataCollector implements StateInterface, DrupalDataCollectorInterface {
 
   /**
    * The state service.
@@ -23,6 +24,21 @@ class StateDataCollector extends DataCollector implements StateInterface {
    * @var \Drupal\Core\KeyValueStore\StateInterface
    */
   protected $state;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('State');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return \Drupal::translation()
+      ->translate('State variabiles: @variables', array('@variables' => count($this->stateKeys())));
+  }
 
   /**
    * Constructs a new StateDataCollector.

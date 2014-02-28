@@ -22,14 +22,6 @@
     </div>
 {% endblock %}
 
-{% block menu %}
-    {{ 'Cache'|t }}
-{% endblock %}
-
-{% block menu_summary %}
-    {{ 'Total cache'|t }}: {{ collector.countcachecids }}
-{% endblock %}
-
 {% block panel %}
     <h2>{{ 'Cache'|t }}</h2>
     {% for bin, cids in collector.cachecids %}

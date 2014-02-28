@@ -7,15 +7,30 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 
 /**
  * Collects data about the used assets (CSS/JS).
  */
-class AssetDataCollector extends DataCollector {
+class AssetDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Assets');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return \Drupal::translation()
+      ->translate('Total assets: @count', array('@count' => ($this->getCssCount() + $this->getJsCount())));
+  }
 
   /**
    * {@inheritdoc}
@@ -80,4 +95,5 @@ class AssetDataCollector extends DataCollector {
   public function getJsSettings() {
     return json_encode($this->data['js']['settings']['data']);
   }
+
 }

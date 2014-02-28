@@ -2,14 +2,29 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Form\FormBuilderWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
-class FormDataCollector extends DataCollector {
+class FormDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
   private $form_builder;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Forms');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return NULL;
+  }
 
   /**
    * @param FormBuilderWrapper $form_builder

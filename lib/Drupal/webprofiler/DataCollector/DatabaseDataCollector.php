@@ -3,13 +3,29 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
-class DatabaseDataCollector extends DataCollector {
+class DatabaseDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
   private $database;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Database');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return \Drupal::translation()->translate('Executed queries: @count', array('@count' => $this->getQueryCount()));
+  }
 
   /**
    * @param Connection $database

@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Component\Utility\String;
 use Drupal\Core\Routing\RouteProviderInterface;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 /**
  * Provides a data collector which shows all available routes.
  */
-class RoutingDataCollector extends DataCollector {
+class RoutingDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
   /**
    * The route profiler.
@@ -24,6 +25,20 @@ class RoutingDataCollector extends DataCollector {
    * @var \Drupal\Core\Routing\RouteProviderInterface
    */
   protected $routeProvider;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Routing');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return \Drupal::translation()->translate('Defined routes: @route', array('@route' => count($this->routing())));
+  }
 
   /**
    * Constructs a new RoutingDataCollector.

@@ -8,6 +8,7 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\Controller\HtmlFormController;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector as BaseRequestDataCollector;
@@ -15,7 +16,21 @@ use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector as BaseReque
 /**
  * Integrate _content into the RequestDataCollector;
  */
-class RequestDataCollector extends BaseRequestDataCollector {
+class RequestDataCollector extends BaseRequestDataCollector implements DrupalDataCollectorInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMenu() {
+    return \Drupal::translation()->translate('Request');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSummary() {
+    return NULL;
+  }
 
   /**
    * {@inheritdoc}
