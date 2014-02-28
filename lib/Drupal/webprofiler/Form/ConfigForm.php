@@ -75,7 +75,10 @@ class ConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('Storage backend'),
       '#description' => $this->t('Choose were to store profiler data.'),
-      '#options' => array('profiler.file_storage' => $this->t('File'), 'profiler.database_storage' => $this->t('Database')),
+      '#options' => array(
+        'profiler.file_storage' => $this->t('File'),
+        'profiler.database_storage' => $this->t('Database')
+      ),
       '#default_value' => $config->get('storage'),
     );
 
