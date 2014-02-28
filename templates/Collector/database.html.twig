@@ -32,6 +32,7 @@
 {% endblock %}
 
 {% block panel %}
+    <h2>{{ 'Database'|t }}</h2>
     {% for query in collector.queries %}
         <div class="query">
             {{ query.query }}

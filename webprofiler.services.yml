@@ -48,10 +48,10 @@ services:
     class: Drupal\webprofiler\DataCollector\TimerDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/timer.html.twig', id:'timer' }
-#  webprofiler.memory:
-#    class: Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector
-#    tags:
-#      - { name: data_collector, template:'@webprofiler/Collector/memory.html.twig', id:'memory' }
+  webprofiler.memory:
+    class: Drupal\webprofiler\DataCollector\MemoryDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/memory.html.twig', id:'memory' }
   webprofiler.form:
     class: Drupal\webprofiler\DataCollector\FormDataCollector
     arguments: ['@form_builder']
