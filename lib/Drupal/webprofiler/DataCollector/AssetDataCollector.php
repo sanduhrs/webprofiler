@@ -93,7 +93,7 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
    * Twig callback to return the JS settings.
    */
   public function getJsSettings() {
-    return json_encode($this->data['js']['settings']['data']);
+    return isset($this->data['js']['settings']) ? json_encode($this->data['js']['settings']['data']) : '';
   }
 
 }
