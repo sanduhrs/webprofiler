@@ -49,7 +49,7 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/timer.html.twig', id:'timer' }
   webprofiler.time:
-    class: Symfony\Component\HttpKernel\DataCollector\TimeDataCollector
+    class: Drupal\webprofiler\DataCollector\TimeDataCollector
     arguments: [NULL, '@stopwatch']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/time.html.twig', id:'time', priority: 255 }
@@ -92,7 +92,7 @@ services:
   stopwatch:
     class: Symfony\Component\Stopwatch\Stopwatch
   webprofiler.event:
-    class: Symfony\Component\HttpKernel\DataCollector\EventDataCollector
+    class: Drupal\webprofiler\DataCollector\EventDataCollector
     arguments: ['@event_dispatcher']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', priority: 255 }
