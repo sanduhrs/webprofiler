@@ -123,5 +123,5 @@ function webprofiler_page_build(&$page) {
     return;
   }
 
-  $page['#attached']['library'][] = array('webprofiler', 'webprofiler');
+  $page['#attached']['library'][] = 'webprofiler/webprofiler';
 }

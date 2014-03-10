@@ -162,10 +162,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
           $webprofiler_path . '/js/webprofiler.js' => array(),
         ),
         'library' => array(
-          array(
-            'core',
-            'drupal.vertical-tabs',
-          )
+          'core/drupal.vertical-tabs',
         )
       )
     );
