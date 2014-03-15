@@ -37,7 +37,7 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
    */
   public function getSummary() {
     return \Drupal::translation()
-      ->translate('State variabiles: @variables', array('@variables' => count($this->stateKeys())));
+      ->translate('State variables: @variables', array('@variables' => count($this->stateKeys())));
   }
 
   /**
