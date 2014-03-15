@@ -8,6 +8,7 @@
 namespace Drupal\webprofiler\Config;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Language\LanguageDefault;
 use Drupal\webprofiler\DataCollector\ConfigDataCollector;
@@ -153,6 +154,13 @@ class ConfigFactoryWrapper implements ConfigFactoryInterface {
    */
   public function listAll($prefix = '') {
     return $this->configFactory->listAll($prefix);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addOverride(ConfigFactoryOverrideInterface $config_factory_override) {
+    return $this->configFactory->addOverride($config_factory_override);
   }
 
 } 
