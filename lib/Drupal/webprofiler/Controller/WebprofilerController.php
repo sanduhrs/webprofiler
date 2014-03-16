@@ -163,8 +163,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         ),
         'library' => array(
           'core/drupal.vertical-tabs',
-        )
-      )
+        ),
+      ),
     );
 
     $resume = array(

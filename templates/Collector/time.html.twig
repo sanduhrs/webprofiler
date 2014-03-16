@@ -1,18 +1,5 @@
 {% from _self import display_timeline, dump_request_data %}
 
-{% if colors is not defined %}
-    {% set colors = {
-        'default':                '#aacd4e',
-        'section':                '#666',
-        'event_listener':         '#3dd',
-        'event_listener_loading': '#add',
-        'template':               '#dd3',
-        'doctrine':               '#d3d',
-        'propel':                 '#f4d',
-        'child_sections':         '#eed',
-    } %}
-{% endif %}
-
 {% block toolbar %}
     {% set duration = collector.events|length ? '%.0f ms'|format(collector.duration) : 'n/a' %}
     {% set icon %}
@@ -47,6 +34,20 @@
 {% endblock %}
 
 {% block panelContent %}
+
+    {% if colors is not defined %}
+        {% set colors = {
+        'default':                '#aacd4e',
+        'section':                '#666',
+        'event_listener':         '#3dd',
+        'event_listener_loading': '#add',
+        'template':               '#dd3',
+        'doctrine':               '#d3d',
+        'propel':                 '#f4d',
+        'child_sections':         '#eed',
+        } %}
+    {% endif %}
+
     <form id="timeline-control" action="" method="get">
         <input type="hidden" name="panel" value="time">
         <table>
@@ -75,7 +76,7 @@
         </small>
     </h3>
 
-    {{ display_timeline('timeline_' ~ token, collector.events, colors) }}
+    {{ _self.getdisplay_timeline('timeline_' ~ token, collector.events, colors) }}
 
     {% if profile.children|length %}
         {% for child in profile.children %}
@@ -85,7 +86,7 @@
                 <small> - {{ events.__section__.duration }} ms</small>
             </h3>
 
-            {{ display_timeline('timeline_' ~ child.token, events, colors) }}
+            {{ _self.getdisplay_timeline('timeline_' ~ child.token, events, colors) }}
         {% endfor %}
     {% endif %}
 
@@ -133,7 +134,7 @@
 
             var _drawingColors  = {{ colors|json_encode|raw }},
                 _storagePrefix  = 'timeline/',
-                _threshold      = 1,
+                _threshold      = 2,
                 _requests       = requests,
                 _maxRequestTime = maxRequestTime;
 
@@ -162,7 +163,7 @@
              */
             function getContainerWidth()
             {
-                return query('#collector-content h2').clientWidth;
+                return query('details#time div.details-wrapper ').clientWidth;
             }
 
             /**
@@ -359,6 +360,7 @@
                 threshold = threshold || this.getThreshold();
 
                 var self = this;
+                console.log(_requests);
 
                 _requests.forEach(function(request) {
                     self.drawOne(request, maxRequestTime, threshold, width);
@@ -366,23 +368,12 @@
             };
 
             this.getThreshold = function() {
-                var threshold = Sfjs.getPreference(_storagePrefix + 'threshold');
-
-                if (threshold === null) {
-                    return _threshold;
-                }
-
-                _threshold = parseInt(threshold);
-
                 return _threshold;
             };
 
             this.setThreshold = function(threshold)
             {
                 _threshold = threshold;
-
-                Sfjs.setPreference(_storagePrefix + 'threshold', threshold);
-
                 return this;
             };
         };
@@ -401,12 +392,12 @@
         var requests_data = {
             "max": {{ "%F"|format(collector.events.__section__.endtime) }},
             "requests": [
-{{ dump_request_data(token, profile, collector.events, collector.events.__section__.origin) }}
+{{ _self.getdump_request_data(token, profile, collector.events, collector.events.__section__.origin) }}
 
 {% if profile.children|length %}
                 ,
 {% for child in profile.children %}
-{{ dump_request_data(child.token, child, child.getcollector('time').events, collector.events.__section__.origin) }}{{ loop.last ? '' : ',' }}
+{{ _self.getdump_request_data(child.token, child, child.getcollector('time').events, collector.events.__section__.origin) }}{{ loop.last ? '' : ',' }}
 {% endfor %}
 {% endif %}
             ]
@@ -451,7 +442,7 @@
                     "id": "{{ token }}",
                     "left": {{ "%F"|format(events.__section__.origin - origin) }},
                     "events": [
-{{ dump_events(events) }}
+{{ _self.getdump_events(events) }}
                     ]
                 }
 {% endautoescape %}
@@ -471,7 +462,7 @@
                             "memory": {{ "%.1F"|format(event.memory / 1024 / 1024) }},
                             "periods": [
                                 {%- for period in event.periods -%}
-                                    {"start": {{ "%F"|format(period.starttime) }}, "end": {{ "%F"|format(period.endtime) }}}{{ loop.last ? '' : ', ' }}
+                                    {"start": {{ "%F"|format(period.starttime) }}, "end": {{ "%F"|format(period.endtime) }}}{{ loop.last ? '' : ',' }}
                                 {%- endfor -%}
                             ]
                         }{{ loop.last ? '' : ',' }}
