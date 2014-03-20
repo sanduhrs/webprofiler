@@ -86,8 +86,11 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
     }
 
     $data = array();
-    foreach ($this->data['drupal_extension']['modules'] as $module => $path) {
-      $data[$module] = $path;
+    foreach ($this->data['drupal_extension']['modules'] as $module => $info) {
+      $data[$module] = implode(' | ', array(
+        \Drupal::translation()->translate('Path: @path', array('@path' => $info->uri)),
+
+      ));
     }
     return $data;
   }
@@ -102,9 +105,9 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
     $data = array();
     foreach ($this->data['drupal_extension']['themes'] as $name => $info) {
       $data[$name] = implode(' | ', array(
-        'Path: ' . $info->uri,
-        'Status: ' . $info->status,
-        'Engine: ' . $info->engine
+        \Drupal::translation()->translate('Path: @path', array('@path' => $info->uri)),
+        \Drupal::translation()->translate('Status: @status', array('@status' => $info->status)),
+        \Drupal::translation()->translate('Engine: @engine', array('@engine' => $info->engine)),
       ));
     }
     return $data;
