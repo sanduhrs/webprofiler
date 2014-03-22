@@ -1,14 +1,14 @@
 {
-  "name": "drupal/webprofiler",
-  "description": "",
-  "type": "drupal-webprofiler",
-  "license": "GPL-2.0+",
-  "require": {
-    "symfony/stopwatch": "2.4.*"
-  },
-  "autoload": {
-    "files": [
-      "vendor/symfony/stopwatch/Symfony/Component/Stopwatch/Stopwatch.php"
-    ]
-  }
+    "name": "drupal/webprofiler",
+    "description": "",
+    "type": "drupal-webprofiler",
+    "license": "GPL-2.0+",
+    "require": {
+        "symfony/stopwatch": "2.4.*"
+    },
+    "autoload": {
+        "files": [
+            "vendor/symfony/stopwatch/Symfony/Component/Stopwatch/Stopwatch.php"
+        ]
+    }
 }

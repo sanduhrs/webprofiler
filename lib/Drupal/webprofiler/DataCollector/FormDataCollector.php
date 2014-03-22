@@ -23,7 +23,8 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()->formatPlural(count($this->data['forms']), 'One form', '@count forms');
+    return \Drupal::translation()
+      ->translate('Rendered forms: @forms', array('@forms' => count($this->data['forms'])));
   }
 
   /**

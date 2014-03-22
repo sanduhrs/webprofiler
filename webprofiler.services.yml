@@ -44,15 +44,11 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/request.html.twig', id:'request' }
       - { name: event_subscriber }
-  webprofiler.timer:
-    class: Drupal\webprofiler\DataCollector\TimerDataCollector
-    tags:
-      - { name: data_collector, template:'@webprofiler/Collector/timer.html.twig', id:'timer' }
   webprofiler.time:
     class: Drupal\webprofiler\DataCollector\TimeDataCollector
     arguments: [NULL, '@stopwatch']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/time.html.twig', id:'time', priority: 255 }
+      - { name: data_collector, template:'@webprofiler/Collector/time.html.twig', id:'time' }
   webprofiler.memory:
     class: Drupal\webprofiler\DataCollector\MemoryDataCollector
     tags:
@@ -89,21 +85,19 @@ services:
     class: Drupal\webprofiler\DataCollector\ConfigDataCollector
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config' }
-  stopwatch:
-    class: Drupal\webprofiler\Stopwatch
   webprofiler.event:
     class: Drupal\webprofiler\DataCollector\EventDataCollector
     arguments: ['@event_dispatcher']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', priority: 255 }
+  stopwatch:
+    class: Drupal\webprofiler\Stopwatch
   webprofiler.debug.event_dispatcher:
     class: Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
     arguments: ['@webprofiler.debug.event_dispatcher.parent', '@stopwatch']
-
   webprofiler.debug.event_dispatcher.parent:
     class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
     arguments: ['@service_container']
-
   webprofiler.debug.controller_resolver:
     class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
     arguments: ['@controller_resolver', '@stopwatch']

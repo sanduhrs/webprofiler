@@ -20,7 +20,7 @@ class TwigExtension extends \Twig_Extension {
    * @param string $rootDir The project root directory
    * @param string $charset The charset
    */
-  public function __construct($fileLinkFormat = 'txmt://open?url=file://%%f&line=%%l', $rootDir = DRUPAL_ROOT, $charset = 'UTF-8') {
+  public function __construct($fileLinkFormat = 'txmt://open?url=file://%f&line=%l', $rootDir = DRUPAL_ROOT, $charset = 'UTF-8') {
     $this->fileLinkFormat = empty($fileLinkFormat) ? ini_get('xdebug.file_link_format') : $fileLinkFormat;
     $this->rootDir = str_replace('\\', '/', $rootDir) . '/';
     $this->charset = $charset;
@@ -42,30 +42,6 @@ class TwigExtension extends \Twig_Extension {
         $this,
         'abbrClass'
       ), array('is_safe' => array('html'))),
-//      new \Twig_SimpleFilter('abbr_method', array(
-//        $this,
-//        'abbrMethod'
-//      ), array('is_safe' => array('html'))),
-//      new \Twig_SimpleFilter('format_args', array(
-//        $this,
-//        'formatArgs'
-//      ), array('is_safe' => array('html'))),
-//      new \Twig_SimpleFilter('format_args_as_text', array(
-//        $this,
-//        'formatArgsAsText'
-//      )),
-//      new \Twig_SimpleFilter('file_excerpt', array(
-//        $this,
-//        'fileExcerpt'
-//      ), array('is_safe' => array('html'))),
-//      new \Twig_SimpleFilter('format_file', array(
-//        $this,
-//        'formatFile'
-//      ), array('is_safe' => array('html'))),
-//      new \Twig_SimpleFilter('format_file_from_text', array(
-//        $this,
-//        'formatFileFromText'
-//      ), array('is_safe' => array('html'))),
       new \Twig_SimpleFilter('file_link', array(
         $this,
         'getFileLink'
@@ -73,6 +49,11 @@ class TwigExtension extends \Twig_Extension {
     );
   }
 
+  /**
+   * @param $class
+   *
+   * @return string
+   */
   public function abbrClass($class) {
     $parts = explode('\\', $class);
     $short = array_pop($parts);

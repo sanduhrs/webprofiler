@@ -7,16 +7,15 @@
 
 namespace Drupal\webprofiler {
 
-class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch {
+  class Stopwatch extends \Symfony\Component\Stopwatch\Stopwatch {
 
-}
+  }
 
 }
 
 namespace Symfony\Component\Stopwatch {
 
-class Stopwatch
-{
+  class Stopwatch {
     /**
      * @var Section[]
      */
@@ -27,9 +26,8 @@ class Stopwatch
      */
     private $activeSections;
 
-    public function __construct()
-    {
-        $this->sections = $this->activeSections = array('__root__' => new Section('__root__'));
+    public function __construct() {
+      $this->sections = $this->activeSections = array('__root__' => new Section('__root__'));
     }
 
     /**
@@ -39,17 +37,16 @@ class Stopwatch
      *
      * @throws \LogicException When the section to re-open is not reachable
      */
-    public function openSection($id = null)
-    {
-        $current = end($this->activeSections);
+    public function openSection($id = NULL) {
+      $current = end($this->activeSections);
 
-        if (null !== $id && null === $current->get($id)) {
-            throw new \LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
-        }
+      if (NULL !== $id && NULL === $current->get($id)) {
+        throw new \LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
+      }
 
-        $this->start('__section__.child', 'section');
-        $this->activeSections[] = $current->open($id);
-        $this->start('__section__');
+      $this->start('__section__.child', 'section');
+      $this->activeSections[] = $current->open($id);
+      $this->start('__section__');
     }
 
     /**
@@ -63,29 +60,27 @@ class Stopwatch
      *
      * @throws \LogicException When there's no started section to be stopped
      */
-    public function stopSection($id)
-    {
-        $this->stop('__section__');
+    public function stopSection($id) {
+      $this->stop('__section__');
 
-        if (1 == count($this->activeSections)) {
-            throw new \LogicException('There is no started section to stop.');
-        }
+      if (1 == count($this->activeSections)) {
+        throw new \LogicException('There is no started section to stop.');
+      }
 
-        $this->sections[$id] = array_pop($this->activeSections)->setId($id);
-        $this->stop('__section__.child');
+      $this->sections[$id] = array_pop($this->activeSections)->setId($id);
+      $this->stop('__section__.child');
     }
 
     /**
      * Starts an event.
      *
-     * @param string $name     The event name
+     * @param string $name The event name
      * @param string $category The event category
      *
      * @return StopwatchEvent A StopwatchEvent instance
      */
-    public function start($name, $category = null)
-    {
-        return end($this->activeSections)->startEvent($name, $category);
+    public function start($name, $category = NULL) {
+      return end($this->activeSections)->startEvent($name, $category);
     }
 
     /**
@@ -95,9 +90,8 @@ class Stopwatch
      *
      * @return bool
      */
-    public function isStarted($name)
-    {
-        return end($this->activeSections)->isEventStarted($name);
+    public function isStarted($name) {
+      return end($this->activeSections)->isEventStarted($name);
     }
 
     /**
@@ -107,9 +101,8 @@ class Stopwatch
      *
      * @return StopwatchEvent A StopwatchEvent instance
      */
-    public function stop($name)
-    {
-        return end($this->activeSections)->stopEvent($name);
+    public function stop($name) {
+      return end($this->activeSections)->stopEvent($name);
     }
 
     /**
@@ -119,9 +112,8 @@ class Stopwatch
      *
      * @return StopwatchEvent A StopwatchEvent instance
      */
-    public function lap($name)
-    {
-        return end($this->activeSections)->stopEvent($name)->start();
+    public function lap($name) {
+      return end($this->activeSections)->stopEvent($name)->start();
     }
 
     /**
@@ -131,20 +123,18 @@ class Stopwatch
      *
      * @return StopwatchEvent[] An array of StopwatchEvent instances
      */
-    public function getSectionEvents($id)
-    {
-        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : array();
+    public function getSectionEvents($id) {
+      return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : array();
     }
-}
+  }
 
 
-/**
- * @internal This class is for internal usage only
- *
- * @author Fabien Potencier <fabien@symfony.com>
- */
-class Section
-{
+  /**
+   * @internal This class is for internal usage only
+   *
+   * @author Fabien Potencier <fabien@symfony.com>
+   */
+  class Section {
     /**
      * @var StopwatchEvent[]
      */
@@ -170,9 +160,8 @@ class Section
      *
      * @param float|null $origin Set the origin of the events in this section, use null to set their origin to their start time
      */
-    public function __construct($origin = null)
-    {
-        $this->origin = is_numeric($origin) ? $origin : null;
+    public function __construct($origin = NULL) {
+      $this->origin = is_numeric($origin) ? $origin : NULL;
     }
 
     /**
@@ -182,15 +171,14 @@ class Section
      *
      * @return Section|null The child section or null when none found
      */
-    public function get($id)
-    {
-        foreach ($this->children as $child) {
-            if ($id === $child->getId()) {
-                return $child;
-            }
+    public function get($id) {
+      foreach ($this->children as $child) {
+        if ($id === $child->getId()) {
+          return $child;
         }
+      }
 
-        return null;
+      return NULL;
     }
 
     /**
@@ -200,21 +188,19 @@ class Section
      *
      * @return Section A child section
      */
-    public function open($id)
-    {
-        if (null === $session = $this->get($id)) {
-            $session = $this->children[] = new self(microtime(true) * 1000);
-        }
+    public function open($id) {
+      if (NULL === $session = $this->get($id)) {
+        $session = $this->children[] = new self(microtime(TRUE) * 1000);
+      }
 
-        return $session;
+      return $session;
     }
 
     /**
      * @return string The identifier of the section
      */
-    public function getId()
-    {
-        return $this->id;
+    public function getId() {
+      return $this->id;
     }
 
     /**
@@ -224,28 +210,26 @@ class Section
      *
      * @return Section The current section
      */
-    public function setId($id)
-    {
-        $this->id = $id;
+    public function setId($id) {
+      $this->id = $id;
 
-        return $this;
+      return $this;
     }
 
     /**
      * Starts an event.
      *
-     * @param string $name     The event name
+     * @param string $name The event name
      * @param string $category The event category
      *
      * @return StopwatchEvent The event
      */
-    public function startEvent($name, $category)
-    {
-        if (!isset($this->events[$name])) {
-            $this->events[$name] = new StopwatchEvent($this->origin ?: microtime(true) * 1000, $category);
-        }
+    public function startEvent($name, $category) {
+      if (!isset($this->events[$name])) {
+        $this->events[$name] = new StopwatchEvent($this->origin ? : microtime(TRUE) * 1000, $category);
+      }
 
-        return $this->events[$name]->start();
+      return $this->events[$name]->start();
     }
 
     /**
@@ -255,9 +239,8 @@ class Section
      *
      * @return bool
      */
-    public function isEventStarted($name)
-    {
-        return isset($this->events[$name]) && $this->events[$name]->isStarted();
+    public function isEventStarted($name) {
+      return isset($this->events[$name]) && $this->events[$name]->isStarted();
     }
 
     /**
@@ -269,13 +252,12 @@ class Section
      *
      * @throws \LogicException When the event has not been started
      */
-    public function stopEvent($name)
-    {
-        if (!isset($this->events[$name])) {
-            throw new \LogicException(sprintf('Event "%s" is not started.', $name));
-        }
+    public function stopEvent($name) {
+      if (!isset($this->events[$name])) {
+        throw new \LogicException(sprintf('Event "%s" is not started.', $name));
+      }
 
-        return $this->events[$name]->stop();
+      return $this->events[$name]->stop();
     }
 
     /**
@@ -287,9 +269,8 @@ class Section
      *
      * @throws \LogicException When the event has not been started
      */
-    public function lap($name)
-    {
-        return $this->stopEvent($name)->start();
+    public function lap($name) {
+      return $this->stopEvent($name)->start();
     }
 
     /**
@@ -297,14 +278,12 @@ class Section
      *
      * @return StopwatchEvent[] An array of StopwatchEvent instances
      */
-    public function getEvents()
-    {
-        return $this->events;
+    public function getEvents() {
+      return $this->events;
     }
-}
+  }
 
-class StopwatchEvent
-{
+  class StopwatchEvent {
     /**
      * @var StopwatchPeriod[]
      */
@@ -328,15 +307,14 @@ class StopwatchEvent
     /**
      * Constructor.
      *
-     * @param float       $origin   The origin time in milliseconds
+     * @param float $origin The origin time in milliseconds
      * @param string|null $category The event category or null to use the default
      *
      * @throws \InvalidArgumentException When the raw time is not valid
      */
-    public function __construct($origin, $category = null)
-    {
-        $this->origin = $this->formatTime($origin);
-        $this->category = is_string($category) ? $category : 'default';
+    public function __construct($origin, $category = NULL) {
+      $this->origin = $this->formatTime($origin);
+      $this->category = is_string($category) ? $category : 'default';
     }
 
     /**
@@ -344,9 +322,8 @@ class StopwatchEvent
      *
      * @return string The category
      */
-    public function getCategory()
-    {
-        return $this->category;
+    public function getCategory() {
+      return $this->category;
     }
 
     /**
@@ -354,9 +331,8 @@ class StopwatchEvent
      *
      * @return float The origin in milliseconds
      */
-    public function getOrigin()
-    {
-        return $this->origin;
+    public function getOrigin() {
+      return $this->origin;
     }
 
     /**
@@ -364,11 +340,10 @@ class StopwatchEvent
      *
      * @return StopwatchEvent The event
      */
-    public function start()
-    {
-        $this->started[] = $this->getNow();
+    public function start() {
+      $this->started[] = $this->getNow();
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -380,15 +355,14 @@ class StopwatchEvent
      *
      * @throws \LogicException When stop() is called without a matching call to start()
      */
-    public function stop()
-    {
-        if (!count($this->started)) {
-            throw new \LogicException('stop() called but start() has not been called before.');
-        }
+    public function stop() {
+      if (!count($this->started)) {
+        throw new \LogicException('stop() called but start() has not been called before.');
+      }
 
-        $this->periods[] = new StopwatchPeriod(array_pop($this->started), $this->getNow());
+      $this->periods[] = new StopwatchPeriod(array_pop($this->started), $this->getNow());
 
-        return $this;
+      return $this;
     }
 
     /**
@@ -396,9 +370,8 @@ class StopwatchEvent
      *
      * @return bool
      */
-    public function isStarted()
-    {
-        return !empty($this->started);
+    public function isStarted() {
+      return !empty($this->started);
     }
 
     /**
@@ -406,19 +379,17 @@ class StopwatchEvent
      *
      * @return StopwatchEvent The event
      */
-    public function lap()
-    {
-        return $this->stop()->start();
+    public function lap() {
+      return $this->stop()->start();
     }
 
     /**
      * Stops all non already stopped periods.
      */
-    public function ensureStopped()
-    {
-        while (count($this->started)) {
-            $this->stop();
-        }
+    public function ensureStopped() {
+      while (count($this->started)) {
+        $this->stop();
+      }
     }
 
     /**
@@ -426,9 +397,8 @@ class StopwatchEvent
      *
      * @return StopwatchPeriod[] An array of StopwatchPeriod instances
      */
-    public function getPeriods()
-    {
-        return $this->periods;
+    public function getPeriods() {
+      return $this->periods;
     }
 
     /**
@@ -436,9 +406,8 @@ class StopwatchEvent
      *
      * @return integer The time (in milliseconds)
      */
-    public function getStartTime()
-    {
-        return isset($this->periods[0]) ? $this->periods[0]->getStartTime() : 0;
+    public function getStartTime() {
+      return isset($this->periods[0]) ? $this->periods[0]->getStartTime() : 0;
     }
 
     /**
@@ -446,9 +415,8 @@ class StopwatchEvent
      *
      * @return integer The time (in milliseconds)
      */
-    public function getEndTime()
-    {
-        return ($count = count($this->periods)) ? $this->periods[$count - 1]->getEndTime() : 0;
+    public function getEndTime() {
+      return ($count = count($this->periods)) ? $this->periods[$count - 1]->getEndTime() : 0;
     }
 
     /**
@@ -456,14 +424,13 @@ class StopwatchEvent
      *
      * @return integer The duration (in milliseconds)
      */
-    public function getDuration()
-    {
-        $total = 0;
-        foreach ($this->periods as $period) {
-            $total += $period->getDuration();
-        }
+    public function getDuration() {
+      $total = 0;
+      foreach ($this->periods as $period) {
+        $total += $period->getDuration();
+      }
 
-        return $total;
+      return $total;
     }
 
     /**
@@ -471,16 +438,15 @@ class StopwatchEvent
      *
      * @return integer The memory usage (in bytes)
      */
-    public function getMemory()
-    {
-        $memory = 0;
-        foreach ($this->periods as $period) {
-            if ($period->getMemory() > $memory) {
-                $memory = $period->getMemory();
-            }
+    public function getMemory() {
+      $memory = 0;
+      foreach ($this->periods as $period) {
+        if ($period->getMemory() > $memory) {
+          $memory = $period->getMemory();
         }
+      }
 
-        return $memory;
+      return $memory;
     }
 
     /**
@@ -488,9 +454,8 @@ class StopwatchEvent
      *
      * @return float Time in ms
      */
-    protected function getNow()
-    {
-        return $this->formatTime(microtime(true) * 1000 - $this->origin);
+    protected function getNow() {
+      return $this->formatTime(microtime(TRUE) * 1000 - $this->origin);
     }
 
     /**
@@ -502,18 +467,16 @@ class StopwatchEvent
      *
      * @throws \InvalidArgumentException When the raw time is not valid
      */
-    private function formatTime($time)
-    {
-        if (!is_numeric($time)) {
-            throw new \InvalidArgumentException('The time must be a numerical value');
-        }
+    private function formatTime($time) {
+      if (!is_numeric($time)) {
+        throw new \InvalidArgumentException('The time must be a numerical value');
+      }
 
-        return round($time, 1);
+      return round($time, 1);
     }
-}
+  }
 
-class StopwatchPeriod
-{
+  class StopwatchPeriod {
     private $start;
     private $end;
     private $memory;
@@ -522,13 +485,12 @@ class StopwatchPeriod
      * Constructor.
      *
      * @param integer $start The relative time of the start of the period (in milliseconds)
-     * @param integer $end   The relative time of the end of the period (in milliseconds)
+     * @param integer $end The relative time of the end of the period (in milliseconds)
      */
-    public function __construct($start, $end)
-    {
-        $this->start = (integer) $start;
-        $this->end = (integer) $end;
-        $this->memory = memory_get_usage(true);
+    public function __construct($start, $end) {
+      $this->start = (integer) $start;
+      $this->end = (integer) $end;
+      $this->memory = memory_get_usage(TRUE);
     }
 
     /**
@@ -536,9 +498,8 @@ class StopwatchPeriod
      *
      * @return integer The time (in milliseconds)
      */
-    public function getStartTime()
-    {
-        return $this->start;
+    public function getStartTime() {
+      return $this->start;
     }
 
     /**
@@ -546,9 +507,8 @@ class StopwatchPeriod
      *
      * @return integer The time (in milliseconds)
      */
-    public function getEndTime()
-    {
-        return $this->end;
+    public function getEndTime() {
+      return $this->end;
     }
 
     /**
@@ -556,9 +516,8 @@ class StopwatchPeriod
      *
      * @return integer The period duration (in milliseconds)
      */
-    public function getDuration()
-    {
-        return $this->end - $this->start;
+    public function getDuration() {
+      return $this->end - $this->start;
     }
 
     /**
@@ -566,10 +525,9 @@ class StopwatchPeriod
      *
      * @return integer The memory usage (in bytes)
      */
-    public function getMemory()
-    {
-        return $this->memory;
+    public function getMemory() {
+      return $this->memory;
     }
-}
+  }
 
 }
