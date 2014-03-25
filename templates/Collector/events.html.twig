@@ -32,7 +32,7 @@
                 <td>
                     {% set link = listener.file|file_link(listener.line) %}
                     {{ listener.class|abbr_class }}::{% if link %}<a
-                    href="{{ link }}">{{ listener.method }}</a>{% else %}{{ listener.method }}{% endif %}
+                        href="{{ link }}">{{ listener.method }}</a>{% else %}{{ listener.method }}{% endif %}
                 </td>
             </tr>
         {% endfor %}
@@ -53,7 +53,7 @@
                     <td>
                         {% set link = listeners[listener].file|file_link(listeners[listener].line) %}
                         {{ listeners[listener].class|abbr_class }}::{% if link %}<a
-                        href="{{ link }}">{{ listeners[listener].method }}</a>{% else %}{{ listeners[listener].method }}{% endif %}
+                            href="{{ link }}">{{ listeners[listener].method }}</a>{% else %}{{ listeners[listener].method }}{% endif %}
                     </td>
                 </tr>
             {% endfor %}

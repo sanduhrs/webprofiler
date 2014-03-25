@@ -16,14 +16,17 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\system\FileDownloadController;
+use Drupal\webprofiler\DataCollector\TimeDataCollector;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
+use Drupal\webprofiler\Stopwatch;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Cmf\Component\Routing\ChainRouter;
+use Symfony\Component\Stopwatch\StopwatchEvent;
 use Twig_Loader_Filesystem;
 
 class WebprofilerController extends ControllerBase implements ContainerInjectionInterface {
@@ -129,6 +132,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     $templates = $template_manager->getTemplates($profile);
 
     $childrens = array();
+    $events = array();
+    $endTime = 0;
     foreach ($templates as $name => $template) {
       /** @var DrupalDataCollectorInterface $collector */
       $collector = $profile->getCollector($name);
@@ -149,6 +154,37 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
           )
         );
       }
+
+      if ($name == 'time') {
+        /** @var TimeDataCollector $collector */
+        /** @var StopwatchEvent[] $collectedEvents */
+        $collectedEvents = $collector->getEvents();
+        $section_periods = $collectedEvents['__section__']->getPeriods();
+        $endTime = end($section_periods)->getEndTime();
+
+        foreach ($collectedEvents as $key => $collectedEvent) {
+          if ('__section__' != $key) {
+            $periods = array();
+            foreach ($collectedEvent->getPeriods() as $period) {
+              $periods[] = array(
+                'start' => sprintf("%F", $period->getStartTime()),
+                'end' => sprintf("%F", $period->getEndTime()),
+              );
+            }
+
+            $events[] = array(
+              "name" => $key,
+              "category" => $collectedEvent->getCategory(),
+              "origin" => sprintf("%F", $collectedEvent->getOrigin()),
+              "starttime" => sprintf("%F", $collectedEvent->getStartTime()),
+              "endtime" => sprintf("%F", $collectedEvent->getEndTime()),
+              "duration" => sprintf("%F", $collectedEvent->getDuration()),
+              "memory" => sprintf("%.1F", $collectedEvent->getMemory() / 1024 / 1024),
+              "periods" => $periods,
+            );
+          }
+        }
+      }
     }
 
     $panels = array(
@@ -159,7 +195,12 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
           $webprofiler_path . '/css/webprofiler.css' => array(),
         ),
         'js' => array(
+          $webprofiler_path . '/js/d3.v2.js' => array(),
           $webprofiler_path . '/js/webprofiler.js' => array(),
+          array(
+            'data' => array('webprofiler' => array('events' => $events, 'endtime' => $endTime)),
+            'type' => 'setting'
+          ),
         ),
         'library' => array(
           'core/drupal.vertical-tabs',
@@ -183,7 +224,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    *
    */
-  public function toolbarAction($token) {
+  public
+  function toolbarAction($token) {
     if (NULL === $token) {
       return new Response('', 200, array('Content-Type' => 'text/html'));
     }
@@ -217,7 +259,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    * Generate the list page.
    */
-  public function listAction(Request $request) {
+  public
+  function listAction(Request $request) {
     $limit = $request->get('limit', 10);
     $this->profiler->disable();
 
@@ -276,7 +319,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    * Downloads a single profile.
    */
-  public function singleExportAction($token) {
+  public
+  function singleExportAction($token) {
     if (NULL === $this->profiler) {
       throw new NotFoundHttpException('The profiler must be enabled.');
     }
@@ -296,7 +340,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    * Downloads a tarball with all stored profiles.
    */
-  public function allExportAction() {
+  public
+  function allExportAction() {
     $archiver = new ArchiveTar(file_directory_temp() . '/profiles.tar.gz', 'gz');
     $tokens = $this->profiler->find('', '', 100, '', '', '');
 
