@@ -23,5 +23,44 @@
 
 {% block panel %}
     <h2>{{ 'Rendered forms'|t }}</h2>
-    {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.forms } only %}
+
+    {% for key, form in collector.forms %}
+        <h3 style="margin-top: 40px">{{ key }}</h3>
+
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">{{ 'Key'|t }}</th>
+                <th scope="col">{{ 'Value'|t }}</th>
+            </tr>
+            </thead>
+            <tr>
+                <td>{{ 'Class'|t }}</td>
+                <td>{{ form.class }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">{{ 'Name'|t }}</th>
+                <th scope="col">{{ 'Title'|t }}</th>
+                <th scope="col">{{ 'Access'|t }}</th>
+                <th scope="col">{{ 'Type'|t }}</th>
+            </tr>
+            </thead>
+
+            {% for key, item in form.form if not (key starts with '#') %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ item['#title']|default('-') }}</td>
+                    <td>{{ item['#access']|default('-') }}</td>
+                    <td>{{ item['#type']|default('-') }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    {% endfor %}
+
 {% endblock %}

@@ -7,6 +7,7 @@
 
 namespace Drupal\webprofiler\Form;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -16,22 +17,33 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
  */
 class ManageForm extends FormBase {
 
+  /**
+   * @var \Symfony\Component\HttpKernel\Profiler\Profiler
+   */
   private $profiler;
+
+  /**
+   * @var \Symfony\Component\DependencyInjection\ContainerInterface
+   */
+  private $config_factory;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('profiler')
+      $container->get('profiler'),
+      $container->get('config.factory')
     );
   }
 
   /**
    * @param Profiler $profiler
+   * @param ConfigFactoryInterface $config_factory
    */
-  public function __construct(Profiler $profiler) {
+  public function __construct(Profiler $profiler, ConfigFactoryInterface $config_factory) {
     $this->profiler = $profiler;
+    $this->config_factory = $config_factory;
   }
 
   /**
@@ -58,9 +70,12 @@ class ManageForm extends FormBase {
   public function buildForm(array $form, array &$form_state) {
     $this->profiler->disable();
 
+    $storage = $this->config_factory->get('webprofiler.config')->get('storage');
+
     $form['purge'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Purge profiles'),
+      '#title' => $this->t('Purge profiles'),
+      '#description' => $this->t('Purge %storage profiles.', array('%storage' => $storage)),
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
     );
@@ -73,7 +88,7 @@ class ManageForm extends FormBase {
 
     $form['data'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Data'),
+      '#title' => $this->t('Data'),
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
     );
@@ -92,7 +107,7 @@ class ManageForm extends FormBase {
    */
   public function purge(array &$form, array &$form_state) {
     $this->profiler->purge();
-    drupal_set_message(t('Profiles purged'));
+    drupal_set_message($this->t('Profiles purged'));
   }
 
   /**

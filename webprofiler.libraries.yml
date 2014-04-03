@@ -1,0 +1,16 @@
+d3:
+  remote: https://github.com/mbostock/d3
+  version: 3.4.4
+  js:
+    /libraries/d3/d3.min.js: {}
+webprofiler:
+  version: 1.0
+  js:
+    js/webprofiler.js: {}
+  css:
+    component:
+      css/webprofiler.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

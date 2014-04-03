@@ -8,18 +8,15 @@
 namespace Drupal\webprofiler\Controller;
 
 use Drupal\Component\Archiver\ArchiveTar;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DataCollector\TimeDataCollector;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
-use Drupal\webprofiler\Stopwatch;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,11 +57,6 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
    * @var \Drupal\Core\Form\FormBuilderInterface
    */
   private $form_builder;
-
-  /**
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  private $config_factory;
 
   /**
    * @var \Drupal\system\FileDownloadController
@@ -128,7 +120,6 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
     }
 
     $template_manager = $this->templateManager;
-    $webprofiler_path = drupal_get_path('module', 'webprofiler');
     $templates = $template_manager->getTemplates($profile);
 
     $childrens = array();
@@ -191,12 +182,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
       '#theme' => 'vertical_tabs',
       '#children' => $childrens,
       '#attached' => array(
-        'css' => array(
-          $webprofiler_path . '/css/webprofiler.css' => array(),
-        ),
         'js' => array(
-          $webprofiler_path . '/js/d3.v2.js' => array(),
-          $webprofiler_path . '/js/webprofiler.js' => array(),
           array(
             'data' => array('webprofiler' => array('events' => $events, 'endtime' => $endTime)),
             'type' => 'setting'
@@ -204,6 +190,8 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
         ),
         'library' => array(
           'core/drupal.vertical-tabs',
+          'webprofiler/webprofiler',
+          'webprofiler/d3',
         ),
       ),
     );
@@ -224,8 +212,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    *
    */
-  public
-  function toolbarAction($token) {
+  public function toolbarAction($token) {
     if (NULL === $token) {
       return new Response('', 200, array('Content-Type' => 'text/html'));
     }
@@ -259,8 +246,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    * Generate the list page.
    */
-  public
-  function listAction(Request $request) {
+  public function listAction(Request $request) {
     $limit = $request->get('limit', 10);
     $this->profiler->disable();
 
@@ -319,8 +305,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    * Downloads a single profile.
    */
-  public
-  function singleExportAction($token) {
+  public function singleExportAction($token) {
     if (NULL === $this->profiler) {
       throw new NotFoundHttpException('The profiler must be enabled.');
     }
@@ -340,8 +325,7 @@ class WebprofilerController extends ControllerBase implements ContainerInjection
   /**
    * Downloads a tarball with all stored profiles.
    */
-  public
-  function allExportAction() {
+  public function allExportAction() {
     $archiver = new ArchiveTar(file_directory_temp() . '/profiles.tar.gz', 'gz');
     $tokens = $this->profiler->find('', '', 100, '', '', '');
 

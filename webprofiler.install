@@ -73,3 +73,77 @@ function webprofiler_schema() {
 
   return $schema;
 }
+
+/**
+ * Implements hook_requirements().
+ */
+function webprofiler_requirements($phase) {
+  $has_d3 = verify_library('webprofiler', 'd3');
+
+  $requirements = array();
+  $requirements['d3js'] = array(
+    'title' => t('D3 library'),
+    'value' => $has_d3 ? t('Enabled') : t('Not found'),
+  );
+
+  if (!$has_d3) {
+    $requirements['d3js']['severity'] = REQUIREMENT_WARNING;
+    $requirements['d3js']['description'] =
+      t('Webprofiler module requires D3 library to proper render data. !d3s_url into /libraries/d3/d3.min.js.',
+        array(
+          '!d3s_url' => l(t('Download D3'), 'https://github.com/mbostock/d3',
+            array('attributes' => array('target' => 'blank')))
+        ));
+  }
+
+  return $requirements;
+}
+
+/**
+ * Verify that the library files exist.
+ *
+ * @param string $extension
+ *   The name of the extension that registered a library.
+ * @param string $name
+ *   The name of a registered library to retrieve.
+ *
+ * @return bool
+ *   TRUE if all files of this library exists, FALSE otherwise
+ *
+ * @see https://drupal.org/node/2231385
+ */
+function verify_library($extension, $name) {
+  /** @var Drupal\Core\Asset\LibraryDiscovery $library_discovery */
+  $library_discovery = \Drupal::service('library.discovery');
+  $library = $library_discovery->getLibraryByName($extension, $name);
+
+  $exist = TRUE;
+  if ($library['js']) {
+    foreach ($library['js'] as $js) {
+      if ($js['type'] == 'file') {
+        if (!file_exists(DRUPAL_ROOT . '/' . $js['data'])) {
+          $exist = FALSE;
+        }
+      }
+    }
+  }
+
+  if ($library['css']) {
+    foreach ($library['css'] as $css) {
+      if ($css['type'] == 'file') {
+        if (!file_exists(DRUPAL_ROOT . '/' . $css['data'])) {
+          $exist = FALSE;
+        }
+      }
+    }
+  }
+
+  if ($library['dependencies']) {
+    foreach ($library['dependencies'] as $dependency) {
+      $parts = explode('/', $dependency);
+      $correct = $this->verifyLibrary($parts[0], $parts[1]);
+    }
+  }
+
+  return $exist;
+}

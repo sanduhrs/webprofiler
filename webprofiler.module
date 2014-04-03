@@ -13,20 +13,6 @@ function webprofiler_help($path, $arg) {
 }
 
 /**
- * Implements hook_menu_link_defaults().
- */
-function webprofiler_menu_link_defaults() {
-  $links = array();
-  $links['webprofiler.admin_list'] = array(
-    'link_title' => 'Webprofiler',
-    'description' => 'List saved profiles, import/export profiles and manage configuration.',
-    'route_name' => 'webprofiler.admin_list',
-    'parent' => 'system.admin.config.development',
-  );
-  return $links;
-}
-
-/**
  * Implements hook_theme().
  */
 function webprofiler_theme() {
@@ -96,23 +82,6 @@ function webprofiler_cache_flush() {
     $profiler = \Drupal::service('profiler');
     $profiler->purge();
   }
-}
-
-/**
- * Implements hook_library_info().
- */
-function webprofiler_library_info() {
-  $libraries['webprofiler'] = array(
-    'title' => 'Web Profiler',
-    'version' => \Drupal::VERSION,
-    'dependencies' => array(
-      array('system', 'jquery'),
-      array('system', 'drupal'),
-      array('system', 'drupalSettings'),
-    ),
-  );
-
-  return $libraries;
 }
 
 /**
