@@ -83,12 +83,3 @@ function webprofiler_cache_flush() {
     $profiler->purge();
   }
 }
-
-/**
- * Implements hook_page_build().
- */
-function webprofiler_page_build(&$page) {
-  if (!\Drupal::currentUser()->hasPermission('access developer toolbar')) {
-    return;
-  }
-}
