@@ -91,6 +91,4 @@ function webprofiler_page_build(&$page) {
   if (!\Drupal::currentUser()->hasPermission('access developer toolbar')) {
     return;
   }
-
-  $page['#attached']['library'][] = 'webprofiler/webprofiler';
 }
