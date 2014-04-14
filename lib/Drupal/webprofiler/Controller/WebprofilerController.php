@@ -26,7 +26,7 @@ use Symfony\Cmf\Component\Routing\ChainRouter;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 use Twig_Loader_Filesystem;
 
-class WebprofilerController extends ControllerBase implements ContainerInjectionInterface {
+class WebprofilerController extends ControllerBase {
 
   /**
    * @var \Symfony\Component\HttpKernel\Profiler\Profiler
