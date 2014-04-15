@@ -39,9 +39,11 @@ class FormBuilderWrapper extends FormBuilder {
   public function retrieveForm($form_id, &$form_state) {
     $form = parent::retrieveForm($form_id, $form_state);
 
-    $this->build_forms[$form_id] += array(
-      'form' => $form,
-    );
+    if ($this->build_forms != NULL) {
+      $this->build_forms[$form_id] += array(
+        'form' => $form,
+      );
+    }
 
     return $form;
   }
