@@ -81,6 +81,13 @@ class CacheBackendWrapper implements CacheBackendInterface {
   /**
    * {@inheritdoc}
    */
+  public function setMultiple(array $items) {
+    return $this->cacheBackend->setMultiple($items);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function delete($cid) {
     return $this->cacheBackend->delete($cid);
   }
@@ -154,5 +161,4 @@ class CacheBackendWrapper implements CacheBackendInterface {
   public function isEmpty() {
     return $this->cacheBackend->isEmpty();
   }
-
-} 
+}
