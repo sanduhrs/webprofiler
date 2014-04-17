@@ -18,7 +18,7 @@ class EventPass implements CompilerPassInterface {
    */
   public function process(ContainerBuilder $container) {
     $definition = $container->findDefinition('http_kernel');
-    $definition->replaceArgument(2, new Reference('webprofiler.debug.controller_resolver'));
+    $definition->replaceArgument(1, new Reference('webprofiler.debug.controller_resolver'));
 
     // replace the regular event_dispatcher service with the traceable one.
     $definition = $container->findDefinition('event_dispatcher');
