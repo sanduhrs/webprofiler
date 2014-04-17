@@ -10,7 +10,6 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Component\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\system\FileDownloadController;
@@ -22,7 +21,7 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Cmf\Component\Routing\ChainRouter;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 use Twig_Loader_Filesystem;
 
@@ -88,7 +87,7 @@ class WebprofilerController extends ControllerBase {
    * Constructs a new WebprofilerController.
    *
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
-   * @param \Symfony\Cmf\Component\Routing\ChainRouter $router
+   * @param \Symfony\Component\Routing\RouterInterface $router
    * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
    * @param \Twig_Loader_Filesystem $twig_loader
    * @param \Drupal\Core\Datetime\Date $date
@@ -97,7 +96,7 @@ class WebprofilerController extends ControllerBase {
    *   The link generator.
    * @param \Drupal\system\FileDownloadController $file_download_controller
    */
-  public function __construct(Profiler $profiler, ChainRouter $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader, Date $date, FormBuilderInterface $form_builder, LinkGeneratorInterface $link_generator, FileDownloadController $file_download_controller) {
+  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader, Date $date, FormBuilderInterface $form_builder, LinkGeneratorInterface $link_generator, FileDownloadController $file_download_controller) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
