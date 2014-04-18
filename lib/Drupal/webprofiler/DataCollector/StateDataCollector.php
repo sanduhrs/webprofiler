@@ -7,7 +7,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Core\KeyValueStore\StateInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
   /**
    * The state service.
    *
-   * @var \Drupal\Core\KeyValueStore\StateInterface
+   * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
 
@@ -43,7 +43,7 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
   /**
    * Constructs a new StateDataCollector.
    *
-   * @param \Drupal\Core\KeyValueStore\StateInterface $state
+   * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    */
   public function __construct(StateInterface $state) {
