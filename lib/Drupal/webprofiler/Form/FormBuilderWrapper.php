@@ -24,7 +24,7 @@ class FormBuilderWrapper extends FormBuilder {
    * {@inheritdoc}
    */
   public function buildForm($form_id, array &$form_state) {
-    if (isset($form_state['build_info'])) {
+    if (isset($form_state['build_info']) && isset($form_state['build_info']['callback_object'])) {
       $class = get_class($form_state['build_info']['callback_object']);
       $this->build_forms[$form_id] = array(
         'class' => $class,
