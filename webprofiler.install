@@ -78,7 +78,7 @@ function webprofiler_schema() {
  * Implements hook_requirements().
  */
 function webprofiler_requirements($phase) {
-  $has_d3 = verify_library('webprofiler', 'd3');
+  $has_d3 = _webprofiler_verify_library('webprofiler', 'd3');
 
   $requirements = array();
   $requirements['d3js'] = array(
@@ -112,7 +112,7 @@ function webprofiler_requirements($phase) {
  *
  * @see https://drupal.org/node/2231385
  */
-function verify_library($extension, $name) {
+function _webprofiler_verify_library($extension, $name) {
   /** @var Drupal\Core\Asset\LibraryDiscovery $library_discovery */
   $library_discovery = \Drupal::service('library.discovery');
   $library = $library_discovery->getLibraryByName($extension, $name);
