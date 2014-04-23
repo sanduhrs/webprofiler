@@ -177,7 +177,13 @@ class WebprofilerController extends ControllerBase {
       }
     }
 
-    $panels = array(
+    $build = array();
+    $build['resume'] = array(
+      '#theme' => 'webprofiler_resume',
+      '#profile' => $profile,
+    );
+
+    $build['panels'] = array(
       '#theme' => 'vertical_tabs',
       '#children' => $childrens,
       '#attached' => array(
@@ -195,17 +201,7 @@ class WebprofilerController extends ControllerBase {
       ),
     );
 
-    $resume = array(
-      '#theme' => 'webprofiler_resume',
-      '#profile' => $profile,
-    );
-
-    $output = array(
-      '#theme' => 'container',
-      '#children' => drupal_render($resume) . drupal_render($panels),
-    );
-
-    return $output;
+    return $build;
   }
 
   /**
