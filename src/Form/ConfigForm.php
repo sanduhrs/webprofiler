@@ -62,7 +62,7 @@ class ConfigForm extends ConfigFormBase {
    */
   public function buildForm(array $form, array &$form_state) {
     $this->profiler->disable();
-    $config = $this->configFactory->get('webprofiler.config');
+    $config = $this->config('webprofiler.config');
 
     $form['purge_on_cache_clear'] = array(
       '#type' => 'checkbox',
@@ -101,7 +101,7 @@ class ConfigForm extends ConfigFormBase {
    *   An associative array containing the current state of the form.
    */
   public function submitForm(array &$form, array &$form_state) {
-    $this->configFactory->get('webprofiler.config')
+    $this->config('webprofiler.config')
       ->set('purge_on_cache_clear', $form_state['values']['purge_on_cache_clear'])
       ->set('storage', $form_state['values']['storage'])
       ->set('exclude', $form_state['values']['exclude'])
