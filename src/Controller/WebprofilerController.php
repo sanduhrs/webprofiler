@@ -7,7 +7,7 @@
 
 namespace Drupal\webprofiler\Controller;
 
-use Drupal\Component\Archiver\ArchiveTar;
+use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
 use Drupal\Core\Form\FormBuilderInterface;
