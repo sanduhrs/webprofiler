@@ -89,6 +89,7 @@ class ManageForm extends FormBase {
     $form['data'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('Data'),
+      '#description' => $this->t('Export all %storage profiles.', array('%storage' => $storage)),
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
     );
