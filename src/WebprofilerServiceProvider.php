@@ -66,10 +66,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
-
-    // Register an additional twig extension.
-    $container->getDefinition('twig')
-      ->addMethodCall('addExtension', array(new Reference('webprofiler.twig_extension')));
   }
 
 }
