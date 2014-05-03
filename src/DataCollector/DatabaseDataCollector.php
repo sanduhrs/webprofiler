@@ -3,15 +3,27 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
+/**
+ * Class DatabaseDataCollector
+ */
 class DatabaseDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
+  use StringTranslationTrait, DrupalDataCollectorTrait;
+
   private $database;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'database';
+  }
 
   /**
    * {@inheritdoc}
@@ -113,13 +125,21 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   }
 
   /**
-   * Returns the name of the collector.
-   *
-   * @return string The collector name
-   *
-   * @api
+   * {@inheritdoc}
    */
-  public function getName() {
-    return 'database';
+  public function getPanel() {
+    $build = array();
+
+    foreach ($this->getQueries() as $query) {
+      $table = $this->getTable('Query arguments', $query['args'], array());
+
+      $build[] = array(
+        '#theme' => 'webprofiler_db_panel',
+        '#query' => $query,
+        '#table' => $table,
+      );
+    }
+
+    return $build;
   }
 }

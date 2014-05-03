@@ -73,11 +73,9 @@ class ManageForm extends FormBase {
     $storage = $this->config_factory->get('webprofiler.config')->get('storage');
 
     $form['purge'] = array(
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => $this->t('Purge profiles'),
-      '#description' => $this->t('Purge %storage profiles.', array('%storage' => $storage)),
-      '#collapsible' => FALSE,
-      '#collapsed' => FALSE,
+      '#open' => TRUE,
     );
 
     $form['purge']['purge'] = array(
@@ -86,18 +84,24 @@ class ManageForm extends FormBase {
       '#submit' => array(array($this, 'purge')),
     );
 
+    $form['purge']['purge-help'] = array(
+      '#markup' => '<div class="form-item">' . $this->t('Purge %storage profiles.', array('%storage' => $storage)) . '</div>',
+    );
+
     $form['data'] = array(
-      '#type' => 'fieldset',
+      '#type' => 'details',
       '#title' => $this->t('Data'),
-      '#description' => $this->t('Export all %storage profiles.', array('%storage' => $storage)),
-      '#collapsible' => FALSE,
-      '#collapsed' => FALSE,
+      '#open' => TRUE,
     );
 
     $form['data']['export'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Export'),
       '#submit' => array(array($this, 'export')),
+    );
+
+    $form['data']['export-help'] = array(
+      '#markup' => '<div class="form-item">' . $this->t('Export all %storage profiles.', array('%storage' => $storage)) . '</div>',
     );
 
     return $form;

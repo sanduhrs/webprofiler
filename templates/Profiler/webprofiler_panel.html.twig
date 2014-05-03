@@ -1,7 +1,7 @@
 {{ template.renderblock('panel', {
-'collector': profile.getcollector(name),
 'token': profile.token,
 'name': name,
 'template': template,
+'content': content
 }) }}
-<div class="summary">{{ summary }}</div>
+<div class="summary" style="display:none">{{ summary }}</div>

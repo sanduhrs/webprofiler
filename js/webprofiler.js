@@ -24,7 +24,7 @@
             /** profiler **/
 
             // data
-            var events = drupalSettings.webprofiler.events;
+            var events = drupalSettings.webprofiler.time.events;
             var lanes = [];
             var items = [];
             for (var j = 0; j < events.length; j++) {
@@ -37,7 +37,7 @@
             }
             var laneLength = lanes.length,
                 timeBegin = 0,
-                timeEnd = drupalSettings.webprofiler.endtime;
+                timeEnd = drupalSettings.webprofiler.time.endtime;
 
             var m = [20, 5, 15, 261], //top right bottom left
                 w = 1062 - m[1] - m[3],

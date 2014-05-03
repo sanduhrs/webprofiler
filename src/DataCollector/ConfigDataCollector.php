@@ -8,6 +8,7 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  * Provides a datacollector to show all requested configs.
  */
 class ConfigDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * {@inheritdoc}
@@ -52,8 +55,7 @@ class ConfigDataCollector extends DataCollector implements DrupalDataCollectorIn
    *   The name of the config.
    */
   public function addConfigName($name) {
-    $this->data['config_names'][] = $name;
-    $this->data['config_names'] = array_unique($this->data['config_names']);
+    $this->data['config_names'][$name] = isset($this->data['config_names'][$name]) ? $this->data['config_names'][$name] + 1 : 1;
   }
 
   /**
@@ -63,4 +65,16 @@ class ConfigDataCollector extends DataCollector implements DrupalDataCollectorIn
     return $this->data['config_names'];
   }
 
-} 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanel() {
+    // Config
+    $build['config'] = $this->getTable($this->t('Configurations used'), $this->configNames(), array(
+      $this->t('id'),
+      $this->t('get')
+    ));
+
+    return $build;
+  }
+}

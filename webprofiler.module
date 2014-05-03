@@ -32,6 +32,7 @@ function webprofiler_theme() {
         'profile' => NULL,
         'name' => NULL,
         'summary' => NULL,
+        'content' => NULL,
       ),
     ),
     'webprofiler_resume' => array(
@@ -40,6 +41,13 @@ function webprofiler_theme() {
         'template' => array(),
         'profile' => NULL,
         'name' => NULL
+      ),
+    ),
+    'webprofiler_db_panel' => array(
+      'template' => 'Profiler/webprofiler_db_panel',
+      'variables' => array(
+        'query' => NULL,
+        'table' => NULL,
       ),
     ),
   );

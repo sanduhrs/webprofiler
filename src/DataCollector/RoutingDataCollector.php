@@ -7,9 +7,10 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Component\Utility\String;
 use Drupal\Core\Routing\RouteProviderInterface;
-use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -19,12 +20,21 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  */
 class RoutingDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
+  use StringTranslationTrait, DrupalDataCollectorTrait;
+
   /**
    * The route profiler.
    *
    * @var \Drupal\Core\Routing\RouteProviderInterface
    */
   protected $routeProvider;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'routing';
+  }
 
   /**
    * {@inheritdoc}
@@ -71,8 +81,13 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
   /**
    * {@inheritdoc}
    */
-  public function getName() {
-    return 'routing';
+  public function getPanel() {
+    $build = array();
+
+    // Routing
+    $build['routing'] = $this->getTable($this->t('Available routes'), $this->routing(), array($this->t('Route name'), 'URL'));
+
+    return $build;
   }
 
 } 

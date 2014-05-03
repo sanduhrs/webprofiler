@@ -12,29 +12,23 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 
 /**
- * MemoryDataCollector.
- *
- * @author Fabien Potencier <fabien@symfony.com>
+ * MemoryDataCollector
  */
 class MemoryDataCollector extends DataCollector implements LateDataCollectorInterface, DrupalDataCollectorInterface {
+
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * {@inheritdoc}
    */
   public function getMenu() {
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
     return NULL;
   }
 
@@ -120,5 +114,11 @@ class MemoryDataCollector extends DataCollector implements LateDataCollectorInte
     }
 
     return $max;
+  }
+
+  public function getPanel() {
+    return array(
+      '#markup' => 'pippo',
+    );
   }
 }

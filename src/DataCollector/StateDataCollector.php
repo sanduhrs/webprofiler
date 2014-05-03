@@ -7,8 +7,9 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Core\State\StateInterface;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\State\StateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  * Provides a data collector to get all requested state values.
  */
 class StateDataCollector extends DataCollector implements StateInterface, DrupalDataCollectorInterface {
+
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * The state service.
@@ -123,4 +126,16 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
     return $this->state->resetCache();
   }
 
-} 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanel() {
+    // State
+    $build['state'] = $this->getTable($this->t('State variables used'), $this->stateKeys(), array(
+      $this->t('id'),
+      $this->t('get')
+    ));
+
+    return $build;
+  }
+}

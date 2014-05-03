@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  * Defines a data collector for the extension system.
  */
 class ExtensionDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * The module handler.
@@ -32,6 +35,13 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
    * @var \Drupal\Core\Extension\ThemeHandlerInterface
    */
   protected $themeHandler;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'drupal_extension';
+  }
 
   /**
    * {@inheritdoc}
@@ -89,7 +99,6 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
     foreach ($this->data['drupal_extension']['modules'] as $module => $info) {
       $data[$module] = implode(' | ', array(
         \Drupal::translation()->translate('Path: @path', array('@path' => $info->uri)),
-
       ));
     }
     return $data;
@@ -116,9 +125,21 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
   /**
    * {@inheritdoc}
    */
-  public function getName() {
-    return 'drupal_extension';
+  public function getPanel() {
+    $build = array();
+
+    // Active modules
+    $build['modules'] = $this->getTable($this->t('Active modules'), $this->moduleInfo(), array(
+      $this->t('Key'),
+      $this->t('Value')
+    ));
+
+    // Active themes
+    $build['themes'] = $this->getTable($this->t('Active themes'), $this->themeInfo(), array(
+      $this->t('Key'),
+      $this->t('Value')
+    ));
+
+    return $build;
   }
-
-
 } 

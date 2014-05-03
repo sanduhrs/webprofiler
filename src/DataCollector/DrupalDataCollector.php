@@ -2,28 +2,18 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Component\Utility\String;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
-use Drupal\Core\Database\Connection;
 
+/**
+ * Class DrupalDataCollector
+ */
 class DrupalDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return NULL;
-  }
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * Collects data for the given Request and Response.
@@ -62,5 +52,11 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
    */
   public function getName() {
     return 'drupal';
+  }
+
+  public function getPanel() {
+    return array(
+      '#markup' => 'pippo',
+    );
   }
 }

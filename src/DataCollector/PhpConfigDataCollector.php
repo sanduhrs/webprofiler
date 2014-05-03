@@ -3,6 +3,7 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,18 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PhpConfigDataCollector extends DataCollector implements DrupalDataCollectorInterface {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return \Drupal::translation()->translate('PHP Config');
-  }
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * {@inheritdoc}
    */
-  public function getSummary() {
-    return NULL;
+  public function getMenu() {
+    return $this->t('PHP Config');
   }
 
   /**
@@ -139,5 +135,64 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
    */
   public function getName() {
     return 'php_config';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanel() {
+    $enabled = $this->t('Enabled');
+    $disabled = $this->t('Disabled');
+
+    $rows = array(
+      array(
+        $this->t('PHP version'),
+        $this->getPhpVersion(),
+      ),
+      array(
+        'Xdebug',
+        ($this->hasXDebug()) ? $enabled : $disabled,
+      ),
+      array(
+        $this->t('PHP acceleration'),
+        ($this->hasAccelerator()) ? $enabled : $disabled,
+      ),
+      array(
+        'XCache',
+        ($this->hasXCache()) ? $enabled : $disabled,
+      ),
+      array(
+        'APC',
+        ($this->hasApc()) ? $enabled : $disabled,
+      ),
+      array(
+        'Zend OPcache',
+        ($this->hasZendOpcache()) ? $enabled : $disabled,
+      ),
+      array(
+        'EAccelerator',
+        ($this->hasEAccelerator()) ? $enabled : $disabled,
+      ),
+      array(
+        $this->t('Full PHP configuration'),
+        \Drupal::linkGenerator()->generate('php info', 'system.php'),
+      ),
+    );
+
+    return array(
+      array(
+        array(
+          '#markup' => '<h3>' . $this->t('Configurations') . '</h3>',
+        ),
+      ),
+      array(
+        '#theme' => 'table',
+        '#rows' => $rows,
+        '#header' => array(
+          $this->t('Config'),
+          $this->t('Value'),
+        ),
+      ),
+    );
   }
 }

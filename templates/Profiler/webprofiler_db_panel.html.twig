@@ -1,0 +1,18 @@
+<div class="query">
+  {{ query.query }}
+  <div class="query-info">
+    <span class="query-info-button">Info</span>
+
+    <div class="query-data">
+      {{ table }}
+
+      <h4>{{ 'Time'|t }}</h4>
+
+      <p>{{ query.time }}</p>
+
+      <h4>{{ 'Caller'|t }}</h4>
+
+      <p>{{ query.caller.file }}:{{ query.caller.line }}</p>
+    </div>
+  </div>
+</div>

@@ -8,6 +8,7 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  * Collects the used cache bins and cache CIDs.
  */
 class CacheDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
    * {@inheritdoc}
@@ -73,4 +76,17 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
     return $this->data['bin_cids'];
   }
 
-} 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanel() {
+    $build = array();
+
+    foreach ($this->cacheCids() as $bin => $cids) {
+      $build[$bin] = $this->getTable($bin . ' (' . count($cids) . ')', $cids, array($this->t('cid'), $this->t('hits')));
+    }
+
+    return $build;
+  }
+
+}

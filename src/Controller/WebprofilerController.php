@@ -122,8 +122,6 @@ class WebprofilerController extends ControllerBase {
     $templates = $template_manager->getTemplates($profile);
 
     $childrens = array();
-    $events = array();
-    $endTime = 0;
     foreach ($templates as $name => $template) {
       /** @var DrupalDataCollectorInterface $collector */
       $collector = $profile->getCollector($name);
@@ -141,39 +139,9 @@ class WebprofilerController extends ControllerBase {
             '#name' => $name,
             '#profile' => $profile,
             '#summary' => $collector->getSummary(),
+            '#content' => $collector->getPanel(),
           )
         );
-      }
-
-      if ($name == 'time') {
-        /** @var TimeDataCollector $collector */
-        /** @var StopwatchEvent[] $collectedEvents */
-        $collectedEvents = $collector->getEvents();
-        $section_periods = $collectedEvents['__section__']->getPeriods();
-        $endTime = end($section_periods)->getEndTime();
-
-        foreach ($collectedEvents as $key => $collectedEvent) {
-          if ('__section__' != $key) {
-            $periods = array();
-            foreach ($collectedEvent->getPeriods() as $period) {
-              $periods[] = array(
-                'start' => sprintf("%F", $period->getStartTime()),
-                'end' => sprintf("%F", $period->getEndTime()),
-              );
-            }
-
-            $events[] = array(
-              "name" => $key,
-              "category" => $collectedEvent->getCategory(),
-              "origin" => sprintf("%F", $collectedEvent->getOrigin()),
-              "starttime" => sprintf("%F", $collectedEvent->getStartTime()),
-              "endtime" => sprintf("%F", $collectedEvent->getEndTime()),
-              "duration" => sprintf("%F", $collectedEvent->getDuration()),
-              "memory" => sprintf("%.1F", $collectedEvent->getMemory() / 1024 / 1024),
-              "periods" => $periods,
-            );
-          }
-        }
       }
     }
 
@@ -186,17 +154,11 @@ class WebprofilerController extends ControllerBase {
     $build['panels'] = array(
       '#theme' => 'vertical_tabs',
       '#children' => $childrens,
+      '#attributes' => array('class' => array('webprofiler')),
       '#attached' => array(
-        'js' => array(
-          array(
-            'data' => array('webprofiler' => array('events' => $events, 'endtime' => $endTime)),
-            'type' => 'setting'
-          ),
-        ),
         'library' => array(
           'core/drupal.vertical-tabs',
           'webprofiler/webprofiler',
-          'webprofiler/d3',
         ),
       ),
     );
@@ -337,5 +299,4 @@ class WebprofilerController extends ControllerBase {
     $request = new Request(array('file' => 'profiles.tar.gz'));
     return $this->file_download_controller->download($request, 'temporary');
   }
-
 }

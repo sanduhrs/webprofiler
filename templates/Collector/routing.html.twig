@@ -1,5 +1,9 @@
 {% block panel %}
-    <h2>Available routes</h2>
+  <div class="title">
+    <h2>{{ 'Routing'|t }}</h2>
+  </div>
 
-    {% include '@webprofiler/Profiler/table.html.twig' with { 'data': collector.routing, 'class': 'inline' } only %}
+  <div class="content">
+    {{ content }}
+  </div>
 {% endblock %}
