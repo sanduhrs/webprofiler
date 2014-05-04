@@ -47,15 +47,14 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
    * {@inheritdoc}
    */
   public function getMenu() {
-    return \Drupal::translation()->translate('Extensions (modules/themes)');
+    return $this->t('Extensions (modules/themes)');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()
-      ->translate('Total active extensions: @extensions', array('@extensions' => $this->getExtensionsCount()));
+    return $this->t('Total active extensions: @extensions', array('@extensions' => $this->getExtensionsCount()));
   }
 
   /**
@@ -98,7 +97,7 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
     $data = array();
     foreach ($this->data['drupal_extension']['modules'] as $module => $info) {
       $data[$module] = implode(' | ', array(
-        \Drupal::translation()->translate('Path: @path', array('@path' => $info->uri)),
+        $this->t('Path: @path', array('@path' => $info->uri)),
       ));
     }
     return $data;
@@ -114,9 +113,9 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
     $data = array();
     foreach ($this->data['drupal_extension']['themes'] as $name => $info) {
       $data[$name] = implode(' | ', array(
-        \Drupal::translation()->translate('Path: @path', array('@path' => $info->uri)),
-        \Drupal::translation()->translate('Status: @status', array('@status' => $info->status)),
-        \Drupal::translation()->translate('Engine: @engine', array('@engine' => $info->engine)),
+        $this->t('Path: @path', array('@path' => $info->uri)),
+        $this->t('Status: @status', array('@status' => $info->status)),
+        $this->t('Engine: @engine', array('@engine' => $info->engine)),
       ));
     }
     return $data;

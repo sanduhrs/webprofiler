@@ -29,14 +29,14 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
    * {@inheritdoc}
    */
   public function getMenu() {
-    return \Drupal::translation()->translate('Database');
+    return $this->t('Database');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()->translate('Executed queries: @count', array('@count' => $this->getQueryCount()));
+    return $this->t('Executed queries: @count', array('@count' => $this->getQueryCount()));
   }
 
   /**

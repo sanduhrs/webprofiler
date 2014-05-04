@@ -24,14 +24,14 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    * {@inheritdoc}
    */
   public function getMenu() {
-    return \Drupal::translation()->translate('Cache');
+    return $this->t('Cache');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()->translate('Total cache: @cache', array('@cache' => $this->countCacheCids()));
+    return $this->t('Total cache: @cache', array('@cache' => $this->countCacheCids()));
   }
 
   /**

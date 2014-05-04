@@ -40,14 +40,14 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
    * {@inheritdoc}
    */
   public function getMenu() {
-    return \Drupal::translation()->translate('Routing');
+    return $this->t('Routing');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()->translate('Defined routes: @route', array('@route' => count($this->routing())));
+    return $this->t('Defined routes: @route', array('@route' => count($this->routing())));
   }
 
   /**

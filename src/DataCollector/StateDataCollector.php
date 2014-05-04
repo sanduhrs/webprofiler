@@ -32,15 +32,14 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
    * {@inheritdoc}
    */
   public function getMenu() {
-    return \Drupal::translation()->translate('State');
+    return $this->t('State');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()
-      ->translate('State variables: @variables', array('@variables' => count($this->stateKeys())));
+    return $this->t('State variables: @variables', array('@variables' => count($this->stateKeys())));
   }
 
   /**

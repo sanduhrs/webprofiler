@@ -58,6 +58,11 @@ services:
     arguments: ['@form_builder']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/form.html.twig', id:'form' }
+  webprofiler.user:
+    class: Drupal\webprofiler\DataCollector\UserDataCollector
+    arguments: ['@current_user', '@authentication', '@entity.manager']
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/user.html.twig', id:'user' }
   webprofiler.database:
     class: Drupal\webprofiler\DataCollector\DatabaseDataCollector
     arguments: ['@database']

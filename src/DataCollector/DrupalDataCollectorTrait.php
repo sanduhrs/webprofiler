@@ -19,6 +19,13 @@ trait DrupalDataCollectorTrait {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getPanel() {
+    return NULL;
+  }
+
+  /**
    * @param $title
    * @param $values
    * @param $header
@@ -52,5 +59,4 @@ trait DrupalDataCollectorTrait {
 
     return $build;
   }
-
 }

@@ -24,15 +24,14 @@ class ConfigDataCollector extends DataCollector implements DrupalDataCollectorIn
    * {@inheritdoc}
    */
   public function getMenu() {
-    return \Drupal::translation()->translate('Config');
+    return $this->t('Config');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getSummary() {
-    return \Drupal::translation()
-      ->translate('Total config: @count', array('@count' => count($this->configNames())));
+    return $this->t('Total config: @count', array('@count' => count($this->configNames())));
   }
 
   /**

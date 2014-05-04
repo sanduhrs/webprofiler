@@ -115,10 +115,4 @@ class MemoryDataCollector extends DataCollector implements LateDataCollectorInte
 
     return $max;
   }
-
-  public function getPanel() {
-    return array(
-      '#markup' => 'pippo',
-    );
-  }
 }
