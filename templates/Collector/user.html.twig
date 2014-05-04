@@ -14,19 +14,19 @@
   {% set text %}
   {% if collector.authenticated %}
     <div class="sf-toolbar-info-piece">
-      <b>Logged in as</b>
+      <b>{{ 'Logged in as'|t }}</b>
       <span class="sf-toolbar-status sf-toolbar-status-{{ color_code }}">{{ collector.name }}</span>
     </div>
     <div class="sf-toolbar-info-piece">
-      <b>Roles</b>
+      <b>{{ 'Roles'|t }}</b>
       <span>{{ collector.roles|join(', ') }}</span>
     </div>
     <div class="sf-toolbar-info-piece">
-      <b>Authenticated by</b>
+      <b>{{ 'Authenticated by'|t }}</b>
       <span>{{ collector.provider }}</span>
     </div>
   {% else %}
-    {{ 'Anonymous'|t }}
+    {{ collector.anonymous }}
   {% endif %}
   {% endset %}
 

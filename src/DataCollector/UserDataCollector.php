@@ -6,6 +6,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Authentication\AuthenticationManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Component\Utility\String;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,7 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   private $currentUser;
   private $authenticationManager;
   private $entityManager;
+  private $configFactory;
 
   /**
    * {@inheritdoc}
@@ -40,12 +42,14 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   /**
    * @param AccountInterface $currentUser
    * @param AuthenticationManagerInterface $authenticationManager
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
+   * @param EntityManagerInterface $entityManager
+   * @param ConfigFactoryInterface $configFactory
    */
-  public function __construct(AccountInterface $currentUser, AuthenticationManagerInterface $authenticationManager, EntityManagerInterface $entityManager) {
+  public function __construct(AccountInterface $currentUser, AuthenticationManagerInterface $authenticationManager, EntityManagerInterface $entityManager, ConfigFactoryInterface $configFactory) {
     $this->currentUser = $currentUser;
     $this->authenticationManager = $authenticationManager;
     $this->entityManager = $entityManager;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -77,6 +81,13 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   }
 
   /**
+   * @return string
+   */
+  public function anonymous() {
+    return $this->data['anonymous'];
+  }
+
+  /**
    * Collects data for the given Request and Response.
    *
    * @param Request $request A Request instance
@@ -97,5 +108,6 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
     }
 
     $this->data['provider'] = $this->authenticationManager->defaultProviderId();
+    $this->data['anonymous'] = $this->configFactory->get('user.settings')->get('anonymous');
   }
 }
