@@ -56,9 +56,9 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addArgument(new Reference('event_dispatcher'))
       ->addArgument(new Reference('url_generator'))
       ->addArgument(new Reference('string_translation'))
+      ->addArgument(new Reference('request_stack'))
       ->addArgument(new Reference('csrf_token', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))
-      ->addArgument(new Reference('http_kernel', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))
-      ->addMethodCall('setRequest', array(new Reference('request', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)));
+      ->addArgument(new Reference('http_kernel', ContainerInterface::IGNORE_ON_INVALID_REFERENCE));
 
     // Replace the existing config.factory service with a wrapper to collect the
     // requested configs.
