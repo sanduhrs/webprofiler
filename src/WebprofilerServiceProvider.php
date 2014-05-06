@@ -51,11 +51,11 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // requested data.
     $container->setDefinition('form_builder.default', $container->getDefinition('form_builder'));
     $container->register('form_builder', 'Drupal\webprofiler\Form\FormBuilderWrapper')
+      ->addArgument(new Reference('form_validator'))
       ->addArgument(new Reference('module_handler'))
       ->addArgument(new Reference('keyvalue.expirable'))
       ->addArgument(new Reference('event_dispatcher'))
       ->addArgument(new Reference('url_generator'))
-      ->addArgument(new Reference('string_translation'))
       ->addArgument(new Reference('request_stack'))
       ->addArgument(new Reference('csrf_token', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))
       ->addArgument(new Reference('http_kernel', ContainerInterface::IGNORE_ON_INVALID_REFERENCE));
