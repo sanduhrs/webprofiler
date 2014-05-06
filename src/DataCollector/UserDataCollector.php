@@ -33,13 +33,6 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('User');
-  }
-
-  /**
    * @param AccountInterface $currentUser
    * @param AuthenticationManagerInterface $authenticationManager
    * @param EntityManagerInterface $entityManager
