@@ -18,13 +18,6 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
   /**
    * {@inheritdoc}
    */
-  public function getMenu() {
-    return $this->t('PHP Config');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data = array(
       'token' => $response->headers->get('X-Debug-Token'),
@@ -128,6 +121,13 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
    */
   public function getSapiName() {
     return $this->data['sapi_name'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('PHP Config');
   }
 
   /**

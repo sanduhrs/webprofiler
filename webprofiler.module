@@ -1,18 +1,6 @@
 <?php
 
 /**
- * Implements hook_help().
- */
-function webprofiler_help($path, $arg) {
-  switch ($path) {
-    case 'admin/config/development/profiler/list':
-      $storage = Drupal::config('webprofiler.config')->get('storage');
-      $output = '<p>' . t('Profiles stored with %storage service.', array('%storage' => $storage)) . '</p>';
-      return $output;
-  }
-}
-
-/**
  * Implements hook_theme().
  */
 function webprofiler_theme() {

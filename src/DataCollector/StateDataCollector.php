@@ -29,20 +29,6 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
   protected $state;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('State');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('State variables: @variables', array('@variables' => count($this->stateKeys())));
-  }
-
-  /**
    * Constructs a new StateDataCollector.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -63,13 +49,6 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
    */
   public function stateKeys() {
     return $this->data['state_get'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'state';
   }
 
   /**
@@ -123,6 +102,27 @@ class StateDataCollector extends DataCollector implements StateInterface, Drupal
    */
   public function resetCache() {
     return $this->state->resetCache();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('State');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'state';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('State variables: @variables', array('@variables' => count($this->stateKeys())));
   }
 
   /**

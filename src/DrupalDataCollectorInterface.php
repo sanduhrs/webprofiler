@@ -8,18 +8,30 @@ namespace Drupal\webprofiler;
 interface DrupalDataCollectorInterface {
 
   /**
-   * @return mixed
+   * @return string
    */
-  public function getMenu();
+  public function getTitle();
 
   /**
-   * @return mixed
+   * @return string
    */
-  public function getSummary();
+  public function getPanelSummary();
 
   /**
-   * @return mixed
+   * @return bool
+   */
+  public function hasPanel();
+
+  /**
+   * @return array
    */
   public function getPanel();
+
+  /**
+   * Returns the name of the collector.
+   *
+   * @return string The collector name
+   */
+  public function getName();
 
 }

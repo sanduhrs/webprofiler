@@ -16,28 +16,10 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
 
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
+  /**
+   * @var \Drupal\webprofiler\Form\FormBuilderWrapper
+   */
   private $form_builder;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'form';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('Forms');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('Rendered forms: @forms', array('@forms' => count($this->data['forms'])));
-  }
 
   /**
    * @param FormBuilderWrapper $form_builder
@@ -64,6 +46,27 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
    */
   public function getForms() {
     return $this->data['forms'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'form';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Forms');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Rendered forms: @forms', array('@forms' => count($this->data['forms'])));
   }
 
   /**

@@ -21,20 +21,6 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('Cache');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('Total cache: @cache', array('@cache' => $this->countCacheCids()));
-  }
-
-  /**
    * Registers a cache get call on a specific cache bin.
    */
   public function registerCacheGet($bin, $cid) {
@@ -45,13 +31,6 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'cache';
   }
 
   /**
@@ -74,6 +53,27 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    */
   public function cacheCids() {
     return $this->data['bin_cids'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'cache';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Cache');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Total cache: @cache', array('@cache' => $this->countCacheCids()));
   }
 
   /**

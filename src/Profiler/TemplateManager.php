@@ -12,7 +12,7 @@
 namespace Drupal\webprofiler\Profiler;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Symfony\Component\HttpKernel\Profiler\Profiler as SymfonyProfiler;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /**
@@ -30,12 +30,12 @@ class TemplateManager {
   /**
    * Constructor.
    *
-   * @param Profiler $profiler
+   * @param SymfonyProfiler $profiler
    * @param \Twig_Environment $twig
    * @param \Twig_Loader_Filesystem $twigLoader
    * @param array $templates
    */
-  public function __construct(Profiler $profiler, \Twig_Environment $twig, \Twig_Loader_Filesystem $twigLoader, array $templates) {
+  public function __construct(SymfonyProfiler $profiler, \Twig_Environment $twig, \Twig_Loader_Filesystem $twigLoader, array $templates) {
     $this->profiler = $profiler;
     $this->twig = $twig;
     $this->twigLoader = $twigLoader;

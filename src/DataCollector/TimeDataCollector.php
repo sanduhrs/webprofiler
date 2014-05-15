@@ -10,7 +10,11 @@ namespace Drupal\webprofiler\DataCollector;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Component\Utility\String;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use Symfony\Component\HttpKernel\DataCollector\TimeDataCollector as BaseTimeDataCollector;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 
 /**
@@ -21,9 +25,64 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
+   *
+   */
+  public function __construct(KernelInterface $kernel = null, $stopwatch = null) {
+    parent::__construct($kernel, $stopwatch);
+
+    $this->data = array(
+      'memory' => 0,
+      'memory_limit' => $this->convertToBytes(ini_get('memory_limit')),
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function getMenu() {
+  public function collect(Request $request, Response $response, \Exception $exception = NULL) {
+    parent::collect($request, $response, $exception);
+
+    $this->updateMemoryUsage();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function lateCollect() {
+    parent::lateCollect();
+
+    $this->updateMemoryUsage();
+  }
+
+  /**
+   * Gets the memory.
+   *
+   * @return integer The memory
+   */
+  public function getMemory() {
+    return $this->data['memory'];
+  }
+
+  /**
+   * Gets the PHP memory limit.
+   *
+   * @return integer The memory limit
+   */
+  public function getMemoryLimit() {
+    return $this->data['memory_limit'];
+  }
+
+  /**
+   * Updates the memory usage data.
+   */
+  public function updateMemoryUsage() {
+    $this->data['memory'] = memory_get_peak_usage(TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
     return $this->t('Timeline');
   }
 
@@ -93,6 +152,46 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
     }
 
     return array('time' => array('events' => $events, 'endtime' => $endTime));
+  }
+
+  /**
+   * @param $memoryLimit
+   *
+   * @return int|string
+   */
+  private function convertToBytes($memoryLimit) {
+    if ('-1' === $memoryLimit) {
+      return -1;
+    }
+
+    $memoryLimit = strtolower($memoryLimit);
+    $max = strtolower(ltrim($memoryLimit, '+'));
+    if (0 === strpos($max, '0x')) {
+      $max = intval($max, 16);
+    }
+    elseif (0 === strpos($max, '0')) {
+      $max = intval($max, 8);
+    }
+    else {
+      $max = intval($max);
+    }
+
+    switch (substr($memoryLimit, -1)) {
+      case 't':
+        $max *= 1024;
+        break;
+      case 'g':
+        $max *= 1024;
+        break;
+      case 'm':
+        $max *= 1024;
+        break;
+      case 'k':
+        $max *= 1024;
+        break;
+    }
+
+    return $max;
   }
 
 }

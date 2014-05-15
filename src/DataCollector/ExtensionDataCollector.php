@@ -37,27 +37,6 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
   protected $themeHandler;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'drupal_extension';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('Extensions (modules/themes)');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('Total active extensions: @extensions', array('@extensions' => $this->getExtensionsCount()));
-  }
-
-  /**
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
@@ -119,6 +98,27 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
       ));
     }
     return $data;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'drupal_extension';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Extensions (modules/themes)');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Total active extensions: @extensions', array('@extensions' => $this->getExtensionsCount()));
   }
 
   /**

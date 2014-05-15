@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -23,34 +24,9 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
   /**
    * {@inheritdoc}
    */
-  public function getMenu() {
-    return $this->t('Assets');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('Total assets: @count', array('@count' => ($this->getCssCount() + $this->getJsCount())));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['js'] = _drupal_add_js();
     $this->data['css'] = _drupal_add_css();
-  }
-
-  /**
-   * Returns the name of the collector.
-   *
-   * @return string The collector name
-   *
-   * @api
-   */
-  public function getName() {
-    return 'asset';
   }
 
   /**
@@ -96,6 +72,27 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
    */
   public function getJsSettings() {
     return isset($this->data['js']['settings']) ? json_encode($this->data['js']['settings']['data']) : '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'asset';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Assets');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Total assets: @count', array('@count' => ($this->getCssCount() + $this->getJsCount())));
   }
 
   /**

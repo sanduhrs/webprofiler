@@ -1,3 +1,4 @@
+# Schema for the configuration files of the Webprofiler module.
 webprofiler.config:
   type: mapping
   label: 'Webprofiler configuration'
@@ -10,4 +11,10 @@ webprofiler.config:
       label: 'Storage implementation'
     exclude:
       type: string
-      label: 'path to exclude'
+      label: 'Path to exclude'
+    active_toolbar_items:
+      type: sequence
+      label: 'Active toolbar items'
+      sequence:
+        - type: string
+          label: 'Toolbar item'

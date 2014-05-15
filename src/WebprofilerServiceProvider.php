@@ -36,6 +36,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addTag('data_collector', array(
         'template' => '@webprofiler/Collector/state.html.twig',
         'id' => 'state',
+        'title' => 'State',
         'priority' => -10
       ));
 
@@ -67,6 +68,4 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
   }
-
 }
-

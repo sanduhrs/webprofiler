@@ -26,13 +26,6 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   private $configFactory;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'user';
-  }
-
-  /**
    * @param AccountInterface $currentUser
    * @param AuthenticationManagerInterface $authenticationManager
    * @param EntityManagerInterface $entityManager
@@ -102,5 +95,26 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
 
     $this->data['provider'] = $this->authenticationManager->defaultProviderId();
     $this->data['anonymous'] = $this->configFactory->get('user.settings')->get('anonymous');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'user';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('User');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasPanel() {
+    return FALSE;
   }
 }

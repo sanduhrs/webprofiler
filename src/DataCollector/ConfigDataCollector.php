@@ -23,28 +23,7 @@ class ConfigDataCollector extends DataCollector implements DrupalDataCollectorIn
   /**
    * {@inheritdoc}
    */
-  public function getMenu() {
-    return $this->t('Config');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('Total config: @count', array('@count' => count($this->configNames())));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'config';
   }
 
   /**
@@ -62,6 +41,27 @@ class ConfigDataCollector extends DataCollector implements DrupalDataCollectorIn
    */
   public function configNames() {
     return $this->data['config_names'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'config';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Config');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Total config: @count', array('@count' => count($this->configNames())));
   }
 
   /**

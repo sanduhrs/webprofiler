@@ -54,9 +54,17 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
     return 'drupal';
   }
 
-  public function getPanel() {
-    return array(
-      '#markup' => 'pippo',
-    );
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Drupal');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasPanel() {
+    return FALSE;
   }
 }

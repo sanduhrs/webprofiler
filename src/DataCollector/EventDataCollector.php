@@ -21,7 +21,7 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
   /**
    * {@inheritdoc}
    */
-  public function getMenu() {
+  public function getTitle() {
     return $this->t('Events');
   }
 

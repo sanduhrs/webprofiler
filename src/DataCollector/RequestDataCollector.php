@@ -24,13 +24,6 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
   /**
    * {@inheritdoc}
    */
-  public function getMenu() {
-    return $this->t('Request');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     parent::collect($request, $response, $exception);
 
@@ -61,6 +54,13 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
       } catch (\ReflectionException $re) {
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Request');
   }
 
   /**

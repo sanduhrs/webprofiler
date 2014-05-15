@@ -1,22 +1,22 @@
 {% block toolbar %}
-  {% set icon %}
-  <span>
+    {% set icon %}
+    <span>
     <img width="13" height="28" alt="Memory Usage"
          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAcBAMAAABITyhxAAAAJ1BMVEXNzc3///////////////////////8/Pz////////////+NjY0/Pz9lMO+OAAAADHRSTlMAABAgMDhAWXCvv9e8JUuyAAAAQ0lEQVQI12MQBAMBBmLpMwoMDAw6BxjOOABpHyCdAKRzsNDp5eXl1KBh5oHBAYY9YHoDQ+cqIFjZwGCaBgSpBrjcCwCZgkUHKKvX+wAAAABJRU5ErkJggg==">
     <span>{{ '%.1f'|format(collector.memory / 1024 / 1024) }} MB</span>
   </span>
-  {% endset %}
-  {% set text %}
-  <div class="sf-toolbar-info-piece">
-    <b>{{ 'Memory usage'|t }}</b>
+    {% endset %}
+    {% set text %}
+    <div class="sf-toolbar-info-piece">
+        <b>{{ 'Memory usage'|t }}</b>
         <span>{{ '%.1f'|format(collector.memory / 1024 / 1024) }}
-          / {{ collector.memoryLimit == -1 ? '&infin;' : '%.1f'|format(collector.memoryLimit / 1024 / 1024)|escape }}
-          MB</span>
-  </div>
-  {% endset %}
+            / {{ collector.memoryLimit == -1 ? '&infin;' : '%.1f'|format(collector.memoryLimit / 1024 / 1024)|escape }}
+            MB</span>
+    </div>
+    {% endset %}
 
-  <div class="sf-toolbar-block">
-    <div class="sf-toolbar-icon">{{ icon|default('') }}</div>
-    <div class="sf-toolbar-info">{{ text|default('') }}</div>
-  </div>
+    <div class="sf-toolbar-block">
+        <div class="sf-toolbar-icon">{{ icon|default('') }}</div>
+        <div class="sf-toolbar-info">{{ text|default('') }}</div>
+    </div>
 {% endblock %}

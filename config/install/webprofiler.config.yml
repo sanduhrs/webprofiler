@@ -1,3 +1,18 @@
 purge_on_cache_clear: false
 storage: profiler.database_storage
 exclude: "/contextual/*\r\n/toolbar/*\r\n/edit/*\r\n*.js\r\n*.css"
+active_toolbar_items:
+  asset: asset
+  cache: cache
+  config: config
+  database: database
+  drupal: drupal
+  drupal_extension: drupal_extension
+  events: events
+  form: form
+  php_config: php_config
+  request: request
+  routing: routing
+  state: state
+  time: time
+  user: user

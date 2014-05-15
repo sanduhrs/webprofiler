@@ -125,20 +125,19 @@ class WebprofilerController extends ControllerBase {
     foreach ($templates as $name => $template) {
       /** @var DrupalDataCollectorInterface $collector */
       $collector = $profile->getCollector($name);
-      $menu = $collector->getMenu();
 
-      if ($menu) {
+      if ($collector->hasPanel()) {
         $childrens[] = array(
           '#theme' => 'details',
           '#attributes' => array('id' => $name),
-          '#title' => $menu,
+          '#title' => $collector->getTitle(),
           '#summary' => 'test',
           '#value' => array(
             '#theme' => 'webprofiler_panel',
-            '#template' => $template,
             '#name' => $name,
+            '#template' => $template,
             '#profile' => $profile,
-            '#summary' => $collector->getSummary(),
+            '#summary' => $collector->getPanelSummary(),
             '#content' => $collector->getPanel(),
           )
         );
@@ -236,7 +235,15 @@ class WebprofilerController extends ControllerBase {
       }
     }
 
-    return array(
+    $build = array();
+
+    $storage = $this->config('webprofiler.config')->get('storage');
+
+    $build['resume'] = array(
+      '#markup' => '<p>' . t('Profiles stored with %storage service.', array('%storage' => $storage)) . '</p>',
+    );
+
+    $build['table'] = array(
       '#theme' => 'table',
       '#rows' => $rows,
       '#header' => array(
@@ -257,6 +264,8 @@ class WebprofilerController extends ControllerBase {
         $this->t('Actions')
       ),
     );
+
+    return $build;
   }
 
   /**

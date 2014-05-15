@@ -30,27 +30,6 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
   protected $routeProvider;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getName() {
-    return 'routing';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('Routing');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
-    return $this->t('Defined routes: @route', array('@route' => count($this->routing())));
-  }
-
-  /**
    * Constructs a new RoutingDataCollector.
    *
    * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
@@ -76,6 +55,27 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
    */
   public function routing() {
     return $this->data['routing'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Routing');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'routing';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Defined routes: @route', array('@route' => count($this->routing())));
   }
 
   /**

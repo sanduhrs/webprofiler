@@ -16,31 +16,20 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
 
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
+  /**
+   * @var \Drupal\Core\Database\Connection
+   */
   private $database;
 
   /**
    * {@inheritdoc}
    */
-  public function getName() {
-    return 'database';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMenu() {
-    return $this->t('Database');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getSummary() {
+  public function getPanelSummary() {
     return $this->t('Executed queries: @count', array('@count' => $this->getQueryCount()));
   }
 
   /**
-   * @param Connection $database
+   * @param \Drupal\Core\Database\Connection $database
    */
   public function __construct(Connection $database) {
     $this->database = $database;
@@ -122,6 +111,20 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
     }
 
     return $time;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'database';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Database');
   }
 
   /**

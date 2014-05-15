@@ -13,8 +13,8 @@ services:
   profiler.logger:
     class: Psr\Log\NullLogger
   profiler:
-    class: Symfony\Component\HttpKernel\Profiler\Profiler
-    arguments: ['@profiler.storage', '@profiler.logger']
+    class: Drupal\webprofiler\Profiler\Profiler
+    arguments: ['@profiler.storage', '@profiler.logger', '@config.factory']
   templateManager:
     class: Drupal\webprofiler\Profiler\TemplateManager
     arguments: ['@profiler', '@twig', '@twig.loader', '%data_collector.templates%']
@@ -34,67 +34,63 @@ services:
   webprofiler.drupal:
     class: Drupal\webprofiler\DataCollector\DrupalDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/drupal.html.twig', id:'drupal' }
+      - { name: data_collector, template:'@webprofiler/Collector/drupal.html.twig', id:'drupal', title:'Drupal' }
   webprofiler.php_config:
     class: Drupal\webprofiler\DataCollector\PhpConfigDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/php_config.html.twig', id:'php_config' }
+      - { name: data_collector, template:'@webprofiler/Collector/php_config.html.twig', id:'php_config', title:'PHP Config' }
   webprofiler.request:
     class: Drupal\webprofiler\DataCollector\RequestDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/request.html.twig', id:'request' }
+      - { name: data_collector, template:'@webprofiler/Collector/request.html.twig', id:'request', title:'Request' }
       - { name: event_subscriber }
   webprofiler.time:
     class: Drupal\webprofiler\DataCollector\TimeDataCollector
     arguments: [NULL, '@stopwatch']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/time.html.twig', id:'time' }
-  webprofiler.memory:
-    class: Drupal\webprofiler\DataCollector\MemoryDataCollector
-    tags:
-      - { name: data_collector, template:'@webprofiler/Collector/memory.html.twig', id:'memory' }
+      - { name: data_collector, template:'@webprofiler/Collector/time.html.twig', id:'time', title:'Timeline' }
   webprofiler.form:
     class: Drupal\webprofiler\DataCollector\FormDataCollector
     arguments: ['@form_builder']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/form.html.twig', id:'form' }
+      - { name: data_collector, template:'@webprofiler/Collector/form.html.twig', id:'form', title:'Forms' }
   webprofiler.user:
     class: Drupal\webprofiler\DataCollector\UserDataCollector
     arguments: ['@current_user', '@authentication', '@entity.manager', '@config.factory']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/user.html.twig', id:'user' }
+      - { name: data_collector, template:'@webprofiler/Collector/user.html.twig', id:'user', title:'User' }
   webprofiler.database:
     class: Drupal\webprofiler\DataCollector\DatabaseDataCollector
     arguments: ['@database']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/database.html.twig', id:'database' }
+      - { name: data_collector, template:'@webprofiler/Collector/database.html.twig', id:'database', title:'Database' }
   webprofiler.drupal_extensions:
     class: Drupal\webprofiler\DataCollector\ExtensionDataCollector
     arguments: ['@module_handler', '@theme_handler']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/extensions.html.twig', id:'drupal_extension' }
+      - { name: data_collector, template:'@webprofiler/Collector/extensions.html.twig', id:'drupal_extension', title:'Extensions (modules/themes)' }
   webprofiler.routing:
     class: Drupal\webprofiler\DataCollector\RoutingDataCollector
     arguments: ['@router.route_provider']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/routing.html.twig', id:'routing' }
+      - { name: data_collector, template:'@webprofiler/Collector/routing.html.twig', id:'routing', title:'Routing' }
   webprofiler.cache:
     class: Drupal\webprofiler\DataCollector\CacheDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache' }
+      - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache', title:'Cache' }
   webprofiler.assets:
     class: Drupal\webprofiler\DataCollector\AssetDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset' }
+      - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset', title:'Assets'}
   webprofiler.config:
     class: Drupal\webprofiler\DataCollector\ConfigDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config' }
+      - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config', title:'Config' }
   webprofiler.event:
     class: Drupal\webprofiler\DataCollector\EventDataCollector
     arguments: ['@event_dispatcher']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', priority: 255 }
+      - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', title:'Events', priority: 255 }
   stopwatch:
     class: Drupal\webprofiler\Stopwatch
   webprofiler.debug.event_dispatcher:

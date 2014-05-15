@@ -7,15 +7,15 @@ trait DrupalDataCollectorTrait {
   /**
    * {@inheritdoc}
    */
-  public function getMenu() {
+  public function getPanelSummary() {
     return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSummary() {
-    return NULL;
+  public function hasPanel() {
+    return TRUE;
   }
 
   /**
