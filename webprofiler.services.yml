@@ -102,3 +102,6 @@ services:
   webprofiler.debug.controller_resolver:
     class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
     arguments: ['@controller_resolver', '@stopwatch']
+  webprofiler.twig_extension:
+    class: Drupal\webprofiler\Twig\RoutingExtension
+    arguments: ['@url_generator']

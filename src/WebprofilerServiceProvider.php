@@ -68,4 +68,12 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function alter(ContainerBuilder $container) {
+    $container->getDefinition('twig')
+      ->addMethodCall('addExtension', array(new Reference('webprofiler.twig_extension')));
+  }
 }
