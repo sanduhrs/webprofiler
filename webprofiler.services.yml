@@ -1,4 +1,9 @@
 services:
+  logger.channel.webprofiler:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory_method: get
+    factory_service: logger.factory
+    arguments: ['webprofiler']
   profiler.file_storage:
     class: Symfony\Component\HttpKernel\Profiler\FileProfilerStorage
     arguments: ['%data_collector.storage%']
@@ -10,11 +15,9 @@ services:
     factory_class: Drupal\webprofiler\Profiler\ProfilerStorageFactory
     factory_method: getProfilerStorage
     arguments: ['@config.factory', '@service_container']
-  profiler.logger:
-    class: Psr\Log\NullLogger
   profiler:
     class: Drupal\webprofiler\Profiler\Profiler
-    arguments: ['@profiler.storage', '@profiler.logger', '@config.factory']
+    arguments: ['@profiler.storage', '@logger.channel.webprofiler', '@config.factory']
   templateManager:
     class: Drupal\webprofiler\Profiler\TemplateManager
     arguments: ['@profiler', '@twig', '@twig.loader', '%data_collector.templates%']
