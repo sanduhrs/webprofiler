@@ -32,7 +32,7 @@
     Loader = (function () {
         "use strict";
 
-        loadXMLDoc('profiler/{{ token }}', function (result) {
+        loadXMLDoc('/profiler/{{ token }}', function (result) {
             document.getElementById('webprofiler{{ token }}').innerHTML = result;
             document.getElementById('webprofiler{{ token }}').style.display = 'block';
 
