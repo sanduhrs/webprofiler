@@ -1,7 +1,7 @@
 {% block toolbar %}
     {% set duration = collector.events|length ? '%.0f ms'|format(collector.duration) : 'n/a' %}
     {% set memory = '%.1f MB'|format(collector.memory / 1024 / 1024) %}
-    {% set total_memory = collector.memoryLimit == -1 ? '&infin;' : '%.1f MB'|format(collector.memoryLimit / 1024 / 1024)|escape %}
+    {% set total_memory = collector.memoryLimit == -1 ? '&infin;' : '%.1f MB'|format(collector.memoryLimit / 1024)|escape %}
     {% set icon %}
     <a href="{{ url("webprofiler.profiler", {token: token}, {fragment: "time"}) }}">
         <img width="20" height="28" alt="Time"

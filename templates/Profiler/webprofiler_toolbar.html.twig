@@ -1,5 +1,5 @@
 <div id="sfMiniToolbar-{{ token }}" class="sf-minitoolbar">
-    <a href="javascript:void(0);" title="Show Drupal toolbar" onclick="
+    <a href="javascript:void(0);" title="{{ "Show Drupal toolbar"|t }}" onclick="
             var elem = this.parentNode;
             if (elem.style.display == 'none') {
             document.getElementById('sfToolbarMainContent-{{ token }}').style.display = 'none';
@@ -32,7 +32,7 @@
         }) }}
     {% endfor %}
 
-    <a class="hide-button" title="Close Toolbar" onclick="
+    <a class="hide-button" title="{{ "Close Toolbar"|t }}" onclick="
             var p = this.parentNode;
             p.style.display = 'none';
             (p.previousElementSibling || p.previousSibling).style.display = 'none';

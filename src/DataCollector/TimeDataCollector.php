@@ -29,11 +29,6 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
    */
   public function __construct(KernelInterface $kernel = null, $stopwatch = null) {
     parent::__construct($kernel, $stopwatch);
-
-    $this->data = array(
-      'memory' => 0,
-      'memory_limit' => $this->convertToBytes(ini_get('memory_limit')),
-    );
   }
 
   /**
@@ -42,6 +37,7 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     parent::collect($request, $response, $exception);
 
+    $this->data['memory_limit'] = $this->convertToBytes(ini_get('memory_limit'));
     $this->updateMemoryUsage();
   }
 
