@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\Views;
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ViewExecutableFactory;
 use Drupal\views\ViewStorageInterface;
@@ -13,6 +14,15 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
 
   /** @var ViewExecutable $view_executable */
   private $views;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(AccountInterface $user) {
+    parent::__construct($user);
+
+    $this->views = array();
+  }
 
   /**
    * {@inheritdoc}

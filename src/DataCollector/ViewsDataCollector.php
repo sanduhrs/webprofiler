@@ -41,14 +41,16 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
 
     /** @var ViewExecutable $view */
     foreach ($views as $view) {
-      $data = array(
-        'id' => $view->storage->id(),
-        'current_display' => $view->current_display,
-        'build_time' => $view->build_time,
-        'execute_time' => $view->execute_time,
-      );
+      if ($view->executed) {
+        $data = array(
+          'id' => $view->storage->id(),
+          'current_display' => $view->current_display,
+          'build_time' => $view->build_time,
+          'execute_time' => $view->execute_time,
+        );
 
-      $this->data['views'][] = $data;
+        $this->data['views'][] = $data;
+      }
     }
   }
 
@@ -60,7 +62,7 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
   }
 
   /**
-   * @return array
+   * @return int
    */
   public function getViewsCount() {
     return count($this->data['views']);

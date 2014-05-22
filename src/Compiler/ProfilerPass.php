@@ -44,7 +44,7 @@ class ProfilerPass implements CompilerPassInterface {
         $template = array($attributes[0]['id'], $attributes[0]['template'], $attributes[0]['title']);
       }
 
-      $collectors->insert(array($id, $template), array($priority, --$order));
+      $collectors->insert(array($id, $template), array(-$priority, --$order));
     }
 
     $templates = array();
