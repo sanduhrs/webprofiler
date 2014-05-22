@@ -16,3 +16,4 @@ active_toolbar_items:
   state: state
   time: time
   user: user
+  views: views

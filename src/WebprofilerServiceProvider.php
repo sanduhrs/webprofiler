@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Drupal\webprofiler\Compiler\EventPass;
 use Drupal\webprofiler\Compiler\ProfilerPass;
+use Drupal\webprofiler\Compiler\ViewsPass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Reference;
@@ -27,6 +28,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // Add a compiler pass to discover all data collector services.
     $container->addCompilerPass(new ProfilerPass());
     $container->addCompilerPass(new EventPass(), PassConfig::TYPE_AFTER_REMOVING);
+    $container->addCompilerPass(new ViewsPass(), PassConfig::TYPE_AFTER_REMOVING);
 
     // Replace the existing state service with a wrapper to collect the
     // requested data.

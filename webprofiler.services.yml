@@ -57,6 +57,11 @@ services:
     arguments: ['@form_builder']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/form.html.twig', id:'form', title:'Forms' }
+  webprofiler.views:
+    class: Drupal\webprofiler\DataCollector\ViewsDataCollector
+    arguments: ['@?views.executable']
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/views.html.twig', id:'views', title:'Views' }
   webprofiler.user:
     class: Drupal\webprofiler\DataCollector\UserDataCollector
     arguments: ['@current_user', '@authentication', '@entity.manager', '@config.factory']

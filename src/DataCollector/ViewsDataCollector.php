@@ -1,0 +1,161 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\webprofiler\DataCollector\ViewsDataCollector.
+ */
+
+namespace Drupal\webprofiler\DataCollector;
+
+use Drupal\Core\Entity\EntityManager;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\views\ViewExecutable;
+use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\webprofiler\Views\ViewExecutableFactoryWrapper;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+
+/**
+ * Collects data about rendered views.
+ */
+class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInterface {
+
+  use StringTranslationTrait, DrupalDataCollectorTrait;
+
+  /** @var ViewExecutableFactoryWrapper $view_executable_factory */
+  private $view_executable_factory;
+
+  /**
+   * @param ViewExecutableFactoryWrapper $view_executable_factory
+   */
+  public function __construct(ViewExecutableFactoryWrapper $view_executable_factory) {
+    $this->view_executable_factory = $view_executable_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function collect(Request $request, Response $response, \Exception $exception = NULL) {
+    $views = $this->view_executable_factory->getViews();
+
+    /** @var ViewExecutable $view */
+    foreach ($views as $view) {
+      $data = array(
+        'id' => $view->storage->id(),
+        'current_display' => $view->current_display,
+        'build_time' => $view->build_time,
+        'execute_time' => $view->execute_time,
+      );
+
+      $this->data['views'][] = $data;
+    }
+  }
+
+  /**
+   * @return array
+   */
+  public function getViews() {
+    return $this->data['views'];
+  }
+
+  /**
+   * @return array
+   */
+  public function getViewsCount() {
+    return count($this->data['views']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'views';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle() {
+    return $this->t('Views');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Total views: @count', array('@count' => $this->getViewsCount()));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanel() {
+    $build = array();
+
+    /** @var EntityManager $entity_manager */
+    $entity_manager = \Drupal::service('entity.manager');
+    $storage = $entity_manager->getStorage('view');
+
+    if ($this->getViewsCount()) {
+      $rows = array();
+      foreach ($this->getViews() as $view) {
+        $row = array();
+
+        $entity = $storage->load($view['id']);
+
+        $operations = array();
+        if ($entity->access('update') && $entity->hasLinkTemplate('edit-display-form')) {
+          $route = $entity->urlInfo('edit-display-form')->toArray();
+          $route['route_parameters']['display_id'] = $view['current_display'];
+
+          $operations['edit'] = array(
+              'title' => $this->t('Edit'),
+              'weight' => 10,
+            ) + $route;
+        }
+
+        $row[] = $view['id'];
+        $row[] = $view['current_display'];
+        $row[] = $view['build_time'];
+        $row[] = $view['execute_time'];
+        $row[] = array(
+          'data' => array(
+            '#type' => 'operations',
+            '#links' => $operations,
+          ),
+        );
+
+        $rows[] = $row;
+      }
+
+      $header = array(
+        $this->t('Id'),
+        $this->t('Display'),
+        'build_time' => array(
+          'data' => $this->t('Build time'),
+          'class' => array(RESPONSIVE_PRIORITY_LOW),
+        ),
+        'execute_time' => array(
+          'data' => $this->t('Execute time'),
+          'class' => array(RESPONSIVE_PRIORITY_LOW),
+        ),
+        $this->t('Operations'),
+      );
+
+      $build['title'] = array(
+        array(
+          '#markup' => '<h3>' . $this->t('Rendered views') . '</h3>',
+        ),
+      );
+
+      $build['table'] = array(
+        '#type' => 'table',
+        '#rows' => $rows,
+        '#header' => $header,
+      );
+    }
+
+    return $build;
+  }
+}
