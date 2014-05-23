@@ -16,13 +16,7 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
-   * Collects data for the given Request and Response.
-   *
-   * @param Request $request A Request instance
-   * @param Response $response A Response instance
-   * @param \Exception $exception An Exception instance
-   *
-   * @api
+   * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['version'] = \Drupal::VERSION;

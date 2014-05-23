@@ -118,7 +118,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
   }
 
   /**
-   * @param $token
+   * @param string $token
    * @param $data
    *
    * @return Profile

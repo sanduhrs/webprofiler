@@ -17,14 +17,27 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /**
  * Profiler Templates Manager
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Artur Wielogórski <wodor@wodor.net>
  */
 class TemplateManager {
+
+  /**
+   * @var \Twig_Environment
+   */
   protected $twig;
+
+  /**
+   * @var \Twig_Loader_Filesystem
+   */
   protected $twigLoader;
+
+  /**
+   * @var array
+   */
   protected $templates;
+
+  /**
+   * @var \Symfony\Component\HttpKernel\Profiler\Profiler
+   */
   protected $profiler;
 
   /**
@@ -50,7 +63,7 @@ class TemplateManager {
    *
    * @return mixed
    *
-   * @throws NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
   public function getName(Profile $profile, $panel) {
     $templates = $this->getNames($profile);
@@ -65,7 +78,7 @@ class TemplateManager {
   /**
    * Gets the templates for a given profile.
    *
-   * @param Profile $profile
+   * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
    *
    * @return array
    */
@@ -81,7 +94,7 @@ class TemplateManager {
   /**
    * Gets template names of templates that are present in the viewed profile.
    *
-   * @param Profile $profile
+   * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
    *
    * @return array
    *

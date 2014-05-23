@@ -6,13 +6,16 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface;
 
+/**
+ * Class ProfilerStorageFactory
+ */
 class ProfilerStorageFactory {
 
   /**
-   * @param ConfigFactoryInterface $config
-   * @param ContainerInterface $container
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
    *
-   * @return ProfilerStorageInterface
+   * @return \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface
    */
   final public static function getProfilerStorage(ConfigFactoryInterface $config, ContainerInterface $container) {
     $storage = $config->get('webprofiler.config')->get('storage') ? : 'profiler.database_storage';

@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- *
+ * Class ConfigForm
  */
 class ConfigForm extends ConfigFormBase {
 
@@ -24,6 +24,9 @@ class ConfigForm extends ConfigFormBase {
    */
   private $profiler;
 
+  /**
+   * @var array
+   */
   private $templates;
 
   /**
@@ -40,7 +43,7 @@ class ConfigForm extends ConfigFormBase {
   /**
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
-   * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
+   * @param array $templates
    */
   public function __construct(ConfigFactoryInterface $config_factory, Profiler $profiler, $templates) {
     parent::__construct($config_factory);
@@ -50,25 +53,14 @@ class ConfigForm extends ConfigFormBase {
   }
 
   /**
-   * Returns a unique string identifying the form.
-   *
-   * @return string
-   *   The unique string identifying the form.
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'webprofiler_config';
   }
 
   /**
-   * Form constructor.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param array $form_state
-   *   An associative array containing the current state of the form.
-   *
-   * @return array
-   *   The form structure.
+   * {@inheritdoc}
    */
   public function buildForm(array $form, array &$form_state) {
     $this->profiler->disable();
@@ -111,12 +103,7 @@ class ConfigForm extends ConfigFormBase {
   }
 
   /**
-   * Form submission handler.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param array $form_state
-   *   An associative array containing the current state of the form.
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, array &$form_state) {
     $this->config('webprofiler.config')

@@ -2,6 +2,9 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+/**
+ * Class DrupalDataCollectorTrait
+ */
 trait DrupalDataCollectorTrait {
 
   /**

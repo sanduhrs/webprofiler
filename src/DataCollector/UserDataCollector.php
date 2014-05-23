@@ -20,16 +20,31 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
 
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
+  /**
+   * @var \Drupal\Core\Session\AccountInterface
+   */
   private $currentUser;
+
+  /**
+   * @var \Drupal\Core\Authentication\AuthenticationManagerInterface
+   */
   private $authenticationManager;
+
+  /**
+   * @var \Drupal\Core\Entity\EntityManagerInterface
+   */
   private $entityManager;
+
+  /**
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   private $configFactory;
 
   /**
-   * @param AccountInterface $currentUser
-   * @param AuthenticationManagerInterface $authenticationManager
-   * @param EntityManagerInterface $entityManager
-   * @param ConfigFactoryInterface $configFactory
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   * @param \Drupal\Core\Authentication\AuthenticationManagerInterface $authenticationManager
+   * @param \Drupal\Core\Entity\EntityManagerInterface $entityManager
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    */
   public function __construct(AccountInterface $currentUser, AuthenticationManagerInterface $authenticationManager, EntityManagerInterface $entityManager, ConfigFactoryInterface $configFactory) {
     $this->currentUser = $currentUser;
@@ -39,7 +54,7 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   }
 
   /**
-   * @return AccountInterface
+   * @return \Drupal\Core\Session\AccountInterface
    */
   public function name() {
     return String::checkPlain($this->data['name']);
@@ -74,13 +89,7 @@ class UserDataCollector extends DataCollector implements DrupalDataCollectorInte
   }
 
   /**
-   * Collects data for the given Request and Response.
-   *
-   * @param Request $request A Request instance
-   * @param Response $response A Response instance
-   * @param \Exception $exception An Exception instance
-   *
-   * @api
+   * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['name'] = $this->currentUser->getUsername();

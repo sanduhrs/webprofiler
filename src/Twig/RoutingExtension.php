@@ -9,6 +9,9 @@ namespace Drupal\webprofiler\Twig;
 
 use Drupal\Core\Routing\UrlGeneratorInterface;
 
+/**
+ * Class RoutingExtension
+ */
 class RoutingExtension extends \Twig_Extension {
 
   /**
@@ -21,38 +24,33 @@ class RoutingExtension extends \Twig_Extension {
   /**
    * Constructs \Drupal\twig_routing\RoutingExtension.
    *
-   * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
+   * @param \Drupal\Core\Routing\UrlGeneratorInterface $urlGenerator
    *   The URL generator.
    */
-  public function __construct(UrlGeneratorInterface $url_generator) {
-    $this->urlGenerator = $url_generator;
+  public function __construct(UrlGeneratorInterface $urlGenerator) {
+    $this->urlGenerator = $urlGenerator;
   }
 
   /**
-   * Returns a list of functions to add to the existing list.
-   *
-   * @return array
-   *   An array of functions
+   * {@inheritdoc}
    */
   public function getFunctions() {
     return array(
       // The url and path function are defined in close parallel to those found
       // in \Symfony\Bridge\Twig\Extension\RoutingExtension
       'url' => new \Twig_SimpleFunction('url', array(
-          $this,
-          'getUrl'
-        ), array('is_safe_callback' => array($this, 'isUrlGenerationSafe'))),
+        $this,
+        'getUrl'
+      ), array('is_safe_callback' => array($this, 'isUrlGenerationSafe'))),
       'path' => new \Twig_SimpleFunction('path', array(
-          $this,
-          'getPath'
-        ), array('is_safe_callback' => array($this, 'isUrlGenerationSafe'))),
+        $this,
+        'getPath'
+      ), array('is_safe_callback' => array($this, 'isUrlGenerationSafe'))),
     );
   }
 
   /**
-   * Returns the name of the extension.
-   *
-   * @return string The extension name
+   * {@inheritdoc}
    */
   public function getName() {
     return 'drupal_twig_routing';

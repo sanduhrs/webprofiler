@@ -19,26 +19,20 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
   /**
    * @var \Drupal\webprofiler\Form\FormBuilderWrapper
    */
-  private $form_builder;
+  private $formBuilder;
 
   /**
-   * @param FormBuilderWrapper $form_builder
+   * @param \Drupal\webprofiler\Form\FormBuilderWrapper $formBuilder
    */
-  public function __construct(FormBuilderWrapper $form_builder) {
-    $this->form_builder = $form_builder;
+  public function __construct(FormBuilderWrapper $formBuilder) {
+    $this->formBuilder = $formBuilder;
   }
 
   /**
-   * Collects data for the given Request and Response.
-   *
-   * @param Request $request A Request instance
-   * @param Response $response A Response instance
-   * @param \Exception $exception An Exception instance
-   *
-   * @api
+   * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-    $this->data['forms'] = $this->form_builder->getBuildForm();
+    $this->data['forms'] = $this->formBuilder->getBuildForm();
   }
 
   /**

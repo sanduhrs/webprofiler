@@ -13,24 +13,27 @@ use Drupal\Core\Database\Database;
 
 class WebprofilerEventListener implements EventSubscriberInterface {
 
-  private $current_user;
+  /**
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  private $currentUser;
 
   /**
-   * @param AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface
    */
-  public function __construct(AccountInterface $current_user) {
-    $this->current_user = $current_user;
+  public function __construct(AccountInterface $currentUser) {
+    $this->currentUser = $currentUser;
   }
 
   /**
-   * @param GetResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    */
   public function onKernelRequest(GetResponseEvent $event) {
     Database::startLog('webprofiler');
   }
 
   /**
-   * @param FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
    */
   public function onKernelResponse(FilterResponseEvent $event) {
     $response = $event->getResponse();
@@ -41,13 +44,13 @@ class WebprofilerEventListener implements EventSubscriberInterface {
       return;
     }
 
-    if ($this->current_user->hasPermission('access web profiler')) {
+    if ($this->currentUser->hasPermission('access web profiler')) {
       $this->injectToolbar($response);
     }
   }
 
   /**
-   * @param Response $response
+   * @param \Symfony\Component\HttpFoundation\Response $response
    */
   protected function injectToolbar(Response $response) {
     $content = $response->getContent();

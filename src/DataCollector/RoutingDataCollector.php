@@ -32,11 +32,11 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
   /**
    * Constructs a new RoutingDataCollector.
    *
-   * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
+   * @param \Drupal\Core\Routing\RouteProviderInterface $routeProvider
    *   The route provider.
    */
-  public function __construct(RouteProviderInterface $route_provider) {
-    $this->routeProvider = $route_provider;
+  public function __construct(RouteProviderInterface $routeProvider) {
+    $this->routeProvider = $routeProvider;
   }
 
   /**

@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- *
+ * Class ManageForm
  */
 class ManageForm extends FormBase {
 
@@ -25,7 +25,7 @@ class ManageForm extends FormBase {
   /**
    * @var \Symfony\Component\DependencyInjection\ContainerInterface
    */
-  private $config_factory;
+  private $configFactory;
 
   /**
    * {@inheritdoc}
@@ -39,38 +39,27 @@ class ManageForm extends FormBase {
 
   /**
    * @param Profiler $profiler
-   * @param ConfigFactoryInterface $config_factory
+   * @param ConfigFactoryInterface $configFactory
    */
-  public function __construct(Profiler $profiler, ConfigFactoryInterface $config_factory) {
+  public function __construct(Profiler $profiler, ConfigFactoryInterface $configFactory) {
     $this->profiler = $profiler;
-    $this->config_factory = $config_factory;
+    $this->configFactory = $configFactory;
   }
 
   /**
-   * Returns a unique string identifying the form.
-   *
-   * @return string
-   *   The unique string identifying the form.
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'webprofiler_purge';
   }
 
   /**
-   * Form constructor.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param array $form_state
-   *   An associative array containing the current state of the form.
-   *
-   * @return array
-   *   The form structure.
+   * {@inheritdoc}
    */
   public function buildForm(array $form, array &$form_state) {
     $this->profiler->disable();
 
-    $storage = $this->config_factory->get('webprofiler.config')->get('storage');
+    $storage = $this->configFactory->get('webprofiler.config')->get('storage');
 
     $form['purge'] = array(
       '#type' => 'details',
@@ -123,12 +112,7 @@ class ManageForm extends FormBase {
   }
 
   /**
-   * Form submission handler.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param array $form_state
-   *   An associative array containing the current state of the form.
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, array &$form_state) {
   }

@@ -6,18 +6,19 @@ use Drupal\Core\Form\FormBuilder;
 
 /**
  * Class FormBuilderWrapper
- *
- * @package Drupal\webprofiler\Form
  */
 class FormBuilderWrapper extends FormBuilder {
 
-  private $build_forms;
+  /**
+   * @var array
+   */
+  private $buildForms;
 
   /**
    * @return array
    */
   public function getBuildForm() {
-    return $this->build_forms;
+    return $this->buildForms;
   }
 
   /**
@@ -26,7 +27,7 @@ class FormBuilderWrapper extends FormBuilder {
   public function buildForm($form_id, array &$form_state) {
     if (isset($form_state['build_info']) && isset($form_state['build_info']['callback_object'])) {
       $class = get_class($form_state['build_info']['callback_object']);
-      $this->build_forms[$form_id] = array(
+      $this->buildForms[$form_id] = array(
         'class' => $class,
       );
     }
@@ -39,8 +40,8 @@ class FormBuilderWrapper extends FormBuilder {
   public function retrieveForm($form_id, &$form_state) {
     $form = parent::retrieveForm($form_id, $form_state);
 
-    if ($this->build_forms != NULL) {
-      $this->build_forms[$form_id] += array(
+    if ($this->buildForms != NULL) {
+      $this->buildForms[$form_id] += array(
         'form' => $form,
       );
     }

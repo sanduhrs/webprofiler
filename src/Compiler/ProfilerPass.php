@@ -9,13 +9,11 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
  * Class ProfilerPass
- *
- * @package Drupal\webprofiler\Compiler
  */
 class ProfilerPass implements CompilerPassInterface {
 
   /**
-   * @param ContainerBuilder $container
+   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
    *
    * @throws \InvalidArgumentException
    */

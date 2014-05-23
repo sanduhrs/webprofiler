@@ -12,7 +12,6 @@ use Drupal\Component\Utility\String;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 use Symfony\Component\HttpKernel\DataCollector\TimeDataCollector as BaseTimeDataCollector;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Stopwatch\StopwatchEvent;
@@ -25,7 +24,8 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
-   *
+   * @param \Symfony\Component\HttpKernel\KernelInterface $kernel
+   * @param $stopwatch
    */
   public function __construct(KernelInterface $kernel = null, $stopwatch = null) {
     parent::__construct($kernel, $stopwatch);
@@ -120,8 +120,8 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
   private function getAttachedJs() {
     /** @var StopwatchEvent[] $collectedEvents */
     $collectedEvents = $this->getEvents();
-    $section_periods = $collectedEvents['__section__']->getPeriods();
-    $endTime = end($section_periods)->getEndTime();
+    $sectionPeriods = $collectedEvents['__section__']->getPeriods();
+    $endTime = end($sectionPeriods)->getEndTime();
     $events = array();
 
     foreach ($collectedEvents as $key => $collectedEvent) {

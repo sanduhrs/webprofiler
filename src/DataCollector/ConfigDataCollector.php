@@ -37,7 +37,7 @@ class ConfigDataCollector extends DataCollector implements DrupalDataCollectorIn
   }
 
   /**
-   * Twig callback to display the config names.
+   * Callback to display the config names.
    */
   public function configNames() {
     return $this->data['config_names'];

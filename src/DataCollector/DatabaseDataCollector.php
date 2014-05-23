@@ -22,13 +22,6 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   private $database;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getPanelSummary() {
-    return $this->t('Executed queries: @count', array('@count' => $this->getQueryCount()));
-  }
-
-  /**
    * @param \Drupal\Core\Database\Connection $database
    */
   public function __construct(Connection $database) {
@@ -36,13 +29,7 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   }
 
   /**
-   * Collects data for the given Request and Response.
-   *
-   * @param Request $request A Request instance
-   * @param Response $response A Response instance
-   * @param \Exception $exception An Exception instance
-   *
-   * @api
+   * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $queries = $this->database->getLogger()->get('webprofiler');
@@ -125,6 +112,13 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
    */
   public function getTitle() {
     return $this->t('Database');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPanelSummary() {
+    return $this->t('Executed queries: @count', array('@count' => $this->getQueryCount()));
   }
 
   /**

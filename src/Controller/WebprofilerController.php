@@ -10,10 +10,7 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
-use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\Core\Utility\LinkGeneratorInterface;
 use Drupal\system\FileDownloadController;
-use Drupal\webprofiler\DataCollector\TimeDataCollector;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,9 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Stopwatch\StopwatchEvent;
 use Twig_Loader_Filesystem;
 
+/**
+ * Class WebprofilerController
+ */
 class WebprofilerController extends ControllerBase {
 
   /**
@@ -45,7 +44,7 @@ class WebprofilerController extends ControllerBase {
   /**
    * @var \Twig_Loader_Filesystem
    */
-  private $twig_loader;
+  private $twigLoader;
 
   /**
    * @var \Drupal\Core\Datetime\Date
@@ -53,19 +52,9 @@ class WebprofilerController extends ControllerBase {
   private $date;
 
   /**
-   * @var \Drupal\Core\Form\FormBuilderInterface
-   */
-  private $form_builder;
-
-  /**
    * @var \Drupal\system\FileDownloadController
    */
-  private $file_download_controller;
-
-  /**
-   * @var \Drupal\Core\Utility\LinkGeneratorInterface
-   */
-  protected $linkGenerator;
+  private $fileDownloadController;
 
   /**
    * {@inheritdoc}
@@ -77,8 +66,6 @@ class WebprofilerController extends ControllerBase {
       $container->get('templateManager'),
       $container->get('twig.loader'),
       $container->get('date'),
-      $container->get('form_builder'),
-      $container->get('link_generator'),
       new FileDownloadController()
     );
   }
@@ -89,26 +76,24 @@ class WebprofilerController extends ControllerBase {
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
    * @param \Symfony\Component\Routing\RouterInterface $router
    * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
-   * @param \Twig_Loader_Filesystem $twig_loader
+   * @param \Twig_Loader_Filesystem $twigLoader
    * @param \Drupal\Core\Datetime\Date $date
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-   *   The link generator.
-   * @param \Drupal\system\FileDownloadController $file_download_controller
+   * @param \Drupal\system\FileDownloadController $fileDownloadController
    */
-  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twig_loader, Date $date, FormBuilderInterface $form_builder, LinkGeneratorInterface $link_generator, FileDownloadController $file_download_controller) {
+  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, Date $date, FileDownloadController $fileDownloadController) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
-    $this->twig_loader = $twig_loader;
+    $this->twigLoader = $twigLoader;
     $this->date = $date;
-    $this->form_builder = $form_builder;
-    $this->linkGenerator = $link_generator;
-    $this->file_download_controller = $file_download_controller;
+    $this->fileDownloadController = $fileDownloadController;
   }
 
   /**
+   * Generates the profile page.
    *
+   * @param string $token
+   * @return array
    */
   public function profilerAction($token) {
     $this->profiler->disable();
@@ -118,8 +103,8 @@ class WebprofilerController extends ControllerBase {
       return $this->t('No profiler data for @token token.', array('@token' => $token));
     }
 
-    $template_manager = $this->templateManager;
-    $templates = $template_manager->getTemplates($profile);
+    $templateManager = $this->templateManager;
+    $templates = $templateManager->getTemplates($profile);
 
     $childrens = array();
     foreach ($templates as $name => $template) {
@@ -166,7 +151,10 @@ class WebprofilerController extends ControllerBase {
   }
 
   /**
+   * Generates the toolbar.
    *
+   * @param string $token
+   * @return array
    */
   public function toolbarAction($token) {
     if (NULL === $token) {
@@ -200,7 +188,10 @@ class WebprofilerController extends ControllerBase {
   }
 
   /**
-   * Generate the list page.
+   * Generates the list page.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   * @return array
    */
   public function listAction(Request $request) {
     $limit = $request->get('limit', 10);
@@ -212,7 +203,7 @@ class WebprofilerController extends ControllerBase {
     if (count($tokens)) {
       foreach ($tokens as $token) {
         $row = array();
-        $row[] = $this->linkGenerator->generate($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
+        $row[] = $this->l($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
         $row[] = $token['ip'];
         $row[] = $token['method'];
         $row[] = $token['url'];
@@ -270,6 +261,9 @@ class WebprofilerController extends ControllerBase {
 
   /**
    * Downloads a single profile.
+   *
+   * @param string $token
+   * @return \Symfony\Component\HttpFoundation\Response
    */
   public function singleExportAction($token) {
     if (NULL === $this->profiler) {
@@ -290,6 +284,8 @@ class WebprofilerController extends ControllerBase {
 
   /**
    * Downloads a tarball with all stored profiles.
+   *
+   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
    */
   public function allExportAction() {
     $archiver = new ArchiveTar(file_directory_temp() . '/profiles.tar.gz', 'gz');
@@ -306,6 +302,6 @@ class WebprofilerController extends ControllerBase {
     $archiver->createModify($files, '', file_directory_temp());
 
     $request = new Request(array('file' => 'profiles.tar.gz'));
-    return $this->file_download_controller->download($request, 'temporary');
+    return $this->fileDownloadController->download($request, 'temporary');
   }
 }

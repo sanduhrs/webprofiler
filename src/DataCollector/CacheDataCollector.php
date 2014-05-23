@@ -34,7 +34,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   }
 
   /**
-   * Twig callback to return the total amount of requested cache CIDS.
+   * Callback to return the total amount of requested cache CIDS.
    *
    * @return int
    */
@@ -47,7 +47,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   }
 
   /**
-   * Twig callback to return all registered cache CIDs keyed by bin.
+   * Callback to return all registered cache CIDs keyed by bin.
    *
    * @return array
    */
