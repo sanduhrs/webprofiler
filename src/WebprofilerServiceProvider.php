@@ -11,6 +11,7 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderBase;
 use Drupal\webprofiler\Compiler\EventPass;
 use Drupal\webprofiler\Compiler\ProfilerPass;
+use Drupal\webprofiler\Compiler\ViewsPass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\Reference;
@@ -37,8 +38,22 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
         'template' => '@webprofiler/Collector/state.html.twig',
         'id' => 'state',
         'title' => 'State',
-        'priority' => -10
+        'priority' => 135
       ));
+
+    // Add ViewsDataCollector only if Views module is enabled.
+    if (FALSE !== $container->hasDefinition('views.executable')) {
+      $container->addCompilerPass(new ViewsPass(), PassConfig::TYPE_AFTER_REMOVING);
+
+      $container->register('webprofiler.views', 'Drupal\webprofiler\DataCollector\ViewsDataCollector')
+        ->addArgument(new Reference(('views.executable')))
+        ->addTag('data_collector', array(
+          'template' => '@webprofiler/Collector/views.html.twig',
+          'id' => 'views',
+          'title' => 'Views',
+          'priority' => 65
+        ));
+    }
 
     // Replaces the existing cache_factory service to be able to collect the
     // requested data.
