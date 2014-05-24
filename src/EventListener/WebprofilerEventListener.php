@@ -44,7 +44,7 @@ class WebprofilerEventListener implements EventSubscriberInterface {
       return;
     }
 
-    if ($this->currentUser->hasPermission('access web profiler')) {
+    if ($this->currentUser->hasPermission('view webprofiler toolbar')) {
       $this->injectToolbar($response);
     }
   }

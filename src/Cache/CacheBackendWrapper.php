@@ -57,8 +57,16 @@ class CacheBackendWrapper implements CacheBackendInterface {
    * {@inheritdoc}
    */
   public function get($cid, $allow_invalid = FALSE) {
-    $this->cacheDataCollector->registerCacheGet($this->bin, $cid);
-    return $this->cacheBackend->get($cid, $allow_invalid);
+    $cache = $this->cacheBackend->get($cid, $allow_invalid);
+
+    if ($cache) {
+      $this->cacheDataCollector->registerCache($this->bin, $cid, CacheDataCollector::WEBPROFILER_CACHE_HIT);
+    }
+    else {
+      $this->cacheDataCollector->registerCache($this->bin, $cid, CacheDataCollector::WEBPROFILER_CACHE_MISS);
+    }
+
+    return $cache;
   }
 
   /**
@@ -66,7 +74,7 @@ class CacheBackendWrapper implements CacheBackendInterface {
    */
   public function getMultiple(&$cids, $allow_invalid = FALSE) {
     foreach ($cids as $cid) {
-      $this->cacheDataCollector->registerCacheGet($this->bin, $cid);
+      $this->cacheDataCollector->registerCache($this->bin, $cid, CacheDataCollector::WEBPROFILER_CACHE_HIT);
     }
     return $this->cacheBackend->getMultiple($cids, $allow_invalid);
   }

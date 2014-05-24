@@ -1,4 +1,6 @@
-/* general */
+/**
+ * General CSS
+ */
 
 .webprofiler h3 {
   margin-top: 20px;
@@ -22,7 +24,9 @@
   padding: 10px 35px;
 }
 
-/* query panel */
+/**
+ * Query panel
+ */
 
 .query {
     margin-bottom: 10px;
@@ -52,7 +56,7 @@
 }
 
 /**
- * Timeline related CSS.
+ * Timeline
  */
 .sf-profiler-timeline .legends {
     font-size: 12px;
@@ -119,4 +123,16 @@
 
 .legends .template {
     border-left-color: #dd3;
+}
+
+/**
+ * Cache
+ */
+.cache-data .cache-data-cid {
+    width: 80%;
+}
+
+.cache-data .cache-data-hit,
+.cache-data .cache-data-miss {
+    width: 10%;
 }

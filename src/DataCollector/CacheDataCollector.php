@@ -20,11 +20,14 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
 
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
+  const WEBPROFILER_CACHE_HIT = 'bin_cids_hit';
+  const WEBPROFILER_CACHE_MISS = 'bin_cids_miss';
+
   /**
-   * Registers a cache get call on a specific cache bin.
+   * Registers a cache get on a specific cache bin.
    */
-  public function registerCacheGet($bin, $cid) {
-    $this->data['bin_cids'][$bin][$cid] = isset($this->data[$bin][$cid]) ? $this->data[$bin][$cid] + 1 : 1;
+  public function registerCache($bin, $cid, $type) {
+    $this->data[$bin][$type][$cid] = isset($this->data[$bin][$type][$cid]) ? $this->data[$bin][$type][$cid] + 1 : 1;
   }
 
   /**
@@ -38,12 +41,32 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    *
    * @return int
    */
-  public function countCacheCids() {
+  public function countCacheCids($type) {
     $total_count = 0;
-    foreach ($this->data['bin_cids'] as $cids) {
-      $total_count += count($cids);
+    foreach ($this->data as $bin) {
+      if (array_key_exists($type, $bin)) {
+        $total_count += count($bin[$type]);
+      }
     }
     return $total_count;
+  }
+
+  /**
+   * Callback to return the total amount of hit cache CIDS.
+   *
+   * @return int
+   */
+  public function countCacheHits() {
+    return $this->countCacheCids(CacheDataCollector::WEBPROFILER_CACHE_HIT);
+  }
+
+  /**
+   * Callback to return the total amount of miss cache CIDS.
+   *
+   * @return int
+   */
+  public function countCacheMisses() {
+    return $this->countCacheCids(CacheDataCollector::WEBPROFILER_CACHE_MISS);
   }
 
   /**
@@ -51,8 +74,33 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    *
    * @return array
    */
-  public function cacheCids() {
-    return $this->data['bin_cids'];
+  public function cacheCids($type) {
+    $cache = array();
+    foreach ($this->data as $key => $bin) {
+      if (array_key_exists($type, $bin)) {
+        $cache[$key] = $bin[$type];
+      }
+    }
+
+    return $cache;
+  }
+
+  /**
+   * Callback to return hit registered cache CIDs keyed by bin.
+   *
+   * @return array
+   */
+  public function cacheHits() {
+    return $this->cacheCids(CacheDataCollector::WEBPROFILER_CACHE_HIT);
+  }
+
+  /**
+   * Callback to return miss registered cache CIDs keyed by bin.
+   *
+   * @return array
+   */
+  public function cacheMisses() {
+    return $this->cacheCids(CacheDataCollector::WEBPROFILER_CACHE_MISS);
   }
 
   /**
@@ -73,7 +121,10 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    * {@inheritdoc}
    */
   public function getPanelSummary() {
-    return $this->t('Total cache: @cache', array('@cache' => $this->countCacheCids()));
+    return $this->t('Total cache hit: @cache_hit, total cache miss: @cache_miss', array(
+      '@cache_hit' => $this->countCacheCids(CacheDataCollector::WEBPROFILER_CACHE_HIT),
+      '@cache_miss' => $this->countCacheCids(CacheDataCollector::WEBPROFILER_CACHE_MISS)
+    ));
   }
 
   /**
@@ -82,11 +133,67 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   public function getPanel() {
     $build = array();
 
-    foreach ($this->cacheCids() as $bin => $cids) {
-      $build[$bin] = $this->getTable($bin . ' (' . count($cids) . ')', $cids, array($this->t('cid'), $this->t('hits')));
+    foreach ($this->data as $key => $bin) {
+      $rows = array();
+      $totalNum = 0;
+
+      if (array_key_exists(CacheDataCollector::WEBPROFILER_CACHE_HIT, $bin)) {
+        foreach ($bin[CacheDataCollector::WEBPROFILER_CACHE_HIT] as $cid => $num) {
+          $row = array();
+
+          $row[] = $cid;
+          $row[] = $num;
+          $row[] = '-';
+
+          $rows[] = $row;
+
+          $totalNum += $num;
+        }
+      }
+
+      if (array_key_exists(CacheDataCollector::WEBPROFILER_CACHE_MISS, $bin)) {
+        foreach ($bin[CacheDataCollector::WEBPROFILER_CACHE_MISS] as $cid => $num) {
+          $row = array();
+
+          $row[] = $cid;
+          $row[] = '-';
+          $row[] = $num;
+
+          $rows[] = $row;
+
+          $totalNum += $num;
+        }
+      }
+
+      $header = array(
+        array(
+          'data' => $this->t('cid'),
+          'class' => array('cache-data-cid'),
+        ),
+        array(
+          'data' => $this->t('hits'),
+          'class' => array('cache-data-hit'),
+        ),
+        array(
+          'data' => $this->t('misses'),
+          'class' => array('cache-data-miss'),
+        ),
+      );
+
+      $build[$key . '_title'] = array(
+        array(
+          '#markup' => '<h3>' . $key . ' (' . $totalNum . ')' . '</h3>',
+        ),
+      );
+
+      $build[$key] = array(
+        '#theme' => 'table',
+        '#rows' => $rows,
+        '#header' => $header,
+        '#attributes' => array('class' => array('cache-data')),
+      );
     }
 
     return $build;
   }
-
 }
