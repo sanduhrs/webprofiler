@@ -46,9 +46,14 @@ function webprofiler_theme() {
  */
 function webprofiler_permission() {
   $perms = array(
-    'access web profiler' => array(
-      'title' => t('Access web profiler'),
-      'description' => t('Access web profiler.'),
+    'access webprofiler' => array(
+      'title' => t('Access webprofiler'),
+      'description' => t('Access webprofiler collected data.'),
+      'restrict access' => TRUE,
+    ),
+    'view webprofiler toolbar' => array(
+      'title' => t('View webprofiler toolbar'),
+      'description' => t('View webprofiler toolbar.'),
     ),
   );
 

@@ -29,25 +29,29 @@
         }
     })();
 
-    Loader = (function () {
+    function Loader() {
         "use strict";
 
-        loadXMLDoc('/profiler/{{ token }}', function (result) {
-            document.getElementById('webprofiler{{ token }}').innerHTML = result;
-            document.getElementById('webprofiler{{ token }}').style.display = 'block';
+        var instance = {};
 
-            if (Sfjs.getPreference('toolbar/displayState') == 'none') {
-                document.getElementById('sfToolbarMainContent-{{ token }}').style.display = 'none';
-                document.getElementById('sfToolbarClearer-{{ token }}').style.display = 'none';
-                document.getElementById('sfMiniToolbar-{{ token }}').style.display = 'block';
-            } else {
-                document.getElementById('sfToolbarMainContent-{{ token }}').style.display = 'block';
-                document.getElementById('sfToolbarClearer-{{ token }}').style.display = 'block';
-                document.getElementById('sfMiniToolbar-{{ token }}').style.display = 'none';
-            }
-        });
+        instance.load = function () {
+            instance.loadXMLDoc('/profiler/{{ token }}', function (result) {
+                document.getElementById('webprofiler{{ token }}').innerHTML = result;
+                document.getElementById('webprofiler{{ token }}').style.display = 'block';
 
-        function loadXMLDoc(url, callback) {
+                if (Sfjs.getPreference('toolbar/displayState') == 'none') {
+                    document.getElementById('sfToolbarMainContent-{{ token }}').style.display = 'none';
+                    document.getElementById('sfToolbarClearer-{{ token }}').style.display = 'none';
+                    document.getElementById('sfMiniToolbar-{{ token }}').style.display = 'block';
+                } else {
+                    document.getElementById('sfToolbarMainContent-{{ token }}').style.display = 'block';
+                    document.getElementById('sfToolbarClearer-{{ token }}').style.display = 'block';
+                    document.getElementById('sfMiniToolbar-{{ token }}').style.display = 'none';
+                }
+            });
+        };
+
+        instance.loadXMLDoc = function (url, callback) {
             var xmlhttp = new XMLHttpRequest();
 
             xmlhttp.onreadystatechange = function () {
@@ -58,8 +62,11 @@
 
             xmlhttp.open("GET", url, true);
             xmlhttp.send();
-        }
-    })();
+        };
 
-    new Loader();
+        return instance;
+    }
+
+    var loader = Loader();
+    loader.load();
 </script>

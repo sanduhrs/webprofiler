@@ -4,7 +4,7 @@ webprofiler.toolbar:
   defaults:
     _controller: '\Drupal\webprofiler\Controller\WebprofilerController::toolbarAction'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'view webprofiler toolbar'
 
 # view profile
 webprofiler.profiler:
@@ -13,7 +13,7 @@ webprofiler.profiler:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::profilerAction'
     _title: 'Webprofiler'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'access webprofiler'
 
 # export single profile
 webprofiler.single_export:
@@ -22,7 +22,7 @@ webprofiler.single_export:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::singleExportAction'
     _title: 'Export single profile'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'access webprofiler'
 
 # export all profiles
 webprofiler.all_export:
@@ -31,7 +31,7 @@ webprofiler.all_export:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::allExportAction'
     _title: 'Export all profiles'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'access webprofiler'
 
 # list stored profiles
 webprofiler.admin_list:
@@ -40,7 +40,7 @@ webprofiler.admin_list:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::listAction'
     _title: 'List'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'access webprofiler'
 
 # manage profiles (import/export/purge)
 webprofiler.admin_manage:
@@ -49,7 +49,7 @@ webprofiler.admin_manage:
     _form: 'Drupal\webprofiler\Form\ManageForm'
     _title: 'Manage'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'access webprofiler'
 
 # configure webprofiler
 webprofiler.admin_configure:
@@ -58,4 +58,4 @@ webprofiler.admin_configure:
     _form: 'Drupal\webprofiler\Form\ConfigForm'
     _title: 'Configure'
   requirements:
-    _permission: 'access web profiler'
+    _permission: 'access webprofiler'
