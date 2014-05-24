@@ -91,18 +91,6 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
   }
 
   /**
-   * @param $class
-   *
-   * @return string
-   */
-  private function abbrClass($class) {
-    $parts = explode('\\', $class);
-    $short = array_pop($parts);
-
-    return sprintf("<abbr title=\"%s\">%s</abbr>", $class, $short);
-  }
-
-  /**
    * Returns the link for a given file/line pair.
    *
    * @param string $file

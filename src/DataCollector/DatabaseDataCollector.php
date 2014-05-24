@@ -101,6 +101,20 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   }
 
   /**
+   * @return string
+   */
+  public function getColorCode() {
+    if ($this->getQueryCount() < 100) {
+      return 'green';
+    }
+    if ($this->getQueryCount() < 200) {
+      return 'yellow';
+    }
+
+    return 'red';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getName() {

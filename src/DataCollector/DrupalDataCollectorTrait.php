@@ -62,4 +62,16 @@ trait DrupalDataCollectorTrait {
 
     return $build;
   }
+
+  /**
+   * @param $class
+   *
+   * @return string
+   */
+  private function abbrClass($class) {
+    $parts = explode('\\', $class);
+    $short = array_pop($parts);
+
+    return sprintf("<abbr title=\"%s\">%s</abbr>", $class, $short);
+  }
 }
