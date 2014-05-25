@@ -61,6 +61,9 @@ class WebprofilerEventListener implements EventSubscriberInterface {
         $toolbar = array(
           '#theme' => 'webprofiler_loader',
           '#token' => $token,
+          '#attached' => array(
+            'library' => array('core/drupal'),
+          ),
         );
 
         $content = mb_substr($content, 0, $pos) . render($toolbar) . mb_substr($content, $pos);
