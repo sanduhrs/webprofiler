@@ -41,6 +41,7 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
     $this->moduleHandler->alter('js', $this->data['js']);
 
     $this->data['css'] = _drupal_add_css();
+    $this->moduleHandler->alter('css', $this->data['css']);
   }
 
   /**
