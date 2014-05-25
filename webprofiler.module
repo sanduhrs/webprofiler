@@ -7,7 +7,7 @@ function webprofiler_theme() {
   return array(
     'webprofiler_loader' => array(
       'template' => 'Profiler/webprofiler_loader',
-      'variables' => array('token' => NULL),
+      'variables' => array('token' => NULL, 'profiler_url' => NULL),
     ),
     'webprofiler_toolbar' => array(
       'template' => 'Profiler/webprofiler_toolbar',

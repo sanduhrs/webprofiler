@@ -35,7 +35,7 @@
         var instance = {};
 
         instance.load = function () {
-            instance.loadXMLDoc(Drupal.url('profiler/{{ token }}'), function (result) {
+            instance.loadXMLDoc('{{ profiler_url }}', function (result) {
                 document.getElementById('webprofiler{{ token }}').innerHTML = result;
                 document.getElementById('webprofiler{{ token }}').style.display = 'block';
 

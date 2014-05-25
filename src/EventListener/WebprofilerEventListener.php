@@ -56,14 +56,15 @@ class WebprofilerEventListener implements EventSubscriberInterface {
     $content = $response->getContent();
     $pos = mb_strripos($content, '</body>');
 
+    $scriptPath = $GLOBALS['script_path'];
+    $basePath = base_path();
+
     if (FALSE !== $pos) {
       if ($token = $response->headers->get('X-Debug-Token')) {
         $toolbar = array(
           '#theme' => 'webprofiler_loader',
           '#token' => $token,
-          '#attached' => array(
-            'library' => array('core/drupal'),
-          ),
+          '#profiler_url' => $basePath . $scriptPath . 'profiler/' . $token,
         );
 
         $content = mb_substr($content, 0, $pos) . render($toolbar) . mb_substr($content, $pos);
