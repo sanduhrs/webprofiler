@@ -83,6 +83,7 @@ services:
       - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache', title:'Cache', priority: 100 }
   webprofiler.assets:
     class: Drupal\webprofiler\DataCollector\AssetDataCollector
+    arguments: ['@module_handler']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset', title:'Assets', priority: 110}
   webprofiler.config:

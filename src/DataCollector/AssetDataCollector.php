@@ -7,6 +7,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,24 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   */
+  public function __construct(ModuleHandlerInterface $moduleHandler) {
+    $this->moduleHandler = $moduleHandler;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['js'] = _drupal_add_js();
+    $this->moduleHandler->alter('js', $this->data['js']);
+
     $this->data['css'] = _drupal_add_css();
   }
 
@@ -64,13 +79,6 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
       }
     }
     return $result;
-  }
-
-  /**
-   * Twig callback to return the JS settings.
-   */
-  public function getJsSettings() {
-    return isset($this->data['js']['settings']) ? json_encode($this->data['js']['settings']['data']) : '';
   }
 
   /**
@@ -117,7 +125,7 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
           '#markup' => '<h3>' . $this->t('JS settings') . '</h3>',
         ),
         array(
-          '#markup' => '<textarea style="width:100%; height:400px">' . json_encode($this->data['js']['settings']['data'], JSON_PRETTY_PRINT) . '</textarea>',
+          '#markup' => '<textarea style="width:100%; height:400px">' . json_encode(drupal_merge_js_settings($this->data['js']['settings']['data']), JSON_PRETTY_PRINT) . '</textarea>',
         ),
       );
     }
