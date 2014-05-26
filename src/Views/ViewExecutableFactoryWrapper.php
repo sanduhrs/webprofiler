@@ -6,6 +6,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ViewExecutableFactory;
 use Drupal\views\ViewStorageInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class ViewExecutableFactoryWrapper
@@ -18,8 +19,8 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
   /**
    * {@inheritdoc}
    */
-  public function __construct(AccountInterface $user) {
-    parent::__construct($user);
+  public function __construct(AccountInterface $user, RequestStack $request_stack) {
+    parent::__construct($user, $request_stack);
 
     $this->views = array();
   }
