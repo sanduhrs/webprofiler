@@ -36,6 +36,8 @@ function webprofiler_theme() {
       'variables' => array(
         'query' => NULL,
         'table' => NULL,
+        'explain' => FALSE,
+        'position' => NULL,
       ),
     ),
   );

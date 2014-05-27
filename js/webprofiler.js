@@ -8,11 +8,6 @@
         attach: function (context) {
             var $context = $(context);
 
-            $('.query-info-button').click(function () {
-                $(this).toggleClass('open');
-                $('.query-data', $(this).parent()).toggle();
-            });
-
             $('.vertical-tabs-panes .vertical-tabs-pane').each(function () {
                 var id = $(this).attr('id');
                 var summary = $('.summary', $(this)).html();

@@ -39,4 +39,23 @@
     <div class="content">
         {{ content }}
     </div>
+
+    <script type="text/template" id="query-explain-template">
+        <table>
+            <thead>
+            <tr>
+                <% _.each(rc.data[1], function(value, key, list) { %>
+                <th><%= key %></th>
+                <% }); %>
+            </tr>
+            </thead>
+            <% _.each(rc.data, function(value) { %>
+            <tr>
+                <% _.each(value, function(value2, key, list) { %>
+                <td><%= value2 %></td>
+                <% }); %>
+            </tr>
+            <% }); %>
+        </table>
+    </script>
 {% endblock %}

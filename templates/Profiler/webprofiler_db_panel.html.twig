@@ -1,18 +1,27 @@
 <div class="query">
-  {{ query.query }}
-  <div class="query-info">
-    <span class="query-info-button">Info</span>
+    {{ query.query }}
+    <div class="query-info">
+        <span class="query-info-button">Info</span>
 
-    <div class="query-data">
-      {{ table }}
+        <div class="query-data">
+            {{ table }}
 
-      <h4>{{ 'Time'|t }}</h4>
+            <h4>{{ 'Time'|t }}</h4>
 
-      <p>{{ query.time }}</p>
+            <p>{{ '%0.4f ms'|format(query.time * 1000) }}</p>
 
-      <h4>{{ 'Caller'|t }}</h4>
+            <h4>{{ 'Caller'|t }}</h4>
 
-      <p>{{ query.caller.file }}:{{ query.caller.line }}</p>
+            <p>{{ query.caller.file }}:{{ query.caller.line }}</p>
+
+            {% if explain %}
+                <h4>{{ 'Explain'|t }}</h4>
+
+                <div class="query-explain-wrapper">
+                    <span class="button query-explain-button" data-query-position="{{ position }}">Show explain</span>
+                </div>
+            {% endif %}
+        </div>
+
     </div>
-  </div>
 </div>

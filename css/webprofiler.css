@@ -25,37 +25,6 @@
 }
 
 /**
- * Query panel
- */
-
-.query {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
-}
-
-.query-info {
-    margin: 10px 0;
-}
-
-.query-info-button {
-    background-color: #CCC;
-    color: #fff;
-    padding: 3px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.query-info-button.open {
-    background-color: #AAA;
-}
-
-.query-data {
-    display: none;
-    margin: 10px 0;
-}
-
-/**
  * Timeline
  */
 .sf-profiler-timeline .legends {

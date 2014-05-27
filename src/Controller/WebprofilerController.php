@@ -140,6 +140,12 @@ class WebprofilerController extends ControllerBase {
       '#children' => $childrens,
       '#attributes' => array('class' => array('webprofiler')),
       '#attached' => array(
+        'js' => array(
+          array(
+            'data' => array('webprofiler' => array('token' => $token)),
+            'type' => 'setting'
+          ),
+        ),
         'library' => array(
           'core/drupal.vertical-tabs',
           'webprofiler/webprofiler',

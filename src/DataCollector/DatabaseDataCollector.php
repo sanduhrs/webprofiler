@@ -141,16 +141,33 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   public function getPanel() {
     $build = array();
 
+    $position = 0;
     foreach ($this->getQueries() as $query) {
       $table = $this->getTable('Query arguments', $query['args'], array());
+
+      $explain = FALSE;
+      if (strpos($query['query'], 'UPDATE') === FALSE && strpos($query['query'], 'INSERT') === FALSE && strpos($query['query'], 'DELETE') === FALSE) {
+        $explain = TRUE;
+      }
 
       $build[] = array(
         '#theme' => 'webprofiler_db_panel',
         '#query' => $query,
         '#table' => $table,
+        '#explain' => $explain,
+        '#position' => $position,
+        '#attached' => array(
+          'library' => array(
+            'webprofiler/database',
+          ),
+        ),
       );
+
+      $position++;
     }
 
     return $build;
   }
+
+
 }

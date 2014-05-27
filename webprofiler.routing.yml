@@ -59,3 +59,12 @@ webprofiler.admin_configure:
     _title: 'Configure'
   requirements:
     _permission: 'access webprofiler'
+
+# configure webprofiler
+webprofiler.database.explain:
+  path: '/admin/config/development/profiler/database_explain/{token}/{qid}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\DatabaseController::explainAction'
+    _title: 'Database Explain'
+  requirements:
+    _permission: 'access webprofiler'
