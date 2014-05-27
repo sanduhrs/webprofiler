@@ -119,8 +119,8 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
 
         $row[] = $view['id'];
         $row[] = $view['current_display'];
-        $row[] = $view['build_time'];
-        $row[] = $view['execute_time'];
+        $row[] = sprintf('%0.2f ms', ($view['build_time'] * 1000));
+        $row[] = sprintf('%0.f ms', ($view['execute_time'] * 1000));
         $row[] = array(
           'data' => array(
             '#type' => 'operations',
