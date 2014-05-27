@@ -37,6 +37,7 @@ function webprofiler_theme() {
         'query' => NULL,
         'table' => NULL,
         'explain' => FALSE,
+        'query_type' => NULL,
         'position' => NULL,
       ),
     ),

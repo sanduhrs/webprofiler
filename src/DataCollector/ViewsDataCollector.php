@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\views\ViewExecutable;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\webprofiler\Views\TraceableViewExecutable;
 use Drupal\webprofiler\Views\ViewExecutableFactoryWrapper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,14 +40,15 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $views = $this->view_executable_factory->getViews();
 
-    /** @var ViewExecutable $view */
+    /** @var TraceableViewExecutable $view */
     foreach ($views as $view) {
       if ($view->executed) {
         $data = array(
           'id' => $view->storage->id(),
           'current_display' => $view->current_display,
-          'build_time' => $view->build_time,
-          'execute_time' => $view->execute_time,
+          'build_time' => $view->getBuildTime(),
+          'execute_time' => $view->getExecuteTime(),
+          'render_time' => $view->getRenderTime(),
         );
 
         $this->data['views'][] = $data;
@@ -120,7 +122,8 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
         $row[] = $view['id'];
         $row[] = $view['current_display'];
         $row[] = sprintf('%0.2f ms', ($view['build_time'] * 1000));
-        $row[] = sprintf('%0.f ms', ($view['execute_time'] * 1000));
+        $row[] = sprintf('%0.2f ms', ($view['execute_time'] * 1000));
+        $row[] = sprintf('%0.2f ms', ($view['render_time'] * 1000));
         $row[] = array(
           'data' => array(
             '#type' => 'operations',
@@ -140,6 +143,10 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
         ),
         'execute_time' => array(
           'data' => $this->t('Execute time'),
+          'class' => array(RESPONSIVE_PRIORITY_LOW),
+        ),
+        'redner_time' => array(
+          'data' => $this->t('Render time'),
           'class' => array(RESPONSIVE_PRIORITY_LOW),
         ),
         $this->t('Operations'),

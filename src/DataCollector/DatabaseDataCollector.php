@@ -141,13 +141,31 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   public function getPanel() {
     $build = array();
 
+    $build['filters'] = array(
+      '#theme' => 'form',
+      '#children' => \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\QueryFilterForm'),
+    );
+
     $position = 0;
     foreach ($this->getQueries() as $query) {
       $table = $this->getTable('Query arguments', $query['args'], array());
 
-      $explain = FALSE;
-      if (strpos($query['query'], 'UPDATE') === FALSE && strpos($query['query'], 'INSERT') === FALSE && strpos($query['query'], 'DELETE') === FALSE) {
-        $explain = TRUE;
+      $explain = TRUE;
+      $type = 'select';
+
+      if (strpos($query['query'], 'UPDATE') !== FALSE) {
+        $explain = FALSE;
+        $type = 'update';
+      }
+
+      if (strpos($query['query'], 'INSERT') !== FALSE) {
+        $explain = FALSE;
+        $type = 'insert';
+      }
+
+      if (strpos($query['query'], 'DELETE') !== FALSE) {
+        $explain = FALSE;
+        $type = 'delete';
       }
 
       $build[] = array(
@@ -155,6 +173,7 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
         '#query' => $query,
         '#table' => $table,
         '#explain' => $explain,
+        '#query_type' => $type,
         '#position' => $position,
         '#attached' => array(
           'library' => array(

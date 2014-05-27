@@ -3,9 +3,26 @@
  */
 
 .query {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+    border-left: 3px solid #CCC;
+    padding-left: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+}
+
+.query-select {
+    border-left: 3px solid #CCC;
+}
+
+.query-insert {
+    border-left: 3px solid #F00;
+}
+
+.query-update {
+    border-left: 3px solid #0F0;
+}
+
+.query-delete {
+    border-left: 3px solid #00F;
 }
 
 .query-info {
