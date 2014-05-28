@@ -31,7 +31,7 @@ services:
       - { name: event_subscriber }
   webprofiler.WebprofilerEventListener:
       class: Drupal\webprofiler\EventListener\WebprofilerEventListener
-      arguments: ['@current_user']
+      arguments: ['@current_user', '@url_generator']
       tags:
         - { name: event_subscriber }
   webprofiler.drupal:
