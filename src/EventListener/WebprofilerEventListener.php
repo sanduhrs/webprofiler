@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\EventListener;
 
+use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,17 @@ class WebprofilerEventListener implements EventSubscriberInterface {
   private $currentUser;
 
   /**
-   * @param \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\Routing\UrlGeneratorInterface
    */
-  public function __construct(AccountInterface $currentUser) {
+  protected $urlGenerator;
+
+  /**
+   * @param \Drupal\Core\Session\AccountInterface
+   * @param \Drupal\Core\Routing\UrlGeneratorInterface $urlGenerator
+   */
+  public function __construct(AccountInterface $currentUser, UrlGeneratorInterface $urlGenerator) {
     $this->currentUser = $currentUser;
+    $this->urlGenerator = $urlGenerator;
   }
 
   /**
@@ -56,15 +64,12 @@ class WebprofilerEventListener implements EventSubscriberInterface {
     $content = $response->getContent();
     $pos = mb_strripos($content, '</body>');
 
-    $scriptPath = $GLOBALS['script_path'];
-    $basePath = base_path();
-
     if (FALSE !== $pos) {
       if ($token = $response->headers->get('X-Debug-Token')) {
         $toolbar = array(
           '#theme' => 'webprofiler_loader',
           '#token' => $token,
-          '#profiler_url' => $basePath . $scriptPath . 'profiler/' . $token,
+          '#profiler_url' => $this->urlGenerator->generate('webprofiler.toolbar', array('token' => $token)),
         );
 
         $content = mb_substr($content, 0, $pos) . render($toolbar) . mb_substr($content, $pos);
