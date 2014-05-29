@@ -141,9 +141,11 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   public function getPanel() {
     $build = array();
 
-    $build['filters'] = array(
-      '#theme' => 'form',
-      '#children' => \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\QueryFilterForm'),
+    $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\QueryFilterForm');
+
+    $build['container'] = array(
+      '#type' => 'container',
+      '#attributes' => array('id' => array('wp-query-wrapper')),
     );
 
     $position = 0;
@@ -168,7 +170,7 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
         $type = 'delete';
       }
 
-      $build[] = array(
+      $build['container'][] = array(
         '#theme' => 'webprofiler_db_panel',
         '#query' => $query,
         '#table' => $table,

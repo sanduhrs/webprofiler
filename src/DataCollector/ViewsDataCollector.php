@@ -137,15 +137,15 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
       $header = array(
         $this->t('Id'),
         $this->t('Display'),
-        'build_time' => array(
+        array(
           'data' => $this->t('Build time'),
           'class' => array(RESPONSIVE_PRIORITY_LOW),
         ),
-        'execute_time' => array(
+        array(
           'data' => $this->t('Execute time'),
           'class' => array(RESPONSIVE_PRIORITY_LOW),
         ),
-        'redner_time' => array(
+        array(
           'data' => $this->t('Render time'),
           'class' => array(RESPONSIVE_PRIORITY_LOW),
         ),
@@ -159,7 +159,7 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
       );
 
       $build['table'] = array(
-        '#type' => 'table',
+        '#theme' => 'table',
         '#rows' => $rows,
         '#header' => $header,
       );

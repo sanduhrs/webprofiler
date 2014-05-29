@@ -2,34 +2,47 @@
  * Query panel
  */
 
-.query {
+/*#database-filter-form .form-item {
+    float: left;
+    margin-right: 10px;
+}
+
+#filter-query-wrapper {
+    clear: left;
+}*/
+
+#wp-query-wrapper {
+    margin-top: 20px;
+}
+
+.wp-query {
     margin-bottom: 30px;
     border-left: 3px solid #CCC;
     padding-left: 10px;
     padding-bottom: 10px;
 }
 
-.query-select {
+.wp-query-select {
     border-left: 3px solid #CCC;
 }
 
-.query-insert {
-    border-left: 3px solid #F00;
-}
-
-.query-update {
+.wp-query-insert {
     border-left: 3px solid #0F0;
 }
 
-.query-delete {
+.wp-query-update {
     border-left: 3px solid #00F;
 }
 
-.query-info {
+.wp-query-delete {
+    border-left: 3px solid #F00;
+}
+
+.wp-query-info {
     margin: 10px 0;
 }
 
-.query-info-button {
+.wp-query-info-button {
     background-color: #CCC;
     color: #fff;
     padding: 3px;
@@ -37,11 +50,11 @@
     border-radius: 4px;
 }
 
-.query-info-button.open {
+.wp-query-info-button.open {
     background-color: #AAA;
 }
 
-.query-data {
+.wp-query-data {
     display: none;
     margin: 10px 0;
 }

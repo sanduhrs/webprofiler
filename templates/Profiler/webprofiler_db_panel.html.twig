@@ -1,9 +1,9 @@
-<div class="query query-{{ query_type }}">
+<div class="wp-query wp-query-{{ query_type }}" data-wp-query-caller="{{ query.caller.class|replace({'\\': '_'}) }}" data-wp-query-type="{{ query_type }}">
     {{ query.query }}
-    <div class="query-info">
-        <span class="query-info-button">Info</span>
+    <div class="wp-query-info">
+        <span class="wp-query-info-button">Info</span>
 
-        <div class="query-data">
+        <div class="wp-query-data">
             {{ table }}
 
             <h4>{{ 'Time'|t }}</h4>
@@ -17,8 +17,8 @@
             {% if explain %}
                 <h4>{{ 'Explain'|t }}</h4>
 
-                <div class="query-explain-wrapper">
-                    <span class="button query-explain-button" data-query-position="{{ position }}">Show explain</span>
+                <div class="wp-query-explain-wrapper">
+                    <span class="button wp-query-explain-button" data-wp-query-position="{{ position }}">Show explain</span>
                 </div>
             {% endif %}
         </div>

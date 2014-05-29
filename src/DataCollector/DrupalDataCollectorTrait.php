@@ -41,7 +41,7 @@ trait DrupalDataCollectorTrait {
       $row = array();
 
       $row[] = $key;
-      $row[] = (is_array($value)) ? implode(', ', $value) : $value;
+      $row[] = print_r($value, TRUE);
 
       $rows[] = $row;
     }

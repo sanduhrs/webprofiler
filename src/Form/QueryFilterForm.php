@@ -50,10 +50,20 @@ class QueryFilterForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, array &$form_state) {
-    $form['type'] = array(
+    $types = array(
+      '' => $this->t('Any'),
+      'select' => 'SELECT',
+      'update' => 'UPDATE',
+      'insert' => 'INSERT',
+      'delete' => 'DELETE',
+    );
+
+    $queryType = \Drupal::request()->attributes->get('query-type');
+    $form['query-type'] = array(
       '#type' => 'select',
       '#title' => $this->t('Type'),
-      '#options' => array('select', 'update', 'insert', 'delete'),
+      '#options' => $types,
+      '#default_value' => $queryType,
     );
 
     $token = \Drupal::request()->attributes->get('token');
@@ -64,23 +74,28 @@ class QueryFilterForm extends FormBase {
 
     $queries = $databaseCollector->getQueries();
 
-    $callers = array();
+    $callers = array('' => $this->t('Any'));
     foreach ($queries as $query) {
       if ($query['caller']['class']) {
-        $callers[$query['caller']['class']] = $query['caller']['class'];
+        $class = str_replace('\\', '_', $query['caller']['class']);
+        $callers[$class] = $query['caller']['class'];
       }
     }
 
-    $form['caller'] = array(
+    $form['query-caller'] = array(
       '#type' => 'select',
       '#title' => $this->t('Caller'),
       '#options' => $callers,
     );
 
-    $form['purge']['purge'] = array(
+    $form['query-filter'] = array(
       '#type' => 'submit',
       '#value' => $this->t('Filter'),
+      '#prefix' => '<div id="filter-query-wrapper">',
+      '#suffix' => '</div>',
     );
+
+    $form['#attributes'] = array('id' => array('database-filter-form'));
 
     return $form;
   }
