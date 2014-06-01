@@ -41,8 +41,20 @@ class FormBuilderWrapper extends FormBuilder {
     $form = parent::retrieveForm($form_id, $form_state);
 
     if ($this->buildForms != NULL) {
+
+      $elements = array();
+      foreach ($form as $key => $value) {
+        if (strpos($key, '#') !== 0) {
+          $elements[$key]['#title'] = isset($value['#title']) ? $value['#title'] : NULL;
+          $elements[$key]['#access'] = isset($value['#access']) ? $value['#access'] : NULL;
+          $elements[$key]['#type'] = isset($value['#type']) ? $value['#type'] : NULL;
+        } else {
+          $elements[$key] = $form[$key];
+        }
+      }
+
       $this->buildForms[$form_id] += array(
-        'form' => $form,
+        'form' => $elements,
       );
     }
 
