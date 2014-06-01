@@ -30,6 +30,7 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
    */
   public function get(ViewStorageInterface $view) {
     $view_executable = new TraceableViewExecutable($view, $this->user);
+    $view_executable->setRequest($this->requestStack->getCurrentRequest());
     $this->views[] = $view_executable;
 
     return $view_executable;
