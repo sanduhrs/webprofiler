@@ -25,8 +25,26 @@
 }
 
 /**
+ * List profiles
+ */
+
+#webprofiler-profiles-filter {
+    margin-bottom: 20px;
+}
+
+#webprofiler-profiles-filter .form-item {
+    float: left;
+    margin-right: 0.25em;
+}
+
+#webprofiler-profiles-filter #edit-actions {
+    clear: left;
+}
+
+/**
  * Timeline
  */
+
 .sf-profiler-timeline .legends {
     font-size: 12px;
     line-height: 1.5em;
@@ -97,6 +115,7 @@
 /**
  * Cache
  */
+
 .cache-data .cache-data-cid {
     width: 80%;
 }

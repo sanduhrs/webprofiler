@@ -10,6 +10,7 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
@@ -203,7 +204,11 @@ class WebprofilerController extends ControllerBase {
     $limit = $request->get('limit', 10);
     $this->profiler->disable();
 
-    $tokens = $this->profiler->find('', '', $limit, '', '', '');
+    $ip = $request->query->get('ip');
+    $method = $request->query->get('method');
+    $url = $request->query->get('url');
+
+    $tokens = $this->profiler->find($ip, $url, $limit, $method, '', '');
 
     $rows = array();
     if (count($tokens)) {
@@ -231,6 +236,14 @@ class WebprofilerController extends ControllerBase {
         $rows[] = $row;
       }
     }
+    else {
+      $rows[] = array(
+        array(
+          'data' => $this->t('No profiles found'),
+          'colspan' => 6,
+        )
+      );
+    }
 
     $build = array();
 
@@ -239,6 +252,8 @@ class WebprofilerController extends ControllerBase {
     $build['resume'] = array(
       '#markup' => '<p>' . t('Profiles stored with %storage service.', array('%storage' => $storage)) . '</p>',
     );
+
+    $build['filters'] = $this->formBuilder()->getForm('Drupal\\webprofiler\\Form\\ProfilesFilterForm');
 
     $build['table'] = array(
       '#theme' => 'table',
@@ -259,6 +274,11 @@ class WebprofilerController extends ControllerBase {
           'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
         ),
         $this->t('Actions')
+      ),
+      '#attached' => array(
+        'library' => array(
+          'webprofiler/webprofiler',
+        ),
       ),
     );
 
