@@ -60,11 +60,20 @@ webprofiler.admin_configure:
   requirements:
     _permission: 'access webprofiler'
 
-# configure webprofiler
+# get query explain
 webprofiler.database.explain:
   path: '/admin/config/development/profiler/database_explain/{token}/{qid}'
   defaults:
     _controller: '\Drupal\webprofiler\Controller\DatabaseController::explainAction'
-    _title: 'Database Explain'
+    _title: 'Query Explain'
+  requirements:
+    _permission: 'access webprofiler'
+
+# get query arguments
+webprofiler.database.arguments:
+  path: '/admin/config/development/profiler/database_arguments/{token}/{qid}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\DatabaseController::argumentsAction'
+    _title: 'Query Arguments'
   requirements:
     _permission: 'access webprofiler'

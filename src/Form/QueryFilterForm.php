@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class ManageForm
+ * Class QueryFilterForm
  */
 class QueryFilterForm extends FormBase {
 

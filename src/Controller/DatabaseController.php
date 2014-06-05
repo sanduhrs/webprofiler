@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Database;
 use Drupal\webprofiler\DataCollector\DatabaseDataCollector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,6 +60,47 @@ class DatabaseController extends ControllerBase {
    * @return JsonResponse
    */
   public function explainAction($token, $qid) {
+    $query = $this->getQuery($token, $qid);
+
+    $data = array();
+    $result = $this->database->query('EXPLAIN ' . $query['query'], (array) $query['args'])->fetchAllAssoc('table');
+    $i = 1;
+    foreach ($result as $row) {
+      foreach ($row as $key => $value) {
+        $data[$i][$key] = $value;
+      }
+      $i++;
+    }
+
+    return new JsonResponse(array('data' => $data));
+  }
+
+  /**
+   * @param string $token
+   * @param int $qid
+   *
+   * @return JsonResponse
+   */
+  public function argumentsAction($token, $qid) {
+    $query = $this->getQuery($token, $qid);
+
+    $conn = Database::getConnection();
+    $quoted = array();
+    foreach ((array) $query['args'] as $key => $val) {
+      $quoted[$key] = is_null($val) ? 'NULL' : $conn->quote($val);
+    }
+    $output = strtr($query['query'], $quoted);
+
+    return new JsonResponse(array('data' => $output));
+  }
+
+  /**
+   * @param string $token
+   * @param int $qid
+   *
+   * @return array
+   */
+  private function getQuery($token, $qid) {
     if (NULL === $this->profiler) {
       throw new NotFoundHttpException('The profiler must be enabled.');
     }
@@ -75,16 +117,6 @@ class DatabaseController extends ControllerBase {
     $queries = $databaseCollector->getQueries();
     $query = $queries[$qid];
 
-    $data = array();
-    $result = $this->database->query('EXPLAIN ' . $query['query'], (array) $query['args'])->fetchAllAssoc('table');
-    $i = 1;
-    foreach ($result as $row) {
-      foreach($row as $key => $value) {
-        $data[$i][$key] = $value;
-      }
-      $i++;
-    }
-
-    return new JsonResponse(array('data' => $data));
+    return $query;
   }
 }

@@ -14,6 +14,10 @@
 
             <p>{{ query.caller.file }}:{{ query.caller.line }}</p>
 
+            <h4>{{ 'Target'|t }}</h4>
+
+            <p>{{ query.target }}</p>
+
             {% if explain %}
                 <h4>{{ 'Explain'|t }}</h4>
 
