@@ -3,6 +3,7 @@ storage: profiler.database_storage
 exclude: "/contextual/*\r\n/toolbar/*\r\n/edit/*\r\n*.js\r\n*.css"
 active_toolbar_items:
   asset: asset
+  block: block
   cache: cache
   config: config
   database: database

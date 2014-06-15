@@ -95,6 +95,7 @@ services:
     arguments: ['@event_dispatcher']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', title:'Events', priority: 130 }
+
   stopwatch:
     class: Drupal\webprofiler\Stopwatch
   webprofiler.debug.event_dispatcher:
@@ -103,9 +104,23 @@ services:
   webprofiler.debug.event_dispatcher.parent:
     class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
     arguments: ['@service_container']
+
   webprofiler.debug.controller_resolver:
     class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
     arguments: ['@controller_resolver', '@stopwatch']
+
+  webprofiler.debug.entity.manager:
+     class: Drupal\webprofiler\Entity\EntityManagerWrapper
+     arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@language_manager', '@string_translation', '@class_resolver', '@typed_data_manager']
+     parent: container.trait
+     tags:
+      - { name: plugin_manager_cache_clear }
+  webprofiler.debug.entity.manager.parent:
+     class: Drupal\Core\Entity\EntityManager
+     parent: webprofiler.debug.entity.manager
+     tags:
+      - { name: plugin_manager_cache_clear }
+
   webprofiler.twig_extension:
     class: Drupal\webprofiler\Twig\RoutingExtension
     arguments: ['@url_generator']

@@ -97,11 +97,12 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
   public function getPanel() {
     $build = array();
 
-    /** @var EntityManager $entity_manager */
-    $entity_manager = \Drupal::service('entity.manager');
-    $storage = $entity_manager->getStorage('view');
-
     if ($this->getViewsCount()) {
+
+      /** @var EntityManager $entity_manager */
+      $entity_manager = \Drupal::service('entity.manager');
+      $storage = $entity_manager->getStorage('view');
+
       $rows = array();
       foreach ($this->getViews() as $view) {
         $row = array();
