@@ -77,3 +77,11 @@ webprofiler.database.arguments:
     _title: 'Query Arguments'
   requirements:
     _permission: 'access webprofiler'
+
+webprofiler.diff:
+  path: '/admin/config/development/profiler/diff/{token1}/{token2}'
+  defaults:
+    _content: '\Drupal\webprofiler\Controller\DiffController::diffAction'
+    _title: 'Diff'
+  requirements:
+    _permission: 'access webprofiler'
