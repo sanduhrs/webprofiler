@@ -23,27 +23,19 @@ class ManageForm extends FormBase {
   private $profiler;
 
   /**
-   * @var \Symfony\Component\DependencyInjection\ContainerInterface
-   */
-  private $configFactory;
-
-  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('profiler'),
-      $container->get('config.factory')
+      $container->get('profiler')
     );
   }
 
   /**
    * @param Profiler $profiler
-   * @param ConfigFactoryInterface $configFactory
    */
-  public function __construct(Profiler $profiler, ConfigFactoryInterface $configFactory) {
+  public function __construct(Profiler $profiler) {
     $this->profiler = $profiler;
-    $this->configFactory = $configFactory;
   }
 
   /**
@@ -59,7 +51,7 @@ class ManageForm extends FormBase {
   public function buildForm(array $form, array &$form_state) {
     $this->profiler->disable();
 
-    $storage = $this->configFactory->get('webprofiler.config')->get('storage');
+    $storage = $this->config('webprofiler.config')->get('storage');
 
     $form['purge'] = array(
       '#type' => 'details',

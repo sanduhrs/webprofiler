@@ -65,7 +65,7 @@ webprofiler.database.explain:
   path: '/admin/config/development/profiler/database_explain/{token}/{qid}'
   defaults:
     _controller: '\Drupal\webprofiler\Controller\DatabaseController::explainAction'
-    _title: 'Query Explain'
+    _title: 'Query explain'
   requirements:
     _permission: 'access webprofiler'
 
@@ -73,7 +73,7 @@ webprofiler.database.explain:
 webprofiler.database.arguments:
   path: '/admin/config/development/profiler/database_arguments/{token}/{qid}'
   defaults:
-    _controller: '\Drupal\webprofiler\Controller\DatabaseController::argumentsAction'
-    _title: 'Query Arguments'
+    _content: '\Drupal\webprofiler\Controller\DatabaseController::argumentsAction'
+    _title: 'Copy query'
   requirements:
     _permission: 'access webprofiler'

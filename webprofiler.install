@@ -78,20 +78,36 @@ function webprofiler_schema() {
  * Implements hook_requirements().
  */
 function webprofiler_requirements($phase) {
-  $has_d3 = _webprofiler_verify_library('webprofiler', 'd3');
-
   $requirements = array();
+
+  $has_d3 = _webprofiler_verify_library('webprofiler', 'd3');
   $requirements['d3js'] = array(
-    'title' => t('D3 library'),
+    'title' => t('D3.js library'),
     'value' => $has_d3 ? t('Enabled') : t('Not found'),
   );
 
   if (!$has_d3) {
     $requirements['d3js']['severity'] = REQUIREMENT_WARNING;
     $requirements['d3js']['description'] =
-      t('Webprofiler module requires D3 library to proper render data. !d3s_url into /libraries/d3/d3.min.js.',
+      t('Webprofiler module requires D3.js library to proper render data. !d3js_url into /libraries/d3/d3.min.js.',
         array(
-          '!d3s_url' => l(t('Download D3'), 'https://github.com/mbostock/d3',
+          '!d3js_url' => l(t('Download D3.js'), 'https://github.com/mbostock/d3',
+            array('attributes' => array('target' => 'blank')))
+        ));
+  }
+
+  $has_highlight = _webprofiler_verify_library('webprofiler', 'highlight');
+  $requirements['highlightjs'] = array(
+    'title' => t('highlight.js library'),
+    'value' => $has_highlight ? t('Enabled') : t('Not found'),
+  );
+
+  if (!$has_highlight) {
+    $requirements['highlightjs']['severity'] = REQUIREMENT_WARNING;
+    $requirements['highlightjs']['description'] =
+      t('Webprofiler module requires highlight.js library to syntax highlight collected queries. !highlightjs_url assets into /libraries/highlight.',
+        array(
+          '!highlightjs_url' => l(t('Download highlight.js'), 'http://highlightjs.org',
             array('attributes' => array('target' => 'blank')))
         ));
   }

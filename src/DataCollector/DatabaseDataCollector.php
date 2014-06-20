@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
@@ -150,7 +151,7 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
 
     $position = 0;
     foreach ($this->getQueries() as $query) {
-      $table = $this->getTable('Query arguments', $query['args'], array());
+      $table = $this->getTable('Query arguments', $query['args'], array('Placeholder', 'Value'));
 
       $explain = TRUE;
       $type = 'select';
@@ -170,6 +171,18 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
         $type = 'delete';
       }
 
+      $token = \Drupal::request()->get('token');
+      $copyUrl = \Drupal::urlGenerator()->generate('webprofiler.database.arguments', array('token' => $token, 'qid' => $position));
+      $query['copy_link'] = l($this->t('Copy'), $copyUrl, array(
+        'attributes' => array(
+          'class' => array('use-ajax', 'wp-button', 'wp-query-copy-button'),
+          'data-accepts' => 'application/vnd.drupal-modal',
+          'data-dialog-options' => Json::encode(array(
+            'width' => 700,
+          )),
+        )
+      ));
+
       $build['container'][] = array(
         '#theme' => 'webprofiler_db_panel',
         '#query' => $query,
@@ -180,6 +193,7 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
         '#attached' => array(
           'library' => array(
             'webprofiler/database',
+            'webprofiler/highlight',
           ),
         ),
       );

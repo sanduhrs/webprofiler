@@ -91,7 +91,7 @@ class DatabaseController extends ControllerBase {
     }
     $output = strtr($query['query'], $quoted);
 
-    return new JsonResponse(array('data' => $output));
+    return new Response($output);
   }
 
   /**

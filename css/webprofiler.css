@@ -2,26 +2,18 @@
  * General CSS
  */
 
+.webprofiler .content {
+    float: left;
+    width: 100%;
+}
+
 .webprofiler h3 {
   margin-top: 20px;
 }
 
-.webprofiler.vertical-tabs-panes {
-  padding: 0;
-}
-
-.webprofiler .details-wrapper {
-  padding: 0;
-}
-
-.webprofiler .title {
-  background-color: #DDDDDD;
-  border-bottom: 1px solid #CCCCCC;
-  padding: 3px 35px;
-}
-
-.webprofiler .content {
-  padding: 10px 35px;
+.webprofiler .title h2 {
+    border-bottom: 1px solid #CCCCCC;
+    padding-bottom: 10px;
 }
 
 /**

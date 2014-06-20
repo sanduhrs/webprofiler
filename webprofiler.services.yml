@@ -23,7 +23,7 @@ services:
     arguments: ['@profiler', '@twig', '@twig.loader', '%data_collector.templates%']
   webprofiler.matcher:
     class: Drupal\webprofiler\RequestMatcher\WebprofilerRequestMatcher
-    arguments: ['@config.factory']
+    arguments: ['@config.factory', '@path.matcher']
   webprofiler.profilerListener:
     class: Symfony\Component\HttpKernel\EventListener\ProfilerListener
     arguments: ['@profiler', '@webprofiler.matcher']

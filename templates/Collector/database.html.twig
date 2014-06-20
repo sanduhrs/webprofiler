@@ -41,15 +41,16 @@
     </div>
 
     <script type="text/template" id="wp-query-explain-template">
+        <h3>{{ 'Explain'|t }}</h3>
         <table>
             <thead>
             <tr>
-                <% _.each(rc.data[1], function(value, key, list) { %>
+                <% _.each(wp.data[1], function(value, key, list) { %>
                 <th><%= key %></th>
                 <% }); %>
             </tr>
             </thead>
-            <% _.each(rc.data, function(value) { %>
+            <% _.each(wp.data, function(value) { %>
             <tr>
                 <% _.each(value, function(value2, key, list) { %>
                 <td><%= value2 %></td>

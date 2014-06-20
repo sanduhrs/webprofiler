@@ -93,6 +93,7 @@ class QueryFilterForm extends FormBase {
       '#value' => $this->t('Filter'),
       '#prefix' => '<div id="filter-query-wrapper">',
       '#suffix' => '</div>',
+      '#attributes' => array('class' => array('button--primary')),
     );
 
     $form['#attributes'] = array('id' => array('database-filter-form'));

@@ -5,17 +5,17 @@
 (function ($, Drupal, drupalSettings) {
     Drupal.behaviors.webprofiler_database = {
         attach: function (context) {
-            $('.wp-query-info-button').click(function () {
+            $('.wp-query-info-button').on('click', function (event) {
                 $(this).toggleClass('open');
-                $('.wp-query-data', $(this).parent()).toggle();
+                $('.wp-query-info', $(this).parent()).toggle();
             });
 
-            $('.wp-query-explain-button').click(function () {
+            $('.wp-query-explain-button').on('click', function (event) {
                 var position = $(this).attr('data-wp-query-position'), wrapper = $(this).parent();
                 var url = Drupal.url('admin/config/development/profiler/database_explain/' + drupalSettings.webprofiler.token + '/' + position);
 
                 $.getJSON(url, function (data) {
-                    _.templateSettings.variable = "rc";
+                    _.templateSettings.variable = "wp";
 
                     var template = _.template(
                         $("#wp-query-explain-template").html()
@@ -23,10 +23,9 @@
 
                     wrapper.html(template(data));
                 });
-
             });
 
-            $('#edit-query-filter').click(function () {
+            $('#edit-query-filter').on('click', function (event) {
                 var queryType = $('#edit-query-type').val(), queryCaller = $('#edit-query-caller').val();
 
                 if (queryType != '' || queryCaller != '') {
@@ -49,6 +48,8 @@
 
                 return false;
             });
+
+            hljs.initHighlightingOnLoad();
         }
     }
 })(jQuery, Drupal, drupalSettings);

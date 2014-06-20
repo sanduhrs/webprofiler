@@ -3,6 +3,7 @@
 namespace Drupal\webprofiler\RequestMatcher;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Path\PathMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
@@ -17,10 +18,17 @@ class WebprofilerRequestMatcher implements RequestMatcherInterface {
   private $configFactory;
 
   /**
-   * @param ConfigFactoryInterface $configFactory
+   * @var \Drupal\Core\Path\PathMatcherInterface
    */
-  public function __construct(ConfigFactoryInterface $configFactory) {
+  private $pathMatcher;
+
+  /**
+   * @param ConfigFactoryInterface $configFactory
+   * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
+   */
+  public function __construct(ConfigFactoryInterface $configFactory, PathMatcherInterface $pathMatcher) {
     $this->configFactory = $configFactory;
+    $this->pathMatcher = $pathMatcher;
   }
 
   /**
@@ -29,6 +37,11 @@ class WebprofilerRequestMatcher implements RequestMatcherInterface {
   public function matches(Request $request) {
     $path = $request->getPathInfo();
 
-    return !drupal_match_path($path, $this->configFactory->get('webprofiler.config')->get('exclude'));
+    $patterns = $this->configFactory->get('webprofiler.config')->get('exclude');
+
+    // never add Webprofiler to phpinfo page.
+    $patterns .= "\r\n/admin/reports/status/php";
+
+    return !$this->pathMatcher->matchPath($path, $patterns);
   }
 }
