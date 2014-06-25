@@ -3,13 +3,20 @@
 namespace Drupal\webprofiler\Entity;
 
 use Drupal\Core\Entity\EntityManager;
+use Drupal\webprofiler\Entity\Block\BlockStorageDecorator;
+use Drupal\webprofiler\Entity\Block\BlockViewBuilderDecorator;
 
 class EntityManagerWrapper extends EntityManager {
 
   /**
    * @var array[EntityStorageInterface]
    */
-  private $storages;
+  private $loaded;
+
+  /**
+   * @var array[EntityViewBuilderInterface]
+   */
+  private $rendered;
 
   /**
    * {@inheritdoc}
@@ -19,7 +26,7 @@ class EntityManagerWrapper extends EntityManager {
 
     if ('block' == $entity_type) {
       $decorator = new BlockStorageDecorator($controller);
-      $this->storages[] = $decorator;
+      $this->loaded[] = $decorator;
 
       return $decorator;
     }
@@ -28,10 +35,33 @@ class EntityManagerWrapper extends EntityManager {
   }
 
   /**
-   * @return mixed
+   * {@inheritdoc}
    */
-  public function getStorages() {
-    return $this->storages;
+  public function getViewBuilder($entity_type) {
+    $controller = $this->getController($entity_type, 'view_builder', 'getViewBuilderClass');
+
+    if ('block' == $entity_type) {
+      $decorator = new BlockViewBuilderDecorator($controller);
+      $this->rendered[] = $decorator;
+
+      return $decorator;
+    }
+
+    return $controller;
+  }
+
+  /**
+   * @return array[EntityStorageInterface]
+   */
+  public function getLoaded() {
+    return $this->loaded;
+  }
+
+  /**
+   * @return array[EntityViewBuilderInterface]
+   */
+  public function getRendered() {
+    return $this->rendered;
   }
 
 }

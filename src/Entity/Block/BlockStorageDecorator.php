@@ -1,19 +1,15 @@
 <?php
 
-namespace Drupal\webprofiler\Entity;
+namespace Drupal\webprofiler\Entity\Block;
 
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\webprofiler\Decorator;
 
 /**
  * Class BlockStorageDecorator
  */
-class BlockStorageDecorator extends Decorator implements ConfigEntityStorageInterface {
-
-  /**
-   * @var array
-   */
-  private $blocks;
+class BlockStorageDecorator extends BlockDecorator implements ConfigEntityStorageInterface {
 
   /**
    * @param ConfigEntityStorageInterface $controller
@@ -37,7 +33,7 @@ class BlockStorageDecorator extends Decorator implements ConfigEntityStorageInte
   public function loadMultiple(array $ids = NULL) {
     $entities = $this->getOriginalObject()->loadMultiple($ids);
 
-    array_merge($this->blocks, $entities);
+    $this->blocks = array_merge($this->blocks, $entities);
 
     return $entities;
   }
@@ -80,7 +76,7 @@ class BlockStorageDecorator extends Decorator implements ConfigEntityStorageInte
   public function loadByProperties(array $values = array()) {
     $entities = $this->getOriginalObject()->loadByProperties($values);
 
-    $this->blocks = $entities;
+    $this->blocks = array_merge($this->blocks, $entities);
 
     return $entities;
   }
@@ -148,10 +144,4 @@ class BlockStorageDecorator extends Decorator implements ConfigEntityStorageInte
     return substr($config_name, strlen($config_prefix . '.'));
   }
 
-  /**
-   * @return mixed
-   */
-  public function getBlocks() {
-    return $this->blocks;
-  }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\webprofiler\Entity;
+namespace Drupal\webprofiler;
 
 /**
  * Class Decorator
@@ -34,7 +34,7 @@ class Decorator {
    * @param $method
    * @param bool $checkSelf
    *
-   * @return bool|BlockStorageDecorator|mixed
+   * @return bool|mixed
    */
   public function isCallable($method, $checkSelf = FALSE) {
     //Check the original object

@@ -4,11 +4,27 @@
     "type": "drupal-webprofiler",
     "license": "GPL-2.0+",
     "require": {
-        "symfony/stopwatch": "2.4.*"
+        "symfony/stopwatch": "2.4.*",
+        "mbostock/d3": "3.4.*",
+        "isagalaev/highlight.js": "8.*"
     },
     "autoload": {
         "files": [
             "vendor/symfony/stopwatch/Symfony/Component/Stopwatch/Stopwatch.php"
         ]
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "isagalaev/highlight.js",
+                "version": "8.0",
+                "source": {
+                    "url": "https://github.com/isagalaev/highlight.js.git",
+                    "type": "git",
+                    "reference": "8.0"
+                }
+            }
+        }
+    ]
 }
