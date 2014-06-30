@@ -50,28 +50,28 @@ class BlockViewBuilderDecorator extends BlockDecorator implements EntityViewBuil
    * {@inheritdoc}
    */
   public function resetCache(array $entities = NULL) {
-    $this->getOriginalObject()->getOriginalObject($entities);
+    $this->getOriginalObject()->resetCache($entities);
   }
 
   /**
    * {@inheritdoc}
    */
   public function viewField(FieldItemListInterface $items, $display_options = array()) {
-    return $this->getOriginalObject()->getOriginalObject($items, $display_options);
+    return $this->getOriginalObject()->viewField($items, $display_options);
   }
 
   /**
    * {@inheritdoc}
    */
   public function viewFieldItem(FieldItemInterface $item, $display_options = array()) {
-    return $this->getOriginalObject()->getOriginalObject($item, $display_options);
+    return $this->getOriginalObject()->viewFieldItem($item, $display_options);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCacheTag() {
-    return $this->getOriginalObject()->getOriginalObject();
+    return $this->getOriginalObject()->getCacheTag();
   }
 
 }
