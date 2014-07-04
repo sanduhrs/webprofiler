@@ -38,7 +38,7 @@ webprofiler.admin_list:
   path: '/admin/reports/profiler/list'
   defaults:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::listAction'
-    _title: 'List'
+    _title: 'Webprofiler'
   requirements:
     _permission: 'access webprofiler'
 
