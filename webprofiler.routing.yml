@@ -8,7 +8,7 @@ webprofiler.toolbar:
 
 # view profile
 webprofiler.profiler:
-  path: '/admin/config/development/profiler/view/{token}'
+  path: '/admin/reports/profiler/view/{token}'
   defaults:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::profilerAction'
     _title: 'Webprofiler'
@@ -35,7 +35,7 @@ webprofiler.all_export:
 
 # list stored profiles
 webprofiler.admin_list:
-  path: '/admin/config/development/profiler/list'
+  path: '/admin/reports/profiler/list'
   defaults:
     _content: '\Drupal\webprofiler\Controller\WebprofilerController::listAction'
     _title: 'List'
