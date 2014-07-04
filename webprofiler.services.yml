@@ -29,8 +29,8 @@ services:
     arguments: ['@profiler', '@webprofiler.matcher']
     tags:
       - { name: event_subscriber }
-  webprofiler.WebprofilerEventListener:
-      class: Drupal\webprofiler\EventListener\WebprofilerEventListener
+  webprofiler.WebprofilerEventSubscriber:
+      class: Drupal\webprofiler\EventSubscriber\WebprofilerEventSubscriber
       arguments: ['@current_user', '@url_generator']
       tags:
         - { name: event_subscriber }
