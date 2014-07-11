@@ -13,6 +13,7 @@ use Drupal\webprofiler\Compiler\BlockPass;
 use Drupal\webprofiler\Compiler\EntityPass;
 use Drupal\webprofiler\Compiler\EventPass;
 use Drupal\webprofiler\Compiler\ProfilerPass;
+use Drupal\webprofiler\Compiler\StoragePass;
 use Drupal\webprofiler\Compiler\ViewsPass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -29,6 +30,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
   public function register(ContainerBuilder $container) {
     // Add a compiler pass to discover all data collector services.
     $container->addCompilerPass(new ProfilerPass());
+    $container->addCompilerPass(new StoragePass());
     $container->addCompilerPass(new EventPass(), PassConfig::TYPE_AFTER_REMOVING);
     $container->addCompilerPass(new EntityPass(), PassConfig::TYPE_AFTER_REMOVING);
 

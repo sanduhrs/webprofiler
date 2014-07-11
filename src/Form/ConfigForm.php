@@ -9,8 +9,7 @@ namespace Drupal\webprofiler\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
-use Drupal\webprofiler\DrupalDataCollectorInterface;
-use Drupal\webprofiler\Profiler\TemplateManager;
+use Drupal\webprofiler\Profiler\ProfilerStorageManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
@@ -30,12 +29,18 @@ class ConfigForm extends ConfigFormBase {
   private $templates;
 
   /**
+   * @var \Drupal\webprofiler\Profiler\ProfilerStorageManager
+   */
+  private $storageManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
       $container->get('profiler'),
+      $container->get('profiler.storage_manager'),
       $container->getParameter('data_collector.templates')
     );
   }
@@ -43,13 +48,15 @@ class ConfigForm extends ConfigFormBase {
   /**
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $storageManager
    * @param array $templates
    */
-  public function __construct(ConfigFactoryInterface $config_factory, Profiler $profiler, $templates) {
+  public function __construct(ConfigFactoryInterface $config_factory, Profiler $profiler, ProfilerStorageManager $storageManager, $templates) {
     parent::__construct($config_factory);
 
     $this->profiler = $profiler;
     $this->templates = $templates;
+    $this->storageManager = $storageManager;
   }
 
   /**
@@ -73,14 +80,13 @@ class ConfigForm extends ConfigFormBase {
       '#default_value' => $config->get('purge_on_cache_clear'),
     );
 
+    $storages = $this->storageManager->getStorages();
+
     $form['storage'] = array(
       '#type' => 'select',
       '#title' => $this->t('Storage backend'),
       '#description' => $this->t('Choose were to store profiler data.'),
-      '#options' => array(
-        'profiler.file_storage' => $this->t('File'),
-        'profiler.database_storage' => $this->t('Database')
-      ),
+      '#options' => $storages,
       '#default_value' => $config->get('storage'),
     );
 
