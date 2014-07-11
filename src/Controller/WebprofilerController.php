@@ -10,15 +10,15 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
-use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
+use Drupal\webprofiler\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\Routing\RouterInterface;
 use Twig_Loader_Filesystem;
 
@@ -28,7 +28,7 @@ use Twig_Loader_Filesystem;
 class WebprofilerController extends ControllerBase {
 
   /**
-   * @var \Symfony\Component\HttpKernel\Profiler\Profiler
+   * @var \Drupal\webprofiler\Profiler\Profiler
    */
   private $profiler;
 
@@ -74,7 +74,7 @@ class WebprofilerController extends ControllerBase {
   /**
    * Constructs a new WebprofilerController.
    *
-   * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+   * @param \Drupal\webprofiler\Profiler\Profiler $profiler
    * @param \Symfony\Component\Routing\RouterInterface $router
    * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
    * @param \Twig_Loader_Filesystem $twigLoader
@@ -93,16 +93,12 @@ class WebprofilerController extends ControllerBase {
   /**
    * Generates the profile page.
    *
-   * @param string $token
+   * @param Profile $profile
+   *
    * @return array
    */
-  public function profilerAction($token) {
+  public function profilerAction(Profile $profile) {
     $this->profiler->disable();
-    $profile = $this->profiler->loadProfile($token);
-
-    if (NULL === $profile) {
-      return $this->t('No profiler data for @token token.', array('@token' => $token));
-    }
 
     $templateManager = $this->templateManager;
     $templates = $templateManager->getTemplates($profile);
@@ -143,7 +139,7 @@ class WebprofilerController extends ControllerBase {
       '#attached' => array(
         'js' => array(
           array(
-            'data' => array('webprofiler' => array('token' => $token)),
+            'data' => array('webprofiler' => array('token' => $profile->getToken())),
             'type' => 'setting'
           ),
         ),
@@ -160,23 +156,16 @@ class WebprofilerController extends ControllerBase {
   /**
    * Generates the toolbar.
    *
-   * @param string $token
+   * @param Profile $profile
+   *
    * @return array
    */
-  public function toolbarAction($token) {
-    if (NULL === $token) {
-      return new Response('', 200, array('Content-Type' => 'text/html'));
-    }
-
+  public function toolbarAction(Profile $profile) {
     $this->profiler->disable();
-
-    if (!$profile = $this->profiler->loadProfile($token)) {
-      return new Response('', 200, array('Content-Type' => 'text/html'));
-    }
 
     $url = NULL;
     try {
-      $url = $this->router->generate('webprofiler.profiler', array('token' => $token));
+      $url = $this->router->generate('webprofiler.profiler', array('token' => $profile->getToken()));
     } catch (\Exception $e) {
       // the profiler is not enabled
     }
@@ -185,7 +174,7 @@ class WebprofilerController extends ControllerBase {
 
     $toolbar = array(
       '#theme' => 'webprofiler_toolbar',
-      '#token' => $token,
+      '#token' => $profile->getToken(),
       '#templates' => $templates,
       '#profile' => $profile,
       '#profiler_url' => $url,
@@ -208,23 +197,23 @@ class WebprofilerController extends ControllerBase {
     $method = $request->query->get('method');
     $url = $request->query->get('url');
 
-    $tokens = $this->profiler->find($ip, $url, $limit, $method, '', '');
+    $profiles = $this->profiler->find($ip, $url, $limit, $method, '', '');
 
     $rows = array();
-    if (count($tokens)) {
-      foreach ($tokens as $token) {
+    if (count($profiles)) {
+      foreach ($profiles as $profile) {
         $row = array();
-        $row[] = $this->l($token['token'], 'webprofiler.profiler', array('token' => $token['token']));
-        $row[] = $token['ip'];
-        $row[] = $token['method'];
-        $row[] = $token['url'];
-        $row[] = $this->date->format($token['time']);
+        $row[] = $this->l($profile['token'], 'webprofiler.profiler', array('profile' => $profile['token']));
+        $row[] = $profile['ip'];
+        $row[] = $profile['method'];
+        $row[] = $profile['url'];
+        $row[] = $this->date->format($profile['time']);
 
         $operations = array(
           'export' => array(
             'title' => $this->t('Export'),
             'route_name' => 'webprofiler.single_export',
-            'route_parameters' => array('token' => $token['token']),
+            'route_parameters' => array('profile' => $profile['token']),
           ),
         );
         $dropbutton = array(
@@ -288,15 +277,13 @@ class WebprofilerController extends ControllerBase {
   /**
    * Downloads a single profile.
    *
-   * @param string $token
+   * @param Profile $profile
+   *
    * @return \Symfony\Component\HttpFoundation\Response
    */
-  public function singleExportAction($token) {
-    if (NULL === $this->profiler) {
-      throw new NotFoundHttpException('The profiler must be enabled.');
-    }
-
+  public function singleExportAction(Profile $profile) {
     $this->profiler->disable();
+    $token = $profile->getToken();
 
     if (!$profile = $this->profiler->loadProfile($token)) {
       throw new NotFoundHttpException($this->t('Token @token does not exist.', array('@token' => $token)));

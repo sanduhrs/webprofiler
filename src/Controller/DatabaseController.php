@@ -14,6 +14,7 @@ use Drupal\webprofiler\DataCollector\DatabaseDataCollector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -54,13 +55,13 @@ class DatabaseController extends ControllerBase {
   }
 
   /**
-   * @param string $token
+   * @param Profile $profile
    * @param int $qid
    *
    * @return JsonResponse
    */
-  public function explainAction($token, $qid) {
-    $query = $this->getQuery($token, $qid);
+  public function explainAction(Profile $profile, $qid) {
+    $query = $this->getQuery($profile, $qid);
 
     $data = array();
     $result = $this->database->query('EXPLAIN ' . $query['query'], (array) $query['args'])->fetchAllAssoc('table');
@@ -76,13 +77,13 @@ class DatabaseController extends ControllerBase {
   }
 
   /**
-   * @param string $token
+   * @param Profile $profile
    * @param int $qid
    *
    * @return JsonResponse
    */
-  public function argumentsAction($token, $qid) {
-    $query = $this->getQuery($token, $qid);
+  public function argumentsAction(Profile $profile, $qid) {
+    $query = $this->getQuery($profile, $qid);
 
     $conn = Database::getConnection();
     $quoted = array();
@@ -95,17 +96,14 @@ class DatabaseController extends ControllerBase {
   }
 
   /**
-   * @param string $token
+   * @param $profile->getToken()
    * @param int $qid
    *
    * @return array
    */
-  private function getQuery($token, $qid) {
-    if (NULL === $this->profiler) {
-      throw new NotFoundHttpException('The profiler must be enabled.');
-    }
-
+  private function getQuery(Profile $profile, $qid) {
     $this->profiler->disable();
+    $token = $profile->getToken();
 
     if (!$profile = $this->profiler->loadProfile($token)) {
       throw new NotFoundHttpException($this->t('Token @token does not exist.', array('@token' => $token)));

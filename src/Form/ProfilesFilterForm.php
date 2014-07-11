@@ -77,7 +77,7 @@ class ProfilesFilterForm extends FormBase {
     $limit = $form_state['values']['limit'];
 
     $form_state['redirect'] = array(
-      'admin/config/development/profiler/list',
+      'admin/reports/profiler/list',
       array(
         'query' => array(
           'ip' => $ip,

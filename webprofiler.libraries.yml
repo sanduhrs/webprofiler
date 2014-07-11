@@ -33,3 +33,4 @@ database:
     - core/drupal
     - core/drupalSettings
     - core/drupal.ajax
+    - core/jquery.once

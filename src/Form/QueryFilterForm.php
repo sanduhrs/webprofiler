@@ -66,8 +66,8 @@ class QueryFilterForm extends FormBase {
       '#default_value' => $queryType,
     );
 
-    $token = \Drupal::request()->attributes->get('token');
-    $profile = $this->profiler->loadProfile($token);
+    $profile = \Drupal::request()->attributes->get('profile');
+    //$profile = $this->profiler->loadProfile($token);
 
     /** @var DatabaseDataCollector $databaseCollector */
     $databaseCollector = $profile->getCollector('database');

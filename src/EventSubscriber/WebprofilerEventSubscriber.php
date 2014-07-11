@@ -69,7 +69,7 @@ class WebprofilerEventSubscriber implements EventSubscriberInterface {
         $toolbar = array(
           '#theme' => 'webprofiler_loader',
           '#token' => $token,
-          '#profiler_url' => $this->urlGenerator->generate('webprofiler.toolbar', array('token' => $token)),
+          '#profiler_url' => $this->urlGenerator->generate('webprofiler.toolbar', array('profile' => $token)),
         );
 
         $content = mb_substr($content, 0, $pos) . render($toolbar) . mb_substr($content, $pos);

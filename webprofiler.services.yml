@@ -124,3 +124,9 @@ services:
   webprofiler.twig_extension:
     class: Drupal\webprofiler\Twig\RoutingExtension
     arguments: ['@url_generator']
+
+  webprofiler.token_converter:
+    class: Drupal\webprofiler\Routing\TokenConverter
+    arguments: ['@profiler']
+    tags:
+      - { name: paramconverter }

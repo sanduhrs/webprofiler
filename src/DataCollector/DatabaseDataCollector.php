@@ -171,8 +171,8 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
         $type = 'delete';
       }
 
-      $token = \Drupal::request()->get('token');
-      $copyUrl = \Drupal::urlGenerator()->generate('webprofiler.database.arguments', array('token' => $token, 'qid' => $position));
+      $profile = \Drupal::request()->get('profile');
+      $copyUrl = \Drupal::urlGenerator()->generate('webprofiler.database.arguments', array('profile' => $profile->getToken(), 'qid' => $position));
       $query['copy_link'] = l($this->t('Copy'), $copyUrl, array(
         'attributes' => array(
           'class' => array('use-ajax', 'wp-button', 'wp-query-copy-button'),
