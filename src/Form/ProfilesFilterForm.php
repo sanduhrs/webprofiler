@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Url;
 use Drupal\webprofiler\DataCollector\DatabaseDataCollector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
@@ -76,16 +77,15 @@ class ProfilesFilterForm extends FormBase {
     $method = $form_state['values']['method'];
     $limit = $form_state['values']['limit'];
 
-    $form_state['redirect'] = array(
-      'admin/reports/profiler/list',
-      array(
-        'query' => array(
-          'ip' => $ip,
-          'url' => $url,
-          'method' => $method,
-          'limit' => $limit,
-        )
+    $url = new Url('webprofiler.admin_list',  array(
+      'query' => array(
+        'ip' => $ip,
+        'url' => $url,
+        'method' => $method,
+        'limit' => $limit,
       )
-    );
+    ));
+
+    $form_state['redirect_route'] = $url;
   }
 }

@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
@@ -100,7 +101,10 @@ class ManageForm extends FormBase {
    * Purges profiles.
    */
   public function export(array &$form, array &$form_state) {
-    $form_state['redirect_route']['route_name'] = 'webprofiler.all_export';
+    $url = new Url('webprofiler.all_export');
+
+    $form_state['redirect_route'] = $url;
+
   }
 
   /**

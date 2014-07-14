@@ -302,12 +302,12 @@ class WebprofilerController extends ControllerBase {
    */
   public function allExportAction() {
     $archiver = new ArchiveTar(file_directory_temp() . '/profiles.tar.gz', 'gz');
-    $tokens = $this->profiler->find('', '', 100, '', '', '');
+    $profiles = $this->profiler->find('', '', 100, '', '', '');
 
     $files = array();
-    foreach ($tokens as $token) {
-      $data = $this->profiler->export($this->profiler->loadProfile($token));
-      $filename = file_directory_temp() . "/{$token['token']}.txt";
+    foreach ($profiles as $profile) {
+      $data = $this->profiler->export($this->profiler->loadProfile($profile['token']));
+      $filename = file_directory_temp() . "/{$profile['token']}.txt";
       file_put_contents($filename, $data);
       $files[] = $filename;
     }
