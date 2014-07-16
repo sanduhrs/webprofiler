@@ -13,6 +13,7 @@ use Drupal\webprofiler\Compiler\BlockPass;
 use Drupal\webprofiler\Compiler\EntityPass;
 use Drupal\webprofiler\Compiler\EventPass;
 use Drupal\webprofiler\Compiler\ProfilerPass;
+use Drupal\webprofiler\Compiler\ServicePass;
 use Drupal\webprofiler\Compiler\StoragePass;
 use Drupal\webprofiler\Compiler\ViewsPass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -30,9 +31,11 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
   public function register(ContainerBuilder $container) {
     // Add a compiler pass to discover all data collector services.
     $container->addCompilerPass(new ProfilerPass());
+
     $container->addCompilerPass(new StoragePass());
     $container->addCompilerPass(new EventPass(), PassConfig::TYPE_AFTER_REMOVING);
     $container->addCompilerPass(new EntityPass(), PassConfig::TYPE_AFTER_REMOVING);
+    $container->addCompilerPass(new ServicePass(), PassConfig::TYPE_AFTER_REMOVING);
 
     // Replace the existing state service with a wrapper to collect the
     // requested data.
@@ -77,7 +80,8 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->setDefinition('cache_factory.default', $container->getDefinition('cache_factory'));
     $container->register('cache_factory', 'Drupal\webprofiler\Cache\CacheFactoryWrapper')
       ->addArgument(new Reference('cache_factory.default'))
-      ->addArgument(new Reference('webprofiler.cache'));
+      ->addArgument(new Reference('webprofiler.cache'))
+      ->addMethodCall('setContainer', array(new Reference('service_container')));
 
     // Replaces the existing form_builder service to be able to collect the
     // requested data.

@@ -9,11 +9,15 @@ namespace Drupal\webprofiler\Cache;
 
 use Drupal\Core\Cache\CacheFactoryInterface;
 use Drupal\webprofiler\DataCollector\CacheDataCollector;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Wraps a cache factory to register all calls to the cache system.
  */
-class CacheFactoryWrapper implements CacheFactoryInterface {
+class CacheFactoryWrapper implements CacheFactoryInterface,  ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   /**
    * The cache factory.

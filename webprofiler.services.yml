@@ -125,6 +125,11 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', title:'Events', priority: 130 }
 
+  webprofiler.service:
+    class: Drupal\webprofiler\DataCollector\ServiceDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 140 }
+
   stopwatch:
     class: Drupal\webprofiler\Stopwatch
 
