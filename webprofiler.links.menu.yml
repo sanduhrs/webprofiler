@@ -1,7 +1,7 @@
-webprofiler.admin_manage:
+webprofiler.admin_configure:
   title: 'Webprofiler'
   description: 'Import/export profiles and manage configuration.'
-  route_name: webprofiler.admin_manage
+  route_name: webprofiler.admin_configure
   parent: system.admin_config_development
 
 webprofiler.admin_list:

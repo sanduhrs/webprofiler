@@ -14,6 +14,7 @@ active_toolbar_items:
   php_config: php_config
   request: request
   routing: routing
+  service: service
   state: state
   time: time
   user: user

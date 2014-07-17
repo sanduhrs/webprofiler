@@ -1,10 +1,10 @@
-webprofiler.admin.manage:
-  title: 'Manage'
-  route_name: webprofiler.admin_manage
-  base_route: webprofiler.admin_manage
-  weight: 10
-webprofiler.admin.configure:
+webprofiler.admin_configure:
   title: 'Configure'
   route_name: webprofiler.admin_configure
-  base_route: webprofiler.admin_manage
+  base_route: webprofiler.admin_configure
+  weight: 10
+webprofiler.admin_manage:
+  title: 'Manage'
+  route_name: webprofiler.admin_manage
+  base_route: webprofiler.admin_configure
   weight: 20
