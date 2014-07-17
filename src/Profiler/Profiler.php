@@ -19,6 +19,11 @@ class Profiler extends SymfonyProfiler {
   private $config;
 
   /**
+   * @var array
+   */
+  private $activeToolbarItems;
+
+  /**
    * Constructor.
    *
    * @param \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface $storage
@@ -31,20 +36,19 @@ class Profiler extends SymfonyProfiler {
     parent::__construct($storage, $logger);
 
     $this->config = $config;
+    $this->activeToolbarItems = $this->config->get('webprofiler.config')->get('active_toolbar_items');
   }
 
   /**
    * {@inheritdoc}
    */
   public function add(DataCollectorInterface $collector) {
-    $activeToolbarItems = $this->config->get('webprofiler.config')->get('active_toolbar_items');
-
     // drupal collector should not be disabled
     if ($collector->getName() == 'drupal') {
       parent::add($collector);
     }
     else {
-      if ($activeToolbarItems && array_key_exists($collector->getName(), $activeToolbarItems) && $activeToolbarItems[$collector->getName()] !== '0') {
+      if ($this->activeToolbarItems && array_key_exists($collector->getName(), $this->activeToolbarItems) && $this->activeToolbarItems[$collector->getName()] !== '0') {
         parent::add($collector);
       }
     }
