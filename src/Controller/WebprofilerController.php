@@ -12,6 +12,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\Date;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\webprofiler\Profiler\ProfilerStorageManager;
 use Drupal\webprofiler\Profiler\TemplateManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\webprofiler\Profiler\Profiler;
@@ -58,6 +59,11 @@ class WebprofilerController extends ControllerBase {
   private $fileDownloadController;
 
   /**
+   * @var \Drupal\webprofiler\Profiler\ProfilerStorageManager
+   */
+  private $profilerDownloadManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -67,6 +73,7 @@ class WebprofilerController extends ControllerBase {
       $container->get('templateManager'),
       $container->get('twig.loader'),
       $container->get('date'),
+      $container->get('profiler.storage_manager'),
       new FileDownloadController()
     );
   }
@@ -80,14 +87,16 @@ class WebprofilerController extends ControllerBase {
    * @param \Twig_Loader_Filesystem $twigLoader
    * @param \Drupal\Core\Datetime\Date $date
    * @param \Drupal\system\FileDownloadController $fileDownloadController
+   * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $profilerDownloadManager
    */
-  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, Date $date, FileDownloadController $fileDownloadController) {
+  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, Date $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
     $this->twigLoader = $twigLoader;
     $this->date = $date;
     $this->fileDownloadController = $fileDownloadController;
+    $this->profilerDownloadManager = $profilerDownloadManager;
   }
 
   /**
@@ -236,10 +245,11 @@ class WebprofilerController extends ControllerBase {
 
     $build = array();
 
-    $storage = $this->config('webprofiler.config')->get('storage');
+    $storageId = $this->config('webprofiler.config')->get('storage');
+    $storage = $this->profilerDownloadManager->getStorage($storageId);
 
     $build['resume'] = array(
-      '#markup' => '<p>' . t('Profiles stored with %storage service.', array('%storage' => $storage)) . '</p>',
+      '#markup' => '<p>' . t('Profiles stored with %storage service.', array('%storage' => $storage['title'])) . '</p>',
     );
 
     $build['filters'] = $this->formBuilder()->getForm('Drupal\\webprofiler\\Form\\ProfilesFilterForm');

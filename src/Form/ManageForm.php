@@ -10,6 +10,7 @@ namespace Drupal\webprofiler\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Url;
+use Drupal\webprofiler\Profiler\ProfilerStorageManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
@@ -24,19 +25,27 @@ class ManageForm extends FormBase {
   private $profiler;
 
   /**
+   * @var \Drupal\webprofiler\Profiler\ProfilerStorageManager
+   */
+  private $profilerDownloadManager;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('profiler')
+      $container->get('profiler'),
+      $container->get('profiler.storage_manager')
     );
   }
 
   /**
    * @param Profiler $profiler
+   * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $profilerDownloadManager
    */
-  public function __construct(Profiler $profiler) {
+  public function __construct(Profiler $profiler, ProfilerStorageManager $profilerDownloadManager) {
     $this->profiler = $profiler;
+    $this->profilerDownloadManager = $profilerDownloadManager;
   }
 
   /**
@@ -52,7 +61,8 @@ class ManageForm extends FormBase {
   public function buildForm(array $form, array &$form_state) {
     $this->profiler->disable();
 
-    $storage = $this->config('webprofiler.config')->get('storage');
+    $storageId = $this->config('webprofiler.config')->get('storage');
+    $storage = $this->profilerDownloadManager->getStorage($storageId);
 
     $form['purge'] = array(
       '#type' => 'details',
@@ -67,7 +77,7 @@ class ManageForm extends FormBase {
     );
 
     $form['purge']['purge-help'] = array(
-      '#markup' => '<div class="form-item">' . $this->t('Purge %storage profiles.', array('%storage' => $storage)) . '</div>',
+      '#markup' => '<div class="form-item">' . $this->t('Purge %storage profiles.', array('%storage' => $storage['title'])) . '</div>',
     );
 
     $form['data'] = array(
@@ -83,7 +93,7 @@ class ManageForm extends FormBase {
     );
 
     $form['data']['export-help'] = array(
-      '#markup' => '<div class="form-item">' . $this->t('Export all %storage profiles.', array('%storage' => $storage)) . '</div>',
+      '#markup' => '<div class="form-item">' . $this->t('Export all %storage profiles.', array('%storage' => $storage['title'])) . '</div>',
     );
 
     return $form;

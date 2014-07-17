@@ -26,6 +26,15 @@ class ProfilerStorageManager {
   }
 
   /**
+   * @param $id
+   *
+   * @return array
+   */
+  public function getStorage($id) {
+    return $this->storages[$id];
+  }
+
+  /**
    * @param \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface
    */
   public function addStorage($id, $title, ProfilerStorageInterface $storage) {
