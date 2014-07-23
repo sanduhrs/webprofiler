@@ -37,18 +37,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->addCompilerPass(new EntityPass(), PassConfig::TYPE_AFTER_REMOVING);
     $container->addCompilerPass(new ServicePass(), PassConfig::TYPE_AFTER_REMOVING);
 
-    // Replace the existing state service with a wrapper to collect the
-    // requested data.
-    $container->setDefinition('state.default', $container->getDefinition('state'));
-    $container->register('state', 'Drupal\webprofiler\DataCollector\StateDataCollector')
-      ->addArgument(new Reference(('state.default')))
-      ->addTag('data_collector', array(
-        'template' => '@webprofiler/Collector/state.html.twig',
-        'id' => 'state',
-        'title' => 'State',
-        'priority' => 135
-      ));
-
     // Add ViewsDataCollector only if Views module is enabled.
     if (FALSE !== $container->hasDefinition('views.executable')) {
       $container->addCompilerPass(new ViewsPass(), PassConfig::TYPE_AFTER_REMOVING);
@@ -74,6 +62,18 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'priority' => 68
         ));
     }
+
+    // Replace the existing state service with a wrapper to collect the
+    // requested data.
+    $container->setDefinition('state.default', $container->getDefinition('state'));
+    $container->register('state', 'Drupal\webprofiler\DataCollector\StateDataCollector')
+      ->addArgument(new Reference(('state.default')))
+      ->addTag('data_collector', array(
+        'template' => '@webprofiler/Collector/state.html.twig',
+        'id' => 'state',
+        'title' => 'State',
+        'priority' => 135
+      ));
 
     // Replaces the existing cache_factory service to be able to collect the
     // requested data.
