@@ -127,6 +127,7 @@ services:
 
   webprofiler.service:
     class: Drupal\webprofiler\DataCollector\ServiceDataCollector
+    arguments: ['@service_container']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 140 }
 

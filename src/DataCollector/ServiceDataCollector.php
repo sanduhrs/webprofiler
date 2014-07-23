@@ -4,6 +4,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -13,10 +14,29 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
+   * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
+   */
+  private $container;
+
+  /**
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   */
+  public function __construct(ContainerInterface $container) {
+    $this->container = $container;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-
+    $this->data['initialized_services'] = array();
+    if ($this->getServicesCount()) {
+      foreach (array_keys($this->getServices()) as $id) {
+        if ($this->container->initialized($id)) {
+          $this->data['initialized_services'][] = $id;
+        }
+      }
+    }
   }
 
   /**
@@ -31,6 +51,13 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
    */
   public function getServicesCount() {
     return count($this->data['graph']);
+  }
+
+  /**
+   * @return int
+   */
+  public function getInitializedServicesCount() {
+    return count($this->data['initialized_services']);
   }
 
   /**
@@ -58,7 +85,7 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
    * {@inheritdoc}
    */
   public function getPanelSummary() {
-    return $this->t('Services: @count', array('@count' => $this->getServicesCount()));
+    return $this->t('Services: @count', array('@count' => $this->getInitializedServicesCount()));
   }
 
   /**
@@ -83,6 +110,8 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
           $edges[] = $edge['id'];
         }
 
+        $row[] = in_array($id, $this->data['initialized_services']) ? $this->t('Yes') : $this->t('No');
+
         $row[] = implode(', ', $edges);
 
         $tags = array();
@@ -98,7 +127,8 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
       $header = array(
         $this->t('Id'),
         $this->t('Class'),
-        $this->t('Depends by'),
+        $this->t('Initialized'),
+        $this->t('Depends on'),
         $this->t('Tags'),
       );
 
