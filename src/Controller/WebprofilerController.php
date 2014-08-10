@@ -9,7 +9,7 @@ namespace Drupal\webprofiler\Controller;
 
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Datetime\Date;
+use Drupal\Core\Datetime\DateFormatter;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\ProfilerStorageManager;
@@ -72,7 +72,7 @@ class WebprofilerController extends ControllerBase {
       $container->get('router'),
       $container->get('templateManager'),
       $container->get('twig.loader'),
-      $container->get('date'),
+      $container->get('date.formatter'),
       $container->get('profiler.storage_manager'),
       new FileDownloadController()
     );
@@ -89,7 +89,7 @@ class WebprofilerController extends ControllerBase {
    * @param \Drupal\system\FileDownloadController $fileDownloadController
    * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $profilerDownloadManager
    */
-  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, Date $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController) {
+  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, DateFormatter $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
