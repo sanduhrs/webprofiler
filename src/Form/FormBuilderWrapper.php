@@ -4,6 +4,7 @@ namespace Drupal\webprofiler\Form;
 
 use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Form\FormInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Class FormBuilderWrapper
@@ -25,7 +26,7 @@ class FormBuilderWrapper extends FormBuilder {
   /**
    * {@inheritdoc}
    */
-  public function retrieveForm($form_id, &$form_state) {
+  public function retrieveForm($form_id, FormStateInterface &$form_state) {
     $form = parent::retrieveForm($form_id, $form_state);
 
     if (!$this->buildForms) {

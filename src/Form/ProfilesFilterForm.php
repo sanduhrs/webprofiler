@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webprofiler\DataCollector\DatabaseDataCollector;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -29,7 +30,7 @@ class ProfilesFilterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form['ip'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('IP'),
@@ -71,7 +72,7 @@ class ProfilesFilterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, array &$form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
     $ip = $form_state['values']['ip'];
     $url = $form_state['values']['url'];
     $method = $form_state['values']['method'];

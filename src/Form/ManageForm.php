@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\webprofiler\Profiler\ProfilerStorageManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -58,7 +59,7 @@ class ManageForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, array &$form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $this->profiler->disable();
 
     $storageId = $this->config('webprofiler.config')->get('storage');
@@ -102,7 +103,7 @@ class ManageForm extends FormBase {
   /**
    * Purges profiles.
    */
-  public function purge(array &$form, array &$form_state) {
+  public function purge(array &$form, FormStateInterface $form_state) {
     $this->profiler->purge();
     drupal_set_message($this->t('Profiles purged'));
   }
@@ -110,7 +111,7 @@ class ManageForm extends FormBase {
   /**
    * Purges profiles.
    */
-  public function export(array &$form, array &$form_state) {
+  public function export(array &$form, FormStateInterface $form_state) {
     $url = new Url('webprofiler.all_export');
 
     $form_state['redirect_route'] = $url;
@@ -120,6 +121,6 @@ class ManageForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, array &$form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state) {
   }
 }
