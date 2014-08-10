@@ -25,9 +25,10 @@ class EventPass implements CompilerPassInterface {
 
     // replace the regular event_dispatcher service with the traceable one.
     $definition = $container->findDefinition('event_dispatcher');
-    $definition->setPublic(FALSE);
     $container->setDefinition('webprofiler.debug.event_dispatcher.parent', $definition);
-    $container->setAlias('event_dispatcher', 'webprofiler.debug.event_dispatcher');
+
+    $definition = $container->findDefinition('webprofiler.debug.event_dispatcher');
+    $container->setDefinition('event_dispatcher', $definition);
   }
 
-} 
+}

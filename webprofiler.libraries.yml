@@ -18,7 +18,7 @@ highlight:
     /libraries/highlight/highlight.pack.js: {}
   css:
     component:
-      /libraries/highlight/idea.css: {}
+      /libraries/highlight/styles/idea.css: {}
 webprofiler:
   version: 1.0
   js:
