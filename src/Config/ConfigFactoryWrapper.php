@@ -96,15 +96,8 @@ class ConfigFactoryWrapper implements ConfigFactoryInterface {
   /**
    * {@inheritdoc}
    */
-  public function getCacheKey($name) {
-    return $this->configFactory->getCacheKey($name);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheKeys($name) {
-    return $this->configFactory->getCacheKeys($name);
+  public function getCacheKeys() {
+    return $this->configFactory->getCacheKeys();
   }
 
   /**
@@ -112,41 +105,6 @@ class ConfigFactoryWrapper implements ConfigFactoryInterface {
    */
   public function clearStaticCache() {
     return $this->configFactory->clearStaticCache();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setLanguage(Language $language = NULL) {
-    return $this->configFactory->setLanguage($language);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setLanguageFromDefault(LanguageDefault $language_default) {
-    return $this->configFactory->setLanguageFromDefault($language_default);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLanguage() {
-    return $this->configFactory->getLanguage();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLanguageConfigNames(array $names) {
-    return $this->configFactory->getLanguageConfigNames($names);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLanguageConfigName($langcode, $name) {
-    return $this->configFactory->getLanguageConfigName($langcode, $name);
   }
 
   /**
@@ -163,4 +121,4 @@ class ConfigFactoryWrapper implements ConfigFactoryInterface {
     return $this->configFactory->addOverride($config_factory_override);
   }
 
-} 
+}
