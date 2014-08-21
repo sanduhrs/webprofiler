@@ -78,7 +78,7 @@ class ProfilesFilterForm extends FormBase {
     $method = $form_state['values']['method'];
     $limit = $form_state['values']['limit'];
 
-    $url = new Url('webprofiler.admin_list',  array(
+    $url = new Url('webprofiler.admin_list', array(), array(
       'query' => array(
         'ip' => $ip,
         'url' => $url,
@@ -87,6 +87,6 @@ class ProfilesFilterForm extends FormBase {
       )
     ));
 
-    $form_state['redirect_route'] = $url;
+    $form_state->setRedirectUrl($url);
   }
 }

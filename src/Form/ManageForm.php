@@ -112,10 +112,7 @@ class ManageForm extends FormBase {
    * Purges profiles.
    */
   public function export(array &$form, FormStateInterface $form_state) {
-    $url = new Url('webprofiler.all_export');
-
-    $form_state['redirect_route'] = $url;
-
+    $form_state->setRedirectUrl(new Url('webprofiler.all_export'));
   }
 
   /**

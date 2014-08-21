@@ -114,10 +114,10 @@ class ConfigForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('webprofiler.config')
-      ->set('purge_on_cache_clear', $form_state['values']['purge_on_cache_clear'])
-      ->set('storage', $form_state['values']['storage'])
-      ->set('exclude', $form_state['values']['exclude'])
-      ->set('active_toolbar_items', $form_state['values']['active_toolbar_items'])
+      ->set('purge_on_cache_clear', $form_state->getValue('purge_on_cache_clear'))
+      ->set('storage', $form_state->getValue('storage'))
+      ->set('exclude', $form_state->getValue('exclude'))
+      ->set('active_toolbar_items', $form_state->getValue('active_toolbar_items'))
       ->save();
 
     parent::submitForm($form, $form_state);
