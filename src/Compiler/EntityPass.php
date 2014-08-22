@@ -9,7 +9,6 @@ namespace Drupal\webprofiler\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class EntityPass
@@ -27,4 +26,4 @@ class EntityPass implements CompilerPassInterface {
     $container->setAlias('entity.manager', 'webprofiler.debug.entity.manager');
   }
 
-} 
+}

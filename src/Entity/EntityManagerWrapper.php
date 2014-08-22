@@ -22,7 +22,7 @@ class EntityManagerWrapper extends EntityManager {
    * {@inheritdoc}
    */
   public function getStorage($entity_type) {
-    $controller = $this->getController($entity_type, 'storage', 'getStorageClass');
+    $controller = $this->getHandler($entity_type, 'storage');
 
     if ('block' == $entity_type) {
       $decorator = new BlockStorageDecorator($controller);
@@ -38,7 +38,7 @@ class EntityManagerWrapper extends EntityManager {
    * {@inheritdoc}
    */
   public function getViewBuilder($entity_type) {
-    $controller = $this->getController($entity_type, 'view_builder', 'getViewBuilderClass');
+    $controller = $this->getHandler($entity_type, 'view_builder');
 
     if ('block' == $entity_type) {
       $decorator = new BlockViewBuilderDecorator($controller);
