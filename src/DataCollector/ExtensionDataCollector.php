@@ -93,8 +93,9 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
     }
     $data = array();
     foreach ($this->data['drupal_extension']['themes'] as $name => $info) {
+      /** @var \Drupal\Core\Extension\Extension $info */
       $data[$name] = implode(' | ', array(
-        $this->t('Path: @path', array('@path' => $info->uri)),
+        $this->t('Path: @path', array('@path' => $info->getPathname())),
         $this->t('Status: @status', array('@status' => $info->status)),
         $this->t('Engine: @engine', array('@engine' => $info->engine)),
       ));
