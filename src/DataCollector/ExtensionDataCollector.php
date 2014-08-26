@@ -7,6 +7,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -75,8 +76,9 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
 
     $data = array();
     foreach ($this->data['drupal_extension']['modules'] as $module => $info) {
+      /** @var \Drupal\Core\Extension\Extension $info */
       $data[$module] = implode(' | ', array(
-        $this->t('Path: @path', array('@path' => $info->uri)),
+        $this->t('Path: @path', array('@path' => $info->getPathname())),
       ));
     }
     return $data;
@@ -141,4 +143,4 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
 
     return $build;
   }
-} 
+}
