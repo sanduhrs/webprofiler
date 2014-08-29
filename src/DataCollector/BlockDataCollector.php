@@ -216,9 +216,10 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
     );
 
     $build[] = array(
-      '#theme' => 'table',
+      '#type' => 'table',
       '#rows' => $rows,
       '#header' => $header,
+      '#sticky' => TRUE,
     );
 
     return $build;

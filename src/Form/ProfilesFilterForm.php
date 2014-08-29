@@ -64,6 +64,7 @@ class ProfilesFilterForm extends FormBase {
     $form['actions']['filter'] = array(
       '#type' => 'submit',
       '#value' => t('Filter'),
+      '#attributes' => array('class' => array('button--primary')),
     );
 
     return $form;

@@ -79,13 +79,13 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
         '#markup' => '<h3>' . $title . '</h3>',
       ),
       array(
-        '#theme' => 'table',
+        '#type' => 'table',
         '#rows' => $rows,
         '#header' => array(
           $this->t('Event name'),
           $this->t('Listener'),
         ),
-        //'#sticky' => TRUE,
+        '#sticky' => TRUE,
       )
     );
   }

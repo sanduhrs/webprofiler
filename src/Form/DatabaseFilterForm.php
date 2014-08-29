@@ -2,12 +2,11 @@
 
 /**
  * @file
- * Contains \Drupal\webprofiler\Form\PurgeForm.
+ * Contains \Drupal\webprofiler\Form\DatabaseFilterForm.
  */
 
 namespace Drupal\webprofiler\Form;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webprofiler\DataCollector\DatabaseDataCollector;
@@ -15,9 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 /**
- * Class QueryFilterForm
+ * Class DatabaseFilterForm
  */
-class QueryFilterForm extends FormBase {
+class DatabaseFilterForm extends FormBase {
 
   /**
    * @var \Symfony\Component\HttpKernel\Profiler\Profiler
@@ -59,15 +58,14 @@ class QueryFilterForm extends FormBase {
       'delete' => 'DELETE',
     );
 
-    $queryType = \Drupal::request()->attributes->get('query-type');
     $form['query-type'] = array(
       '#type' => 'select',
       '#title' => $this->t('Type'),
       '#options' => $types,
-      '#default_value' => $queryType,
+      '#default_value' => $this->getRequest()->query->get('query-type'),
     );
 
-    $profile = \Drupal::request()->attributes->get('profile');
+    $profile = $this->getRequest()->attributes->get('profile');
 
     /** @var DatabaseDataCollector $databaseCollector */
     $databaseCollector = $profile->getCollector('database');

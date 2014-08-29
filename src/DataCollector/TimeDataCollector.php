@@ -98,8 +98,9 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
     );
 
     return array(
-      '#theme' => 'table',
+      '#type' => 'table',
       '#rows' => $rows,
+      '#sticky' => TRUE,
       '#attached' => array(
         'js' => array(
           array(

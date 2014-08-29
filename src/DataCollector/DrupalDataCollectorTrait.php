@@ -2,6 +2,8 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Component\Utility\String;
+
 /**
  * Class DrupalDataCollectorTrait
  */
@@ -55,9 +57,10 @@ trait DrupalDataCollectorTrait {
     }
 
     $build['table'] = array(
-      '#theme' => 'table',
+      '#type' => 'table',
       '#rows' => $rows,
       '#header' => $header,
+      '#sticky' => TRUE,
     );
 
     return $build;
@@ -72,6 +75,6 @@ trait DrupalDataCollectorTrait {
     $parts = explode('\\', $class);
     $short = array_pop($parts);
 
-    return sprintf("<abbr title=\"%s\">%s</abbr>", $class, $short);
+    return String::format("<abbr title=\"@class\">@short</abbr>", array('@class' => $class, '@short' => $short));
   }
 }

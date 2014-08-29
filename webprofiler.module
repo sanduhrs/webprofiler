@@ -45,25 +45,6 @@ function webprofiler_theme() {
 }
 
 /**
- * Implements hook_permission().
- */
-function webprofiler_permission() {
-  $perms = array(
-    'access webprofiler' => array(
-      'title' => t('Access webprofiler'),
-      'description' => t('Access webprofiler collected data.'),
-      'restrict access' => TRUE,
-    ),
-    'view webprofiler toolbar' => array(
-      'title' => t('View webprofiler toolbar'),
-      'description' => t('View webprofiler toolbar.'),
-    ),
-  );
-
-  return $perms;
-}
-
-/**
  * Implements hook_file_download().
  */
 function webprofiler_file_download($uri) {

@@ -49,7 +49,7 @@ class WebprofilerController extends ControllerBase {
   private $twigLoader;
 
   /**
-   * @var \Drupal\Core\Datetime\Date
+   * @var \Drupal\Core\Datetime\DateFormatter
    */
   private $date;
 
@@ -85,7 +85,7 @@ class WebprofilerController extends ControllerBase {
    * @param \Symfony\Component\Routing\RouterInterface $router
    * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
    * @param \Twig_Loader_Filesystem $twigLoader
-   * @param \Drupal\Core\Datetime\Date $date
+   * @param \Drupal\Core\Datetime\DateFormatter $date
    * @param \Drupal\system\FileDownloadController $fileDownloadController
    * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $profilerDownloadManager
    */
@@ -255,7 +255,7 @@ class WebprofilerController extends ControllerBase {
     $build['filters'] = $this->formBuilder()->getForm('Drupal\\webprofiler\\Form\\ProfilesFilterForm');
 
     $build['table'] = array(
-      '#theme' => 'table',
+      '#type' => 'table',
       '#rows' => $rows,
       '#header' => array(
         $this->t('Token'),
@@ -274,6 +274,7 @@ class WebprofilerController extends ControllerBase {
         ),
         $this->t('Actions')
       ),
+      '#sticky' => TRUE,
       '#attached' => array(
         'library' => array(
           'webprofiler/webprofiler',

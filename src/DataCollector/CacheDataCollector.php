@@ -187,10 +187,11 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
       );
 
       $build[$key] = array(
-        '#theme' => 'table',
+        '#type' => 'table',
         '#rows' => $rows,
         '#header' => $header,
         '#attributes' => array('class' => array('cache-data')),
+        '#sticky' => TRUE,
       );
     }
 

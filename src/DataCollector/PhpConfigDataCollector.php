@@ -23,6 +23,7 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
       'token' => $response->headers->get('X-Debug-Token'),
       'php_version' => PHP_VERSION,
       'xdebug_enabled' => extension_loaded('xdebug'),
+      'xhprof_enabled' => extension_loaded('xhprof'),
       'eaccel_enabled' => extension_loaded('eaccelerator') && ini_get('eaccelerator.enable'),
       'apc_enabled' => extension_loaded('apc') && ini_get('apc.enabled'),
       'xcache_enabled' => extension_loaded('xcache') && ini_get('xcache.cacher'),
@@ -58,6 +59,15 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
    */
   public function hasXDebug() {
     return $this->data['xdebug_enabled'];
+  }
+
+  /**
+   * Returns true if the XHProf is enabled.
+   *
+   * @return Boolean true if XHProf is enabled, false otherwise
+   */
+  public function hasXHProf() {
+    return $this->data['xhprof_enabled'];
   }
 
   /**
@@ -154,6 +164,10 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
         ($this->hasXDebug()) ? $enabled : $disabled,
       ),
       array(
+        'XHProf',
+        ($this->hasXHProf()) ? $enabled : $disabled,
+      ),
+      array(
         $this->t('PHP acceleration'),
         ($this->hasAccelerator()) ? $enabled : $disabled,
       ),
@@ -186,12 +200,13 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
         ),
       ),
       array(
-        '#theme' => 'table',
+        '#type' => 'table',
         '#rows' => $rows,
         '#header' => array(
           $this->t('Config'),
           $this->t('Value'),
         ),
+        '#sticky' => TRUE,
       ),
     );
   }

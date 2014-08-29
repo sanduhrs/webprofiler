@@ -35,7 +35,9 @@ class ProfilerStorageManager {
   }
 
   /**
-   * @param \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface
+   * @param $id
+   * @param $title
+   * @param \Symfony\Component\HttpKernel\Profiler\ProfilerStorageInterface $storage
    */
   public function addStorage($id, $title, ProfilerStorageInterface $storage) {
     $this->storages[$id] = array(

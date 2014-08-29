@@ -142,7 +142,7 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   public function getPanel() {
     $build = array();
 
-    $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\QueryFilterForm');
+    $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\DatabaseFilterForm');
 
     $build['container'] = array(
       '#type' => 'container',

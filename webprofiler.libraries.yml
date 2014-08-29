@@ -43,3 +43,10 @@ database:
     - core/drupalSettings
     - core/drupal.ajax
     - core/jquery.once
+service:
+  version: 1.0
+  js:
+    js/service.js: {}
+  css:
+    component:
+      css/service.css: {}

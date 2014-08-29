@@ -160,9 +160,10 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
       );
 
       $build['table'] = array(
-        '#theme' => 'table',
+        '#type' => 'table',
         '#rows' => $rows,
         '#header' => $header,
+        '#sticky' => TRUE,
       );
     }
 

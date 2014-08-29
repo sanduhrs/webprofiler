@@ -7,7 +7,6 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
-use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -96,7 +95,7 @@ class ExtensionDataCollector extends DataCollector implements DrupalDataCollecto
       /** @var \Drupal\Core\Extension\Extension $info */
       $data[$name] = implode(' | ', array(
         $this->t('Path: @path', array('@path' => $info->getPathname())),
-        $this->t('Status: @status', array('@status' => $info->status)),
+        $this->t('Status: @status', array('@status' => ($info->status) ? $this->t('enabled') : $this->t('disabled'))),
         $this->t('Engine: @engine', array('@engine' => $info->engine)),
       ));
     }

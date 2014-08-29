@@ -94,6 +94,8 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
   public function getPanel() {
     $build = array();
 
+    $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\ServiceFilterForm');
+
     if ($this->getServicesCount()) {
       $rows = array();
       $services = $this->getServices();
@@ -103,25 +105,37 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
         $row = array();
 
         $row[] = $id;
-        $row[] = $service['value']['class'];
+
+        $class = $service['value']['class'];
+        $row[] = $class;
 
         $edges = array();
-        foreach($service['outEdges'] AS $edge) {
+        foreach ($service['outEdges'] AS $edge) {
           $edges[] = $edge['id'];
         }
 
-        $row[] = in_array($id, $this->data['initialized_services']) ? $this->t('Yes') : $this->t('No');
+        $initialized = in_array($id, $this->data['initialized_services']);
+        $row[] = ($initialized) ? $this->t('Yes') : $this->t('No');
 
-        $row[] = implode(', ', $edges);
+        $dependsOn = implode(', ', $edges);
+        $row[] = $dependsOn;
 
         $tags = array();
-        foreach($service['value']['tags'] AS $tag => $value) {
+        foreach ($service['value']['tags'] AS $tag => $value) {
           $tags[] = $tag;
         }
 
-        $row[] = implode(', ', $tags);
+        $implodedTags = implode(', ', $tags);
+        $row[] = $implodedTags;
 
-        $rows[] = $row;
+        $rows[] = array(
+          'data' => $row,
+          'data-wp-service-id' => $id,
+          'data-wp-service-class' => $class,
+          'data-wp-service-initialized' => ($initialized) ? 1 : 0,
+          'data-wp-service-depends-on' => $dependsOn,
+          'data-wp-service-tags' => $implodedTags,
+        );
       }
 
       $header = array(
@@ -133,9 +147,18 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
       );
 
       $build['table'] = array(
-        '#theme' => 'table',
+        '#type' => 'table',
         '#rows' => $rows,
         '#header' => $header,
+        '#sticky' => TRUE,
+        '#attached' => array(
+          'library' => array(
+            'webprofiler/service',
+          ),
+        ),
+        '#attributes' => array(
+          'class' => array('wp-service-table'),
+        ),
       );
     }
 

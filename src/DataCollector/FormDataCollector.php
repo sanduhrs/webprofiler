@@ -99,7 +99,7 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
       }
 
       $build[$formData['#form_id']]['fields'] = array(
-        '#theme' => 'table',
+        '#type' => 'table',
         '#rows' => $rows,
         '#header' => array(
           $this->t('Name'),
@@ -107,6 +107,7 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
           $this->t('Access'),
           $this->t('Type'),
         ),
+        '#sticky' => TRUE,
       );
     }
 
