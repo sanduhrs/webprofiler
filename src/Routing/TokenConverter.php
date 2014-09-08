@@ -26,7 +26,7 @@ class TokenConverter implements ParamConverterInterface {
   /**
    * {@inheritdoc}
    */
-  public function convert($value, $definition, $name, array $defaults, Request $request) {
+  public function convert($value, $definition, $name, array $defaults) {
     if (NULL === $this->profiler) {
       return NULL;
     }
