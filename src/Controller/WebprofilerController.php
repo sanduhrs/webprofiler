@@ -249,7 +249,11 @@ class WebprofilerController extends ControllerBase {
     $storage = $this->profilerDownloadManager->getStorage($storageId);
 
     $build['resume'] = array(
-      '#markup' => '<p>' . t('Profiles stored with %storage service.', array('%storage' => $storage['title'])) . '</p>',
+      '#type' => 'inline_template',
+      '#template' => '<p>{{ message }}</p>',
+      '#context' => array(
+        'message' => $this->t('Profiles stored with %storage service.', array('%storage' => $storage['title'])),
+      ),
     );
 
     $build['filters'] = $this->formBuilder()->getForm('Drupal\\webprofiler\\Form\\ProfilesFilterForm');

@@ -181,8 +181,11 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
       );
 
       $build[$key . '_title'] = array(
-        array(
-          '#markup' => '<h3>' . $key . ' (' . $totalNum . ')' . '</h3>',
+        '#type' => 'inline_template',
+        '#template' => '<h3>{{ key }} ({{ totalNum }})</h3>',
+        '#context' => array(
+          'key' => $key,
+          'totalNum' => $totalNum,
         ),
       );
 

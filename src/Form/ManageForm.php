@@ -78,7 +78,11 @@ class ManageForm extends FormBase {
     );
 
     $form['purge']['purge-help'] = array(
-      '#markup' => '<div class="form-item">' . $this->t('Purge %storage profiles.', array('%storage' => $storage['title'])) . '</div>',
+      '#type' => 'inline_template',
+      '#template' => '<div class="form-item">{{ message }}</div>',
+      '#context' => array(
+        'message' =>  $this->t('Purge %storage profiles.', array('%storage' => $storage['title'])),
+      ),
     );
 
     $form['data'] = array(
@@ -93,8 +97,12 @@ class ManageForm extends FormBase {
       '#submit' => array(array($this, 'export')),
     );
 
-    $form['data']['export-help'] = array(
-      '#markup' => '<div class="form-item">' . $this->t('Export all %storage profiles.', array('%storage' => $storage['title'])) . '</div>',
+    $form['data']['purge-help'] = array(
+      '#type' => 'inline_template',
+      '#template' => '<div class="form-item">{{ message }}</div>',
+      '#context' => array(
+        'message' =>  $this->t('Export all %storage profiles.', array('%storage' => $storage['title'])),
+      ),
     );
 
     return $form;

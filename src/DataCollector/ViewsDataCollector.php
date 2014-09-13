@@ -154,8 +154,10 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
       );
 
       $build['title'] = array(
-        array(
-          '#markup' => '<h3>' . $this->t('Rendered views') . '</h3>',
+        '#type' => 'inline_template',
+        '#template' => '<h3>{{ title }}</h3>',
+        '#context' => array(
+          'title' => $this->t('Rendered views'),
         ),
       );
 

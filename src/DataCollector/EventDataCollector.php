@@ -7,6 +7,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Component\Utility\String;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\DataCollector\EventDataCollector as BaseEventDataCollector;
@@ -28,6 +29,13 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
   /**
    * {@inheritdoc}
    */
+  public function getPanelSummary() {
+    return $this->t('Called listeners: @listeners', array('@listeners' => count($this->getCalledListeners())));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPanel() {
     $calledListeners = $this->getCalledListeners();
     $notCalledListeners = $this->getNotCalledListeners();
@@ -36,7 +44,11 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
 
     if (empty($calledListeners)) {
       $build['no-events'] = array(
-        '#markup' => $this->t('No events have been recorded. Are you sure that debugging is enabled in the kernel?'),
+        '#type' => 'inline_template',
+        '#template' => '{{ message }}',
+        '#context' => array(
+          'message' => $this->t('No events have been recorded. Are you sure that debugging is enabled in the kernel?'),
+        ),
       );
 
       return $build;
@@ -58,14 +70,25 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
    * @return mixed
    */
   private function getTable($title, $listeners) {
+    $build = array();
+
     $rows = array();
     foreach ($listeners as $listener) {
       $row = array();
       $row[] = $listener['event'];
 
       if ($listener['type'] == 'Method') {
-        $link = '<a href="' . $this->getFileLink($listener['file'], $listener['line']) . '">' . $listener['method'] . '</a>';
-        $row[] = $this->abbrClass($listener['class']) . '::' . $link;
+        $data = array(
+          '#type' => 'inline_template',
+          '#template' => '{{ class }}::<a href="{{ link }}">{{ method }}</a>',
+          '#context' => array(
+            'class' => $this->abbrClass($listener['class']),
+            'link' => $this->getFileLink($listener['file'], $listener['line']),
+            'method' => $listener['method']
+          ),
+        );
+
+        $row[] = render($data);
       }
       else {
         $row[] = 'Closure';
@@ -74,20 +97,25 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
       $rows[] = $row;
     }
 
-    return array(
-      array(
-        '#markup' => '<h3>' . $title . '</h3>',
+    $build['title'] = array(
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ title }}</h3>',
+      '#context' => array(
+        'title' => $title,
       ),
-      array(
-        '#type' => 'table',
-        '#rows' => $rows,
-        '#header' => array(
-          $this->t('Event name'),
-          $this->t('Listener'),
-        ),
-        '#sticky' => TRUE,
-      )
     );
+
+    $build['table'] = array(
+      '#type' => 'table',
+      '#rows' => $rows,
+      '#header' => array(
+        $this->t('Event name'),
+        $this->t('Listener'),
+      ),
+      '#sticky' => TRUE,
+    );
+
+    return $build;
   }
 
   /**
@@ -102,12 +130,24 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
    *   A link of false
    */
   private function getFileLink($file, $line) {
-    $fileLinkFormat = 'txmt://open?url=file://%f&line=%l';
+    $fileLinkFormat = 'txmt://open?url=file://@file&line=@line';
 
     if (is_file($file)) {
-      return strtr($fileLinkFormat, array('%f' => $file, '%l' => $line));
+      return String::format($fileLinkFormat, array('@file' => $file, '@line' => $line));
     }
 
     return FALSE;
+  }
+
+  /**
+   * @param $class
+   *
+   * @return string
+   */
+  private function abbrClass($class) {
+    $parts = explode('\\', $class);
+    $short = array_pop($parts);
+
+    return String::format("<abbr title=\"@class\">@short</abbr>", array('@class' => $class, '@short' => $short));
   }
 }

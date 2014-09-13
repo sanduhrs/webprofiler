@@ -151,6 +151,8 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
    * {@inheritdoc}
    */
   public function getPanel() {
+    $build = array();
+
     $enabled = $this->t('Enabled');
     $disabled = $this->t('Disabled');
 
@@ -193,21 +195,24 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
       ),
     );
 
-    return array(
-      array(
-        array(
-          '#markup' => '<h3>' . $this->t('Configurations') . '</h3>',
-        ),
-      ),
-      array(
-        '#type' => 'table',
-        '#rows' => $rows,
-        '#header' => array(
-          $this->t('Config'),
-          $this->t('Value'),
-        ),
-        '#sticky' => TRUE,
+    $build['title'] = array(
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ title }}</h3>',
+      '#context' => array(
+        'title' => $this->t('Configurations'),
       ),
     );
+
+    $build['table'] = array(
+      '#type' => 'table',
+      '#rows' => $rows,
+      '#header' => array(
+        $this->t('Config'),
+        $this->t('Value'),
+      ),
+      '#sticky' => TRUE,
+    );
+
+    return $build;
   }
 }

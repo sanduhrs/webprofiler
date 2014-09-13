@@ -99,17 +99,29 @@ class RequestDataCollector extends BaseRequestDataCollector implements DrupalDat
 
     // Content
     $build['content'] = array(
-      '#markup' => '<h3>' . $this->t('Request Content') . '</h3>',
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ title }}</h3>',
+      '#context' => array(
+        'title' => $this->t('Request Content'),
+      ),
     );
 
     if (!$this->getContent()) {
       $build['content']['data'] = array(
-        '#markup' => $this->t('No content'),
+        '#type' => 'inline_template',
+        '#template' => '<h3>{{ message }}</h3>',
+        '#context' => array(
+          'message' => $this->t('No content'),
+        ),
       );
     }
     else {
       $build['content']['data'] = array(
-        '#markup' => $this->getContent(),
+        '#type' => 'inline_template',
+        '#template' => '{{ content }}',
+        '#context' => array(
+          'content' => $this->getContent(),
+        ),
       );
     }
 

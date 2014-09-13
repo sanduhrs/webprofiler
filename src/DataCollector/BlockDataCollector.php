@@ -209,13 +209,15 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
       $this->t('Operations'),
     );
 
-    $build[] = array(
-      array(
-        '#markup' => '<h3>' . $title . '</h3>',
+    $build['title'] = array(
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ title }}</h3>',
+      '#context' => array(
+        'title' => $title,
       ),
     );
 
-    $build[] = array(
+    $build['table'] = array(
       '#type' => 'table',
       '#rows' => $rows,
       '#header' => $header,

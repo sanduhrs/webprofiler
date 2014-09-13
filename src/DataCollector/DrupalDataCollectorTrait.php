@@ -31,9 +31,14 @@ trait DrupalDataCollectorTrait {
   }
 
   /**
-   * @param $title
-   * @param $values
-   * @param $header
+   * Builds a simple key/value table.
+   *
+   * @param string $title
+   *   The title of the table.
+   * @param array $values
+   *   The array of values for the table.
+   * @param array $header
+   *   The array of header values for the table.
    *
    * @return mixed
    */
@@ -50,8 +55,10 @@ trait DrupalDataCollectorTrait {
 
     if ($title) {
       $build['title'] = array(
-        array(
-          '#markup' => '<h3>' . $title . '</h3>',
+        '#type' => 'inline_template',
+        '#template' => '<h3>{{ title }}</h3>',
+        '#context' => array(
+          'title' => $title,
         ),
       );
     }
@@ -66,15 +73,4 @@ trait DrupalDataCollectorTrait {
     return $build;
   }
 
-  /**
-   * @param $class
-   *
-   * @return string
-   */
-  private function abbrClass($class) {
-    $parts = explode('\\', $class);
-    $short = array_pop($parts);
-
-    return String::format("<abbr title=\"@class\">@short</abbr>", array('@class' => $class, '@short' => $short));
-  }
 }

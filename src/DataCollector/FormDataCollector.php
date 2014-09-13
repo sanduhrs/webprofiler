@@ -71,7 +71,11 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
 
     if (count($this->getForms()) == 0) {
       $build['no-forms'] = array(
-        '#markup' => $this->t('No forms.'),
+        '#type' => 'inline_template',
+        '#template' => '{{ message }}',
+        '#context' => array(
+          'message' => $this->t('No forms.'),
+        ),
       );
 
       return $build;
@@ -81,7 +85,12 @@ class FormDataCollector extends DataCollector implements DrupalDataCollectorInte
       $formData = $form['form'];
 
       $build[$formData['#form_id']]['class'] = array(
-        '#markup' => '<h3>#' . $formData['#form_id'] . ': ' . $form['class'] . '</h3>',
+        '#type' => 'inline_template',
+        '#template' => '<h3>#{{ id }}: {{ class }}</h3>',
+        '#context' => array(
+          'id' => $formData['#form_id'],
+          'class' => $form['class'],
+        ),
       );
 
       $rows = array();

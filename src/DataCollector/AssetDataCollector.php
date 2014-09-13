@@ -123,10 +123,18 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
     if (isset($this->data['js']['settings'])) {
       $build['js-settings'] = array(
         array(
-          '#markup' => '<h3>' . $this->t('JS settings') . '</h3>',
-        ),
-        array(
-          '#markup' => '<textarea style="width:100%; height:400px">' . json_encode(drupal_merge_js_settings($this->data['js']['settings']['data']), JSON_PRETTY_PRINT) . '</textarea>',
+          '#type' => 'inline_template',
+          '#template' => '<h3>{{ message }}</h3>',
+          '#context' => array(
+            'message' => $this->t('JS settings'),
+          ),
+          array(
+            '#type' => 'inline_template',
+            '#template' => '<textarea style="width:100%; height:400px">{{ settings }}</textarea>',
+            '#context' => array(
+              'settings' => json_encode(drupal_merge_js_settings($this->data['js']['settings']['data']), JSON_PRETTY_PRINT),
+            ),
+          ),
         ),
       );
     }

@@ -46,7 +46,10 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
     $this->data['routing'] = array();
     foreach ($this->routeProvider->getAllRoutes() as $route_name => $route) {
       // @TODO Find a better visual representation.
-      $this->data['routing'][String::checkPlain($route_name)] = $route->getPath();
+      $this->data['routing'][] = array(
+        'name' => $route_name,
+        'path' => $route->getPath(),
+      );
     }
   }
 
@@ -84,10 +87,32 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
   public function getPanel() {
     $build = array();
 
-    // Routing
-    $build['routing'] = $this->getTable($this->t('Available routes'), $this->routing(), array($this->t('Route name'), 'URL'));
+    $rows = array();
+    foreach ($this->routing() as $key => $value) {
+      $row = array();
+
+      $row[] = $value['name'];
+      $row[] = $value['path'];
+
+      $rows[] = $row;
+    }
+
+    $build['title'] = array(
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ title }}</h3>',
+      '#context' => array(
+        'title' => $this->t('Available routes'),
+      ),
+    );
+
+    $build['table'] = array(
+      '#type' => 'table',
+      '#rows' => $rows,
+      '#header' => array($this->t('Route name'), 'URL'),
+      '#sticky' => TRUE,
+    );
 
     return $build;
   }
 
-} 
+}

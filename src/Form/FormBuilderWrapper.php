@@ -45,8 +45,9 @@ class FormBuilderWrapper extends FormBuilder {
       }
     }
 
-    $this->buildForms[$form_state['build_info']['form_id']] = array(
-      'class' => get_class($form_state['build_info']['callback_object']),
+    $buildInfo = $form_state->getBuildInfo();
+    $this->buildForms[$buildInfo['form_id']] = array(
+      'class' => get_class($buildInfo['callback_object']),
       'form' => $elements,
     );
 
