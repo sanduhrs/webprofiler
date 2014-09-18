@@ -162,11 +162,4 @@ class CacheBackendWrapper implements CacheBackendInterface {
   public function removeBin() {
     return $this->cacheBackend->removeBin();
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isEmpty() {
-    return $this->cacheBackend->isEmpty();
-  }
 }
