@@ -4,7 +4,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\IntrospectableContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -14,14 +14,14 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
-   * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
+   * @var \Symfony\Component\DependencyInjection\IntrospectableContainerInterface $container
    */
   private $container;
 
   /**
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   * @param IntrospectableContainerInterface $container
    */
-  public function __construct(ContainerInterface $container) {
+  public function __construct(IntrospectableContainerInterface $container) {
     $this->container = $container;
   }
 
