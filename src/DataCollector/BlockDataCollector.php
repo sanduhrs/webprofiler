@@ -140,11 +140,11 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
     $storage = $entity_manager->getStorage('block');
 
     if ($this->getLoadedBlocks()) {
-      $build = array_merge($build, $this->getTable($this->getLoadedBlocks(), $storage, $this->t('Loaded blocks')));
+      $build['loaded'] =$this->getTable($this->getLoadedBlocks(), $storage, $this->t('Loaded blocks'));
     }
 
     if ($this->getRenderedBlocks()) {
-      $build = array_merge($build, $this->getTable($this->getRenderedBlocks(), $storage, $this->t('Rendered blocks')));
+      $build['rendered'] = $this->getTable($this->getRenderedBlocks(), $storage, $this->t('Rendered blocks'));
     }
 
     return $build;
