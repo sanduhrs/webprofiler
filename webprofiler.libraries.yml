@@ -50,3 +50,12 @@ service:
   css:
     component:
       css/service.css: {}
+timeline:
+  version: 1.0
+  js:
+    js/timeline.js: {}
+  css:
+    component:
+      css/timeline.css: {}
+  dependencies:
+    - webprofiler/d3

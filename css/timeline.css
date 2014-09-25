@@ -1,0 +1,70 @@
+/**
+ * Timeline
+ */
+
+.sf-profiler-timeline .legends {
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.sf-profiler-timeline .legends span {
+  border-left-width: 10px;
+  border-left-style: solid;
+  padding: 0 10px 0 5px;
+}
+
+.timeline {
+  background-color: #fbfbfb;
+  margin-bottom: 15px;
+  margin-top: 5px;
+  shape-rendering: crispEdges;
+}
+
+.mini text {
+  font: 9px sans-serif;
+}
+
+.default {
+  fill: #aacd4e;
+  stroke-width: 6;
+}
+
+.legends .default {
+  border-left-color: #aacd4e;
+}
+
+.section {
+  fill: #666;
+  stroke-width: 6;
+}
+
+.legends .section {
+  border-left-color: #666;
+}
+
+.event_listener {
+  fill: #3dd;
+  stroke-width: 6;
+}
+
+.legends .event_listener {
+  border-left-color: #3dd;
+}
+
+.event_listener_loading {
+  fill: #add;
+  stroke-width: 6;
+}
+
+.legends .event_listener_loading {
+  border-left-color: #add;
+}
+
+.template {
+  fill: #dd3;
+  stroke-width: 6;
+}
+
+.legends .template {
+  border-left-color: #dd3;
+}

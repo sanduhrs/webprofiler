@@ -109,7 +109,7 @@ class TimeDataCollector extends BaseTimeDataCollector implements DrupalDataColle
           ),
         ),
         'library' => array(
-          'webprofiler/d3',
+          'webprofiler/timeline',
         ),
       ),
     );
