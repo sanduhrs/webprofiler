@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\DataCollector;
 
+use Drupal\Core\Url;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -191,7 +192,7 @@ class PhpConfigDataCollector extends DataCollector implements DrupalDataCollecto
       ),
       array(
         $this->t('Full PHP configuration'),
-        \Drupal::linkGenerator()->generate('php info', 'system.php'),
+        \Drupal::linkGenerator()->generate('php info', new Url('system.php')),
       ),
     );
 
