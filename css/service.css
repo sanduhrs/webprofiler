@@ -14,3 +14,7 @@
 #service-filter-form {
   margin-bottom: 20px;
 }
+
+#wp-service-wrapper {
+  overflow-x: scroll;
+}

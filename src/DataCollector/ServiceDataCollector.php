@@ -96,6 +96,11 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
 
     $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\ServiceFilterForm');
 
+    $build['container'] = array(
+      '#type' => 'container',
+      '#attributes' => array('id' => array('wp-service-wrapper')),
+    );
+
     if ($this->getServicesCount()) {
       $rows = array();
       $services = $this->getServices();
@@ -146,7 +151,7 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
         $this->t('Tags'),
       );
 
-      $build['table'] = array(
+      $build['container']['table'] = array(
         '#type' => 'table',
         '#rows' => $rows,
         '#header' => $header,
