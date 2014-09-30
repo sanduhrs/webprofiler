@@ -5,6 +5,7 @@ namespace Drupal\webprofiler\DataCollector;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,10 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $queries = $this->database->getLogger()->get('webprofiler');
-    usort($queries, array("Drupal\\webprofiler\\DataCollector\\DatabaseDataCollector", "orderQuery"));
+    usort($queries, array(
+        "Drupal\\webprofiler\\DataCollector\\DatabaseDataCollector",
+        "orderQuery"
+      ));
 
     foreach ($queries as &$query) {
       // remove caller
@@ -142,7 +146,8 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
   public function getPanel() {
     $build = array();
 
-    $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\DatabaseFilterForm');
+    $build['filters'] = \Drupal::formBuilder()
+      ->getForm('Drupal\\webprofiler\\Form\\DatabaseFilterForm');
 
     $build['container'] = array(
       '#type' => 'container',
@@ -151,7 +156,10 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
 
     $position = 0;
     foreach ($this->getQueries() as $query) {
-      $table = $this->getTable('Query arguments', $query['args'], array('Placeholder', 'Value'));
+      $table = $this->getTable('Query arguments', $query['args'], array(
+          'Placeholder',
+          'Value'
+        ));
 
       $explain = TRUE;
       $type = 'select';
@@ -172,16 +180,19 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
       }
 
       $profile = \Drupal::request()->get('profile');
-      $copyUrl = \Drupal::urlGenerator()->generate('webprofiler.database.arguments', array('profile' => $profile->getToken(), 'qid' => $position));
-      $query['copy_link'] = l($this->t('Copy'), $copyUrl, array(
-        'attributes' => array(
-          'class' => array('use-ajax', 'wp-button', 'wp-query-copy-button'),
-          'data-accepts' => 'application/vnd.drupal-modal',
-          'data-dialog-options' => Json::encode(array(
-            'width' => 700,
-          )),
-        )
-      ));
+      $query['copy_link'] = \Drupal::linkGenerator()
+        ->generate($this->t('Copy'), new Url('webprofiler.database.arguments', array(
+          'profile' => $profile->getToken(),
+          'qid' => $position
+        ), array(
+          'attributes' => array(
+            'class' => array('use-ajax', 'wp-button', 'wp-query-copy-button'),
+            'data-accepts' => 'application/vnd.drupal-modal',
+            'data-dialog-options' => Json::encode(array(
+              'width' => 700,
+            )),
+          )
+        )));
 
       $build['container'][] = array(
         '#theme' => 'webprofiler_db_panel',
