@@ -10,6 +10,7 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Url;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\webprofiler\Profiler\ProfilerStorageManager;
@@ -212,7 +213,7 @@ class WebprofilerController extends ControllerBase {
     if (count($profiles)) {
       foreach ($profiles as $profile) {
         $row = array();
-        $row[] = $this->l($profile['token'], 'webprofiler.profiler', array('profile' => $profile['token']));
+        $row[] = $this->l($profile['token'], new Url('webprofiler.profiler', array('profile' => $profile['token'])));
         $row[] = $profile['ip'];
         $row[] = $profile['method'];
         $row[] = $profile['url'];
