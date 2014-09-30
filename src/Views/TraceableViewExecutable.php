@@ -58,6 +58,12 @@ class TraceableViewExecutable extends ViewExecutable {
 
     $module_handler = \Drupal::moduleHandler();
 
+    // @TODO on the longrun it would be great to execute a view without
+    //   the theme system at all, see https://drupal.org/node/2322623.
+    $active_theme = \Drupal::theme()->getActiveTheme();
+    $themes = array_keys($active_theme->getBaseThemes());
+    $themes[] = $active_theme->getName();
+
     // Check for already-cached output.
     if (!empty($this->live_preview)) {
       $cache = FALSE;
@@ -66,6 +72,7 @@ class TraceableViewExecutable extends ViewExecutable {
       $cache = $this->display_handler->getPlugin('cache');
     }
 
+    /** @var \Drupal\views\Plugin\views\cache\CachePluginBase $cache */
     if ($cache && $cache->cacheGet('output')) {
     }
     else {
@@ -114,12 +121,11 @@ class TraceableViewExecutable extends ViewExecutable {
       $module_handler->invokeAll('views_pre_render', array($this));
 
       // Let the themes play too, because pre render is a very themey thing.
-      if (isset($GLOBALS['base_theme_info']) && isset($GLOBALS['theme'])) {
-        foreach ($GLOBALS['base_theme_info'] as $base) {
-          $module_handler->invoke($base->getName(), 'views_pre_render', array($this));
+      foreach ($themes as $theme_name) {
+        $function = $theme_name . '_views_pre_render';
+        if (function_exists($function)) {
+          $function($this);
         }
-
-        $module_handler->invoke($GLOBALS['theme'], 'views_pre_render', array($this));
       }
 
       $this->display_handler->output = $this->display_handler->render();
@@ -138,12 +144,11 @@ class TraceableViewExecutable extends ViewExecutable {
     $module_handler->invokeAll('views_post_render', array($this, &$this->display_handler->output, $cache));
 
     // Let the themes play too, because post render is a very themey thing.
-    if (isset($GLOBALS['base_theme_info']) && isset($GLOBALS['theme'])) {
-      foreach ($GLOBALS['base_theme_info'] as $base) {
-        $module_handler->invoke($base->getName(), 'views_post_render', array($this));
+    foreach ($themes as $theme_name) {
+      $function = $theme_name . '_views_post_render';
+      if (function_exists($function)) {
+        $function($this);
       }
-
-      $module_handler->invoke($GLOBALS['theme'], 'views_post_render', array($this));
     }
 
     $this->render_time = microtime(TRUE) - $start;
