@@ -34,10 +34,6 @@ class DatabaseDataCollector extends DataCollector implements DrupalDataCollector
    * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-    if($this->database->getLogger() === NULL) {
-      return;
-    }
-
     $queries = $this->database->getLogger()->get('webprofiler');
     usort($queries, array(
         "Drupal\\webprofiler\\DataCollector\\DatabaseDataCollector",

@@ -34,13 +34,6 @@ class WebprofilerEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-   */
-  public function onKernelRequest(GetResponseEvent $event) {
-    Database::startLog('webprofiler');
-  }
-
-  /**
    * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
    */
   public function onKernelResponse(FilterResponseEvent $event) {
@@ -84,7 +77,6 @@ class WebprofilerEventSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return array(
       KernelEvents::RESPONSE => array('onKernelResponse', -128),
-      KernelEvents::REQUEST => array('onKernelRequest', -100),
     );
   }
 }
