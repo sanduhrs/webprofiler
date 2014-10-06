@@ -172,4 +172,4 @@ services:
   webprofiler.middleware:
     class: Drupal\webprofiler\WebprofilerMiddleware
     tags:
-      - { name: http_middleware, priority: 75 }
+      - { name: http_middleware, priority: 400 }
