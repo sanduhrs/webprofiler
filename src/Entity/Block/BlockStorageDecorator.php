@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\Entity\Block;
 
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\webprofiler\Decorator;
@@ -142,6 +143,20 @@ class BlockStorageDecorator extends BlockDecorator implements ConfigEntityStorag
    */
   public static function getIDFromConfigName($config_name, $config_prefix) {
     return substr($config_name, strlen($config_prefix . '.'));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createFromStorageRecord(array $values) {
+    return $this->getOriginalObject()->createFromStorageRecord($values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateFromStorageRecord(ConfigEntityInterface $entity, array $values) {
+    return $this->getOriginalObject()->updateFromStorageRecord($entity, $values);
   }
 
 }
