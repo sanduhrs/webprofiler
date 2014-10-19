@@ -148,7 +148,7 @@ services:
 
   webprofiler.debug.entity.manager:
      class: Drupal\webprofiler\Entity\EntityManagerWrapper
-     arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@language_manager', '@string_translation', '@class_resolver', '@typed_data_manager', '@entity.definitions.installed']
+     arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@language_manager', '@string_translation', '@class_resolver', '@typed_data_manager', '@entity.definitions.installed', '@event_dispatcher']
      parent: container.trait
      tags:
       - { name: plugin_manager_cache_clear }
