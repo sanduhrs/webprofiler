@@ -70,7 +70,7 @@ class BlockViewBuilderDecorator extends BlockDecorator implements EntityViewBuil
   /**
    * {@inheritdoc}
    */
-  public function getCacheTag() {
+  public function getCacheTags() {
     return $this->getOriginalObject()->getCacheTag();
   }
 
