@@ -1,3 +1,28 @@
+{% block toolbar %}
+  {% set icon %}
+  <a href="{{ url("webprofiler.profiler", {profile: token}, {fragment: 'routing'}) }}" title="{{ 'Routing'|t }}">
+    <img width="20" height="28" alt="Asset"
+         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAcCAYAAACOGPReAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3goZDiE4LUJXPAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAD+klEQVRIx+2VT2hUVxTGv3Pvff/mrzrT1IpjxzguUsYJuqiUEoN1UYYkiosKgW4FIYSAhLhpSxehILY0gRJB6Kobk65KUuyiyDQt1OJKKCrUMZGAHWhmmOHlvZn35t17u4mFGG0ChW7aD+7iwjk/zrmc813gPy3aKWB0dPRQvV4fNQzjyenTp7+ZnJwMyuUypdNp1Go1AoCzZ8+qy5cvq2c5YidoLBYbWl9f/1gI8aBarVYB3L1169aWmEqlsuW+BTo7O8sqlQrt378f169fV1prY2pq6sDDhw/teDy+p1AonDpx4sTbtm3HbduWUkolpUxns9lfjh49+u21a9fkNujExIR6rlDFOZftdhtCCGlZ1kgymXxDa50UQkjGGAzD4L7vR1rrcwBub4FeuHAh4bruu67rHjZN0/M8j1+8eLFx8ODBV9vtNrTWZiwWMz3PM4UQhhBCSCkJgGSMJe7fv//FlStXylevXn0iAGB6etpYWVl5r9ls3rBtu0tE0rIsKwiCajKZ/F1KGYVhCCLSjuNoImJCCDDGiHNOGxsbUgjRVywWTwH4SiwtLdHi4mL/06dPp8MwFFprRURGGIZCKWU7juMopUgpBSklra6uAgAsywIABEFAlmWxsbGx1aGhod8AQORyOX7kyJF3Hj16dCCKImXbtqG1ps1KoLUGAC2lRCKRYMPDwxQEAQkhQETwfZ8KhUI0PDw8t3fv3nsAIEqlklJKPWg2m/X5+fmMZVmKc65932fJZBJRFGHfvn3EGDPy+fzt8+fPL7fb7VcYY5GU0pBSOoZh/JpKpW4SURsABBGpVqv185kzZ266rjtWq9VYLBZDp9NBLpcjxhgzDAOcc9y5c+enkydP/mCaZhKAAuAD4ABCAJ0tc5pKpRqDg4NflkolHUXRIc55F4DOZDIrc3NzhzudzpuO47hSyveLxeJnQoik4ziIx+M3jh079vnMzEx72/ATkdJa38tmsx8AMDbXNwSgGo3Gh0EQQCllptPp1zOZzGsA0o7jQCn10ePHj8WlS5c+XVhYcBuNhgYA9pcJECkiahHROhH9QUQtAKHWuquUglKKAcDa2pp2XVc2Go2u53m8r6/vrXK5vOcZcNtGaa2JiPTzprM5AeCci97eXhZFEbcsiw8MDNRHRkYW+/v76y/d/RcAEUUR4vE4lFL8+PHjd8vl8qrv+z2MsTCRSHyfyWS+JiLvpdAXWaOUEqZpgojY8vLyd+Pj4z8CSAOIADSJyH8+SezaeImwsbHhb7516+9i2W5gz85utSNUKQUigtaaut3ursg7ta9N09T1eh2O48ienh71j/8orTWrVqvnPM+bMAyjGovFPsnn81X8r39dfwJQY7ge70OffAAAAABJRU5ErkJggg=="
+         alt="Routing">
+  </a>
+
+
+
+  {% endset %}
+
+  {% set text %}
+  <div class="sf-toolbar-info-piece">
+    <b>{{ 'Routes'|t }}</b>
+    <span>{{ collector.routingCount }}</span>
+  </div>
+  {% endset %}
+
+  <div class="sf-toolbar-block">
+    <div class="sf-toolbar-icon">{{ icon|default('') }}</div>
+    <div class="sf-toolbar-info">{{ text|default('') }}</div>
+  </div>
+{% endblock %}
+
 {% block panel %}
     <div class="title">
         <h2>{{ 'Routing'|t }}</h2>

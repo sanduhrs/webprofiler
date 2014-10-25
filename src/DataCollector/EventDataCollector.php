@@ -64,6 +64,20 @@ class EventDataCollector extends BaseEventDataCollector implements DrupalDataCol
   }
 
   /**
+   * @return int
+   */
+  public function getCalledListenersCount() {
+    return count($this->getCalledListeners());
+  }
+
+  /**
+   * @return int
+   */
+  public function getNotCalledListenersCount() {
+    return count($this->getNotCalledListeners());
+  }
+
+  /**
    * @param $title
    * @param $listeners
    *

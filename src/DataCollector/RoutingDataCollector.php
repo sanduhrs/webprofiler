@@ -54,6 +54,13 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
   }
 
   /**
+   * @return int
+   */
+  public function getRoutingCount() {
+    return count($this->routing());
+  }
+
+  /**
    * Twig callback for displaying the routes.
    */
   public function routing() {
