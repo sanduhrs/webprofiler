@@ -95,7 +95,7 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
    * @return array
    */
   public function getLoadedBlocks() {
-    return (array_key_exists('rendered', $this->data['blocks'])) ? $this->data['blocks']['rendered'] : array();
+    return (array_key_exists('loaded', $this->data['blocks'])) ? $this->data['blocks']['loaded'] : array();
   }
 
   /**
