@@ -14,7 +14,8 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
   use StringTranslationTrait, DrupalDataCollectorTrait;
 
   /**
-   * @var \Symfony\Component\DependencyInjection\IntrospectableContainerInterface $container
+   * @var \Symfony\Component\DependencyInjection\IntrospectableContainerInterface
+   *   $container
    */
   private $container;
 
@@ -61,6 +62,19 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
   }
 
   /**
+   * @return int
+   */
+  public function getInitializedServicesWithoutWebprofilerCount() {
+    $countWithoutWebprofiler = 0;
+    foreach ($this->data['initialized_services'] as $service) {
+      if (strpos($service, 'webprofiler') !== 0) {
+        $countWithoutWebprofiler++;
+      }
+    }
+    return $countWithoutWebprofiler;
+  }
+
+  /**
    * @return array
    */
   public function getServices() {
@@ -85,7 +99,11 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
    * {@inheritdoc}
    */
   public function getPanelSummary() {
-    return $this->t('Services: @count', array('@count' => $this->getInitializedServicesCount()));
+    return $this->t('Initialized: @count, initialized without Webprofiler: @count_without_webprofiler, available: @available', array(
+        '@count' => $this->getInitializedServicesCount(),
+        '@count_without_webprofiler' => $this->getInitializedServicesWithoutWebprofilerCount(),
+        '@available' => $this->getServicesCount()
+      ));
   }
 
   /**
@@ -94,7 +112,8 @@ class ServiceDataCollector extends DataCollector implements DrupalDataCollectorI
   public function getPanel() {
     $build = array();
 
-    $build['filters'] = \Drupal::formBuilder()->getForm('Drupal\\webprofiler\\Form\\ServiceFilterForm');
+    $build['filters'] = \Drupal::formBuilder()
+      ->getForm('Drupal\\webprofiler\\Form\\ServiceFilterForm');
 
     $build['container'] = array(
       '#type' => 'container',

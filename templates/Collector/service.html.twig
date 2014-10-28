@@ -9,7 +9,7 @@
     {% set text %}
     <div class="sf-toolbar-info-piece">
         <b>{{ 'Initialized'|t }}</b>
-        <span>{{ collector.initializedServicesCount }}</span>
+        <span>{{ collector.initializedServicesCount }} ({{ collector.initializedServicesWithoutWebprofilerCount }})</span>
     </div>
     <div class="sf-toolbar-info-piece">
         <b>{{ 'Available'|t }}</b>
