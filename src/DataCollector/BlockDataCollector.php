@@ -81,7 +81,7 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
    * @return array
    */
   public function getRenderedBlocks() {
-    return $this->data['blocks']['rendered'];
+    return (array_key_exists('rendered', $this->data['blocks'])) ? $this->data['blocks']['rendered'] : array();
   }
 
   /**
@@ -95,7 +95,7 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
    * @return array
    */
   public function getLoadedBlocks() {
-    return $this->data['blocks']['loaded'];
+    return (array_key_exists('rendered', $this->data['blocks'])) ? $this->data['blocks']['rendered'] : array();
   }
 
   /**
