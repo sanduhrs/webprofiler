@@ -95,7 +95,7 @@ class RoutingDataCollector extends DataCollector implements DrupalDataCollectorI
     $build = array();
 
     $rows = array();
-    foreach ($this->routing() as $key => $value) {
+    foreach ($this->routing() as $value) {
       $row = array();
 
       $row[] = $value['name'];

@@ -63,7 +63,7 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
       $select->condition('time', $start, '>=');
     }
 
-    if (!empty($send)) {
+    if (!empty($end)) {
       $select->condition('time', $end, '<=');
     }
 
@@ -133,4 +133,4 @@ class DatabaseProfilerStorage implements ProfilerStorageInterface {
 
     return $profile;
   }
-} 
+}
