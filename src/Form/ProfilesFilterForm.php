@@ -74,10 +74,10 @@ class ProfilesFilterForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $ip = $form_state['values']['ip'];
-    $url = $form_state['values']['url'];
-    $method = $form_state['values']['method'];
-    $limit = $form_state['values']['limit'];
+    $ip = $form_state->getValue('ip');// ['values']['ip'];
+    $url = $form_state->getValue('url');
+    $method = $form_state->getValue('method');
+    $limit = $form_state->getValue('limit');
 
     $url = new Url('webprofiler.admin_list', array(), array(
       'query' => array(
