@@ -21,6 +21,7 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
     $this->data['version'] = \Drupal::VERSION;
     $this->data['profile'] = drupal_get_profile();
+    $this->data['destination'] = drupal_get_destination();
   }
 
   /**
@@ -35,6 +36,14 @@ class DrupalDataCollector extends DataCollector implements DrupalDataCollectorIn
    */
   public function getProfile() {
     return $this->data['profile'];
+  }
+
+  /**
+   * @return string
+   */
+  public function getConfigUrl() {
+    $destination = $this->data['destination'];
+    return \Drupal::url('webprofiler.admin_configure', [], ['query' => $destination]);
   }
 
   /**
