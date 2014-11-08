@@ -131,6 +131,12 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 140 }
 
+  webprofiler.http:
+    class: Drupal\webprofiler\DataCollector\HttpDataCollector
+    arguments: ['@http_client']
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/http.html.twig', id:'http', title:'Http', priority: 150 }
+
   stopwatch:
     class: Drupal\webprofiler\Stopwatch
 
