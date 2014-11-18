@@ -31,6 +31,13 @@ trait DrupalDataCollectorTrait {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getData() {
+    return $this->data;
+  }
+
+  /**
    * Builds a simple key/value table.
    *
    * @param string $title

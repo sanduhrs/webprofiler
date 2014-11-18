@@ -23,6 +23,18 @@ webprofiler.profiler:
   requirements:
     _permission: 'access webprofiler'
 
+webprofiler.profiler_panel:
+  path: '/admin/reports/profiler/panel/{profile}/{collector}'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\WebprofilerController::collectorAction'
+    _title: 'Profiler collector'
+  options:
+    parameters:
+      profile:
+        type: 'webprofiler:token'
+  requirements:
+    _permission: 'access webprofiler'
+
 # export single profile
 webprofiler.single_export:
   path: '/admin/config/development/profiler/export/{profile}'

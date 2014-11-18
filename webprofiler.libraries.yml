@@ -19,43 +19,63 @@ highlight:
   css:
     component:
       /libraries/highlight/styles/idea.css: {}
-webprofiler:
+#webprofiler:
+#  version: 1.0
+#  js:
+#    js/webprofiler.js: {}
+#  css:
+#    component:
+#      css/webprofiler.css: {}
+#  dependencies:
+#    - core/jquery
+#    - core/drupal
+#    - core/drupalSettings
+#database:
+#  version: 1.0
+#  js:
+#    js/database.js: {}
+#  css:
+#    component:
+#      css/database.css: {}
+#  dependencies:
+#    - core/jquery
+#    - core/drupal
+#    - core/drupalSettings
+#    - core/drupal.ajax
+#    - core/jquery.once
+#service:
+#  version: 1.0
+#  js:
+#    js/service.js: {}
+#  css:
+#    component:
+#      css/service.css: {}
+#timeline:
+#  version: 1.0
+#  js:
+#    js/timeline.js: {}
+#  css:
+#    component:
+#      css/timeline.css: {}
+#  dependencies:
+#    - webprofiler/d3
+
+dashboard:
   version: 1.0
   js:
-    js/webprofiler.js: {}
+    js/app/app.js: {}
+    js/app/models/collector.js: {}
+    js/app/collections/collectors.js: {}
+    js/app/views/php_config.js: {}
+    js/app/views/dashboard.js: {}
   css:
     component:
-      css/webprofiler.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings
-database:
-  version: 1.0
-  js:
-    js/database.js: {}
-  css:
-    component:
-      css/database.css: {}
-  dependencies:
-    - core/jquery
-    - core/drupal
-    - core/drupalSettings
-    - core/drupal.ajax
-    - core/jquery.once
-service:
-  version: 1.0
-  js:
-    js/service.js: {}
-  css:
-    component:
-      css/service.css: {}
-timeline:
-  version: 1.0
-  js:
-    js/timeline.js: {}
-  css:
-    component:
-      css/timeline.css: {}
+      css/app/dashboard.css: {}
   dependencies:
     - webprofiler/d3
+    - webprofiler/highlight
+    - core/jquery
+    - core/underscore
+    - core/backbone
+    - core/drupal
+    - core/drupalSettings

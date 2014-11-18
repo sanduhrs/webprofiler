@@ -1,0 +1,9 @@
+<div id="dashboard">
+
+  <ul>
+    {% for panel in panels %}
+      <li><a href='#' id="{{ panel.name }}" class="webprofiler--panel">{{ panel.title }}</a></li>
+    {% endfor %}
+  </ul>
+
+</div>

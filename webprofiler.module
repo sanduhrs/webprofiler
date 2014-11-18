@@ -13,34 +13,40 @@ function webprofiler_theme() {
       'template' => 'Profiler/webprofiler_toolbar',
       'variables' => array('token' => NULL, 'templates' => array(), 'profile' => NULL, 'profiler_url' => NULL),
     ),
-    'webprofiler_panel' => array(
-      'template' => 'Profiler/webprofiler_panel',
+    'webprofiler_dashboard' => array(
+      'template' => 'Profiler/webprofiler_dashboard',
       'variables' => array(
-        'template' => array(),
-        'profile' => NULL,
-        'name' => NULL,
-        'summary' => NULL,
-        'content' => NULL,
+        'panels' => array(),
       ),
     ),
-    'webprofiler_resume' => array(
-      'template' => 'Profiler/webprofiler_resume',
-      'variables' => array(
-        'template' => array(),
-        'profile' => NULL,
-        'name' => NULL
-      ),
-    ),
-    'webprofiler_db_panel' => array(
-      'template' => 'Profiler/webprofiler_db_panel',
-      'variables' => array(
-        'query' => NULL,
-        'table' => NULL,
-        'explain' => FALSE,
-        'query_type' => NULL,
-        'position' => NULL,
-      ),
-    ),
+//    'webprofiler_panel' => array(
+//      'template' => 'Profiler/webprofiler_panel',
+//      'variables' => array(
+//        'template' => array(),
+//        'profile' => NULL,
+//        'name' => NULL,
+//        'summary' => NULL,
+//        'content' => NULL,
+//      ),
+//    ),
+//    'webprofiler_resume' => array(
+//      'template' => 'Profiler/webprofiler_resume',
+//      'variables' => array(
+//        'template' => array(),
+//        'profile' => NULL,
+//        'name' => NULL
+//      ),
+//    ),
+//    'webprofiler_db_panel' => array(
+//      'template' => 'Profiler/webprofiler_db_panel',
+//      'variables' => array(
+//        'query' => NULL,
+//        'table' => NULL,
+//        'explain' => FALSE,
+//        'query_type' => NULL,
+//        'position' => NULL,
+//      ),
+//    ),
   );
 }
 

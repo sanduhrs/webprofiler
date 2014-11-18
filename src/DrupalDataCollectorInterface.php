@@ -34,4 +34,6 @@ interface DrupalDataCollectorInterface {
    */
   public function getName();
 
+  public function getData();
+
 }
