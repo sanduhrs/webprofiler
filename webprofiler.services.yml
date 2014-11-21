@@ -1,5 +1,6 @@
 services:
 
+# profiler services
   logger.channel.webprofiler:
     class: Drupal\Core\Logger\LoggerChannel
     factory_method: get
@@ -31,14 +32,17 @@ services:
     class: Drupal\webprofiler\Profiler\Profiler
     arguments: ['@profiler.storage', '@logger.channel.webprofiler', '@config.factory']
 
+# template manager
   templateManager:
     class: Drupal\webprofiler\Profiler\TemplateManager
     arguments: ['@profiler', '@twig', '@twig.loader', '%data_collector.templates%']
 
+# request matcher
   webprofiler.matcher:
     class: Drupal\webprofiler\RequestMatcher\WebprofilerRequestMatcher
     arguments: ['@config.factory', '@path.matcher']
 
+# event subscribers
   webprofiler.profilerListener:
     class: Symfony\Component\HttpKernel\EventListener\ProfilerListener
     arguments: ['@profiler', '@webprofiler.matcher']
@@ -51,6 +55,7 @@ services:
       tags:
         - { name: event_subscriber }
 
+# datacollector services
   webprofiler.drupal:
     class: Drupal\webprofiler\DataCollector\DrupalDataCollector
     tags:
@@ -131,6 +136,7 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 140 }
 
+# debug services
   stopwatch:
     class: Drupal\webprofiler\Stopwatch
 
@@ -146,19 +152,12 @@ services:
     class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
     arguments: ['@controller_resolver', '@stopwatch']
 
-  webprofiler.debug.entity.manager:
-     class: Drupal\webprofiler\Entity\EntityManagerWrapper
-     arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@language_manager', '@string_translation', '@class_resolver', '@typed_data_manager', '@entity.definitions.installed', '@event_dispatcher']
-     parent: container.trait
-     tags:
-      - { name: plugin_manager_cache_clear }
+  webprofiler.middleware:
+    class: Drupal\webprofiler\WebprofilerMiddleware
+    tags:
+      - { name: http_middleware, priority: 400 }
 
-  webprofiler.debug.entity.manager.parent:
-     class: Drupal\Core\Entity\EntityManager
-     parent: webprofiler.debug.entity.manager
-     tags:
-      - { name: plugin_manager_cache_clear }
-
+# utils services
   webprofiler.twig_extension:
     class: Drupal\webprofiler\Twig\RoutingExtension
     arguments: ['@url_generator']
@@ -168,8 +167,3 @@ services:
     arguments: ['@profiler']
     tags:
       - { name: paramconverter }
-
-  webprofiler.middleware:
-    class: Drupal\webprofiler\WebprofilerMiddleware
-    tags:
-      - { name: http_middleware, priority: 400 }

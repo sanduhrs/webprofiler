@@ -21,9 +21,7 @@ class EntityPass implements CompilerPassInterface {
   public function process(ContainerBuilder $container) {
     // replace the regular entity.manager service with the traceable one.
     $definition = $container->findDefinition('entity.manager');
-    $definition->setPublic(FALSE);
-    $container->setDefinition('webprofiler.debug.entity.manager.parent', $definition);
-    $container->setAlias('entity.manager', 'webprofiler.debug.entity.manager');
+    $definition->setClass('Drupal\webprofiler\Entity\EntityManagerWrapper');
   }
 
 }

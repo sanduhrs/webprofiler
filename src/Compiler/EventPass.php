@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -23,12 +24,11 @@ class EventPass implements CompilerPassInterface {
     $definition = $container->findDefinition('http_kernel.basic');
     $definition->replaceArgument(1, new Reference('webprofiler.debug.controller_resolver'));
 
-    // replace the regular event_dispatcher service with the traceable one.
+    // replace the regular event_dispatcher service with the debug one
     $definition = $container->findDefinition('event_dispatcher');
+    $definition->setPublic(false);
     $container->setDefinition('webprofiler.debug.event_dispatcher.parent', $definition);
-
-    $definition = $container->findDefinition('webprofiler.debug.event_dispatcher');
-    $container->setDefinition('event_dispatcher', $definition);
+    $container->setAlias('event_dispatcher', 'webprofiler.debug.event_dispatcher');
   }
 
 }
