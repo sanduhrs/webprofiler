@@ -10,6 +10,7 @@ namespace Drupal\webprofiler\Controller;
 use Drupal\Core\Archiver\ArchiveTar;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Drupal\system\FileDownloadController;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
@@ -65,6 +66,11 @@ class WebprofilerController extends ControllerBase {
   private $profilerDownloadManager;
 
   /**
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  private $renderer;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -75,7 +81,8 @@ class WebprofilerController extends ControllerBase {
       $container->get('twig.loader'),
       $container->get('date.formatter'),
       $container->get('profiler.storage_manager'),
-      new FileDownloadController()
+      new FileDownloadController(),
+      $container->get('renderer')
     );
   }
 
@@ -87,10 +94,11 @@ class WebprofilerController extends ControllerBase {
    * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
    * @param \Twig_Loader_Filesystem $twigLoader
    * @param \Drupal\Core\Datetime\DateFormatter $date
-   * @param \Drupal\system\FileDownloadController $fileDownloadController
    * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $profilerDownloadManager
+   * @param \Drupal\system\FileDownloadController $fileDownloadController
+   * @param \Drupal\Core\Render\RendererInterface $renderer
    */
-  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, DateFormatter $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController) {
+  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, DateFormatter $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController, RendererInterface $renderer) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
@@ -98,6 +106,7 @@ class WebprofilerController extends ControllerBase {
     $this->date = $date;
     $this->fileDownloadController = $fileDownloadController;
     $this->profilerDownloadManager = $profilerDownloadManager;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -190,7 +199,7 @@ class WebprofilerController extends ControllerBase {
       '#profiler_url' => $url,
     );
 
-    return new Response(render($toolbar));
+    return new Response($this->renderer->render($toolbar));
   }
 
   /**
@@ -230,7 +239,7 @@ class WebprofilerController extends ControllerBase {
           '#type' => 'operations',
           '#links' => $operations,
         );
-        $row[] = render($dropbutton);
+        $row[] = $this->renderer->render($dropbutton);
 
         $rows[] = $row;
       }

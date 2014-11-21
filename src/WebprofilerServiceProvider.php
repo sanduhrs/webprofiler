@@ -54,7 +54,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     // Add BlockDataCollector only if Block module is enabled.
     if (FALSE !== $container->hasDefinition('plugin.manager.block')) {
       $container->register('webprofiler.block', 'Drupal\webprofiler\DataCollector\BlockDataCollector')
-        ->addArgument(new Reference(('webprofiler.debug.entity.manager')))
+        ->addArgument(new Reference(('entity.manager')))
         ->addTag('data_collector', array(
           'template' => '@webprofiler/Collector/block.html.twig',
           'id' => 'block',
