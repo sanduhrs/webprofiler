@@ -75,14 +75,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
         'priority' => 135
       ));
 
-    // Replaces the existing cache_factory service to be able to collect the
-    // requested data.
-    $container->setDefinition('cache_factory.default', $container->getDefinition('cache_factory'));
-    $container->register('cache_factory', 'Drupal\webprofiler\Cache\CacheFactoryWrapper')
-      ->addArgument(new Reference('cache_factory.default'))
-      ->addArgument(new Reference('webprofiler.cache'))
-      ->addMethodCall('setContainer', array(new Reference('service_container')));
-
     // Replaces the existing form_builder service to be able to collect the
     // requested data.
     $container->setDefinition('form_builder.default', $container->getDefinition('form_builder'));
@@ -97,13 +89,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
       ->addArgument(new Reference('theme.manager'))
       ->addArgument(new Reference('csrf_token', ContainerInterface::IGNORE_ON_INVALID_REFERENCE))
       ->addArgument(new Reference('kernel', ContainerInterface::IGNORE_ON_INVALID_REFERENCE));
-
-    // Replace the existing config.factory service with a wrapper to collect the
-    // requested configs.
-    $container->setDefinition('config.factory.default', $container->getDefinition('config.factory'));
-    $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
-      ->addArgument(new Reference('webprofiler.config'))
-      ->addArgument(new Reference('config.factory.default'));
   }
 
   /**

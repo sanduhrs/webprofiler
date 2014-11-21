@@ -142,15 +142,27 @@ services:
 
   webprofiler.debug.event_dispatcher:
     class: Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
-    arguments: ['@webprofiler.debug.event_dispatcher.parent', '@stopwatch']
+    arguments: ['@webprofiler.debug.event_dispatcher.default', '@stopwatch']
 
-  webprofiler.debug.event_dispatcher.parent:
+  webprofiler.debug.event_dispatcher.default:
     class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
     arguments: ['@service_container']
 
   webprofiler.debug.controller_resolver:
     class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
     arguments: ['@controller_resolver', '@stopwatch']
+
+  webprofiler.debug.cache_factory:
+    class: Drupal\webprofiler\Cache\CacheFactoryWrapper
+    public: false
+    decorates: cache_factory
+    arguments: ['@webprofiler.debug.cache_factory.inner', '@webprofiler.cache']
+
+  webprofiler.debug.config.factory:
+    class: Drupal\webprofiler\Config\ConfigFactoryWrapper
+    public: false
+    decorates: config.factory
+    arguments: ['@webprofiler.debug.config.factory.inner', '@webprofiler.config']
 
   webprofiler.middleware:
     class: Drupal\webprofiler\WebprofilerMiddleware
