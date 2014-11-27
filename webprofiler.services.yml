@@ -136,6 +136,11 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 140 }
 
+  webprofiler.frontend:
+    class: Drupal\webprofiler\DataCollector\FrontendDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/frontend.html.twig', id:'frontend', title:'Frontend', priority: 150 }
+
 # debug services
   stopwatch:
     class: Drupal\webprofiler\Stopwatch

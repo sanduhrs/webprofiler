@@ -97,3 +97,17 @@ webprofiler.database.arguments:
         type: 'webprofiler:token'
   requirements:
     _permission: 'access webprofiler'
+
+# save frontend data
+webprofiler.frontend.save:
+  path: '/admin/reports/profiler/frontend/{profile}/save'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\FrontendController::saveAction'
+    _title: 'Save frontend data'
+  options:
+    parameters:
+      profile:
+        type: 'webprofiler:token'
+  methods:  [POST]
+  requirements:
+    _permission: 'access webprofiler'
