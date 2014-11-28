@@ -157,11 +157,7 @@ services:
     tags:
       - { name: http_middleware, priority: 400 }
 
-# utils services
-  webprofiler.twig_extension:
-    class: Drupal\webprofiler\Twig\RoutingExtension
-    arguments: ['@url_generator']
-
+# parameter converter service for profile token
   webprofiler.token_converter:
     class: Drupal\webprofiler\Routing\TokenConverter
     arguments: ['@profiler']
