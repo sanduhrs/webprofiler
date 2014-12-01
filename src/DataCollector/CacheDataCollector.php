@@ -25,9 +25,27 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
 
   /**
    * Registers a cache get on a specific cache bin.
+   *
+   * @param $cache
    */
-  public function registerCache($bin, $cid, $type) {
-    $this->data[$bin][$type][$cid] = isset($this->data[$bin][$type][$cid]) ? $this->data[$bin][$type][$cid] + 1 : 1;
+  public function registerCacheHit($cache) {
+//    $this->data[$bin][$type][$cid] = isset($this->data[$bin][$type][$cid]) ? $this->data[$bin][$type][$cid] + 1 : 1;
+    $this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['cache'] = $cache;
+    $this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['count'] =
+      isset($this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['count']) ? $this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['count'] + 1 : 1;
+  }
+
+  /**
+   * Registers a cache get on a specific cache bin.
+   *
+   * @param $bin
+   * @param $cid
+   */
+  public function registerCacheMiss($bin, $cid) {
+//    $this->data[$bin][$type][$cid] = isset($this->data[$bin][$type][$cid]) ? $this->data[$bin][$type][$cid] + 1 : 1;
+    $this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['cache'] = NULL;
+    $this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['count'] =
+      isset($this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['count']) ? $this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['count'] + 1 : 1;
   }
 
   /**
@@ -39,16 +57,19 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   /**
    * Callback to return the total amount of requested cache CIDS.
    *
+   * @param string $type
+   *
    * @return int
    */
   public function countCacheCids($type) {
-    $total_count = 0;
-    foreach ($this->data as $bin) {
-      if (array_key_exists($type, $bin)) {
-        $total_count += count($bin[$type]);
-      }
-    }
-    return $total_count;
+//    $total_count = 0;
+//    foreach ($this->data as $bin) {
+//      if (array_key_exists($type, $bin)) {
+//        $total_count += count($bin[$type]);
+//      }
+//    }
+//    return $total_count;
+    return count($this->data[$type]);
   }
 
   /**
@@ -71,6 +92,8 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
 
   /**
    * Callback to return all registered cache CIDs keyed by bin.
+   *
+   * @param $type
    *
    * @return array
    */

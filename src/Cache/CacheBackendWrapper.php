@@ -60,10 +60,13 @@ class CacheBackendWrapper implements CacheBackendInterface {
     $cache = $this->cacheBackend->get($cid, $allow_invalid);
 
     if ($cache) {
-      $this->cacheDataCollector->registerCache($this->bin, $cid, CacheDataCollector::WEBPROFILER_CACHE_HIT);
+      $cacheCopy = clone($cache);
+      unset($cacheCopy->data);
+
+      $this->cacheDataCollector->registerCacheHit($cacheCopy);
     }
     else {
-      $this->cacheDataCollector->registerCache($this->bin, $cid, CacheDataCollector::WEBPROFILER_CACHE_MISS);
+      $this->cacheDataCollector->registerCacheMiss($this->bin, $cid);
     }
 
     return $cache;
@@ -73,10 +76,21 @@ class CacheBackendWrapper implements CacheBackendInterface {
    * {@inheritdoc}
    */
   public function getMultiple(&$cids, $allow_invalid = FALSE) {
-    foreach ($cids as $cid) {
-      $this->cacheDataCollector->registerCache($this->bin, $cid, CacheDataCollector::WEBPROFILER_CACHE_HIT);
+    $cidsCopy = $cids;
+    $cache = $this->cacheBackend->getMultiple($cids, $allow_invalid);
+
+    foreach ($cidsCopy as $cid) {
+      if (in_array($cid, $cids)) {
+        $this->cacheDataCollector->registerCacheMiss($this->bin, $cid);
+      }
+      else {
+        $cacheCopy = clone($cache[$cid]);
+        unset($cacheCopy->data);
+        $this->cacheDataCollector->registerCacheHit($cacheCopy);
+      }
     }
-    return $this->cacheBackend->getMultiple($cids, $allow_invalid);
+
+    return $cache;
   }
 
   /**
