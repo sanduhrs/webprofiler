@@ -24,15 +24,37 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   const WEBPROFILER_CACHE_MISS = 'bin_cids_miss';
 
   /**
+   * {@inheritdoc}
+   */
+  public function collect(Request $request, Response $response, \Exception $exception = NULL) {
+  }
+
+  /**
+   *
+   */
+  public function __construct() {
+    $this->data['total'][CacheDataCollector::WEBPROFILER_CACHE_HIT] = 0;
+    $this->data['total'][CacheDataCollector::WEBPROFILER_CACHE_MISS] = 0;
+    $this->data['cache'] = array();
+  }
+
+  /**
    * Registers a cache get on a specific cache bin.
    *
    * @param $cache
    */
-  public function registerCacheHit($cache) {
-//    $this->data[$bin][$type][$cid] = isset($this->data[$bin][$type][$cid]) ? $this->data[$bin][$type][$cid] + 1 : 1;
-    $this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['cache'] = $cache;
-    $this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['count'] =
-      isset($this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['count']) ? $this->data[$cache->bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cache->cid]['count'] + 1 : 1;
+  public function registerCacheHit($bin, $cache) {
+    $current = isset($this->data['cache'][$bin][$cache->cid]) ? $this->data['cache'][$bin][$cache->cid] : NULL;
+
+    if (!$current) {
+      $current = $cache;
+      $current->{CacheDataCollector::WEBPROFILER_CACHE_HIT} = 0;
+      $current->{CacheDataCollector::WEBPROFILER_CACHE_MISS} = 0;
+      $this->data['cache'][$bin][$cache->cid] = $current;
+    }
+
+    $current->{CacheDataCollector::WEBPROFILER_CACHE_HIT}++;
+    $this->data['total'][CacheDataCollector::WEBPROFILER_CACHE_HIT]++;
   }
 
   /**
@@ -42,16 +64,18 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    * @param $cid
    */
   public function registerCacheMiss($bin, $cid) {
-//    $this->data[$bin][$type][$cid] = isset($this->data[$bin][$type][$cid]) ? $this->data[$bin][$type][$cid] + 1 : 1;
-    $this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['cache'] = NULL;
-    $this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['count'] =
-      isset($this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['count']) ? $this->data[$bin][CacheDataCollector::WEBPROFILER_CACHE_HIT][$cid]['count'] + 1 : 1;
-  }
+    $current = isset($this->data['cache'][$bin][$cid]) ?
+      $this->data['cache'][$bin][$cid] : NULL;
 
-  /**
-   * {@inheritdoc}
-   */
-  public function collect(Request $request, Response $response, \Exception $exception = NULL) {
+    if (!$current) {
+      $current = new \StdClass();
+      $current->{CacheDataCollector::WEBPROFILER_CACHE_HIT} = 0;
+      $current->{CacheDataCollector::WEBPROFILER_CACHE_MISS} = 0;
+      $this->data['cache'][$bin][$cid] = $current;
+    }
+
+    $current->{CacheDataCollector::WEBPROFILER_CACHE_MISS}++;
+    $this->data['total'][CacheDataCollector::WEBPROFILER_CACHE_MISS]++;
   }
 
   /**
@@ -62,14 +86,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    * @return int
    */
   public function countCacheCids($type) {
-//    $total_count = 0;
-//    foreach ($this->data as $bin) {
-//      if (array_key_exists($type, $bin)) {
-//        $total_count += count($bin[$type]);
-//      }
-//    }
-//    return $total_count;
-    return count($this->data[$type]);
+   return $this->data['total'][$type];
   }
 
   /**
@@ -98,14 +115,15 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    * @return array
    */
   public function cacheCids($type) {
-    $cache = array();
-    foreach ($this->data as $key => $bin) {
-      if (array_key_exists($type, $bin)) {
-        $cache[$key] = $bin[$type];
+    $hits = array();
+    foreach ($this->data['cache'] as $bin => $caches) {
+      $hits[$bin] = 0;
+      foreach($caches as $cid => $cache) {
+        $hits[$bin] += $cache->{$type};
       }
     }
 
-    return $cache;
+    return $hits;
   }
 
   /**
@@ -155,37 +173,28 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    */
   public function getPanel() {
     $build = array();
-
-    foreach ($this->data as $key => $bin) {
+   // var_dump($this->data);
+    foreach ($this->data['cache'] as $bin => $caches) {
       $rows = array();
-      $totalNum = 0;
 
-      if (array_key_exists(CacheDataCollector::WEBPROFILER_CACHE_HIT, $bin)) {
-        foreach ($bin[CacheDataCollector::WEBPROFILER_CACHE_HIT] as $cid => $num) {
-          $row = array();
+      $build[$bin . '_title'] = array(
+        '#type' => 'inline_template',
+        '#template' => '<h3>{{ key }} ({{ totalNum }})</h3>',
+        '#context' => array(
+          'key' => $bin,
+          'totalNum' => count($caches),
+        ),
+      );
 
-          $row[] = $cid;
-          $row[] = $num;
-          $row[] = '-';
+      foreach($caches as $cid => $cache) {
+        $row = array();
 
-          $rows[] = $row;
+        $row[] = $cid;
+        $row[] = $cache->{CacheDataCollector::WEBPROFILER_CACHE_HIT};
+        $row[] = $cache->{CacheDataCollector::WEBPROFILER_CACHE_MISS};
+        $row[] = isset($cache->tags) ? implode(', ', $cache->tags) : '';
 
-          $totalNum += $num;
-        }
-      }
-
-      if (array_key_exists(CacheDataCollector::WEBPROFILER_CACHE_MISS, $bin)) {
-        foreach ($bin[CacheDataCollector::WEBPROFILER_CACHE_MISS] as $cid => $num) {
-          $row = array();
-
-          $row[] = $cid;
-          $row[] = '-';
-          $row[] = $num;
-
-          $rows[] = $row;
-
-          $totalNum += $num;
-        }
+        $rows[] = $row;
       }
 
       $header = array(
@@ -201,18 +210,13 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
           'data' => $this->t('misses'),
           'class' => array('cache-data-miss'),
         ),
-      );
-
-      $build[$key . '_title'] = array(
-        '#type' => 'inline_template',
-        '#template' => '<h3>{{ key }} ({{ totalNum }})</h3>',
-        '#context' => array(
-          'key' => $key,
-          'totalNum' => $totalNum,
+        array(
+          'data' => $this->t('tags'),
+          'class' => array('cache-data-tags'),
         ),
       );
 
-      $build[$key] = array(
+      $build[$bin . '_table'] = array(
         '#type' => 'table',
         '#rows' => $rows,
         '#header' => $header,

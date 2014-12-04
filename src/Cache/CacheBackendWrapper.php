@@ -60,10 +60,12 @@ class CacheBackendWrapper implements CacheBackendInterface {
     $cache = $this->cacheBackend->get($cid, $allow_invalid);
 
     if ($cache) {
-      $cacheCopy = clone($cache);
-      unset($cacheCopy->data);
+      $cacheCopy = new \StdClass();
+      $cacheCopy->cid = $cache->cid;
+      $cacheCopy->expire = $cache->expire;
+      $cacheCopy->tags = $cache->tags;
 
-      $this->cacheDataCollector->registerCacheHit($cacheCopy);
+      $this->cacheDataCollector->registerCacheHit($this->bin, $cacheCopy);
     }
     else {
       $this->cacheDataCollector->registerCacheMiss($this->bin, $cid);
@@ -84,9 +86,12 @@ class CacheBackendWrapper implements CacheBackendInterface {
         $this->cacheDataCollector->registerCacheMiss($this->bin, $cid);
       }
       else {
-        $cacheCopy = clone($cache[$cid]);
-        unset($cacheCopy->data);
-        $this->cacheDataCollector->registerCacheHit($cacheCopy);
+        $cacheCopy = new \StdClass();
+        $cacheCopy->cid = $cache[$cid]->cid;
+        $cacheCopy->expire = $cache[$cid]->expire;
+        $cacheCopy->tags = $cache[$cid]->tags;
+
+        $this->cacheDataCollector->registerCacheHit($this->bin, $cacheCopy);
       }
     }
 
