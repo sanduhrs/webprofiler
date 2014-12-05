@@ -108,7 +108,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   }
 
   /**
-   * Callback to return all registered cache CIDs keyed by bin.
+   * Callback to return the total amount of hit cache CIDs keyed by bin.
    *
    * @param $type
    *
@@ -127,7 +127,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   }
 
   /**
-   * Callback to return hit registered cache CIDs keyed by bin.
+   * Callback to return hit cache CIDs keyed by bin.
    *
    * @return array
    */
@@ -136,7 +136,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
   }
 
   /**
-   * Callback to return miss registered cache CIDs keyed by bin.
+   * Callback to return miss cache CIDs keyed by bin.
    *
    * @return array
    */
@@ -173,7 +173,7 @@ class CacheDataCollector extends DataCollector implements DrupalDataCollectorInt
    */
   public function getPanel() {
     $build = array();
-   // var_dump($this->data);
+
     foreach ($this->data['cache'] as $bin => $caches) {
       $rows = array();
 
