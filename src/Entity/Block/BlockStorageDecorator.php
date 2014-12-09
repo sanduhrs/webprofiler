@@ -159,4 +159,10 @@ class BlockStorageDecorator extends BlockDecorator implements ConfigEntityStorag
     return $this->getOriginalObject()->updateFromStorageRecord($entity, $values);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getAggregateQuery($conjunction = 'AND') {
+    return $this->getOriginalObject()->getAggregateQuery($conjunction);
+  }
 }
