@@ -115,7 +115,7 @@ services:
 
   webprofiler.assets:
     class: Drupal\webprofiler\DataCollector\AssetDataCollector
-    arguments: ['@module_handler']
+    arguments: ['@asset.js.collection_renderer', '@asset.css.collection_renderer']
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset', title:'Assets', priority: 110}
 

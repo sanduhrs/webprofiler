@@ -140,7 +140,7 @@ class WebprofilerController extends ControllerBase {
             '#profile' => $profile,
             '#summary' => $collector->getPanelSummary(),
             '#content' => $collector->getPanel(),
-          )
+          ),
         );
       }
     }
@@ -156,10 +156,9 @@ class WebprofilerController extends ControllerBase {
       '#children' => $childrens,
       '#attributes' => array('class' => array('webprofiler')),
       '#attached' => array(
-        'js' => array(
-          array(
-            'data' => array('webprofiler' => array('token' => $profile->getToken())),
-            'type' => 'setting'
+        'drupalSettings' => array(
+          'webprofiler' => array(
+            'token' => $profile->getToken(),
           ),
         ),
         'library' => array(
@@ -186,7 +185,7 @@ class WebprofilerController extends ControllerBase {
     try {
       $url = $this->router->generate('webprofiler.profiler', array('token' => $profile->getToken()));
     } catch (\Exception $e) {
-      // the profiler is not enabled
+      // The profiler is not enabled.
     }
 
     $templates = $this->templateManager->getTemplates($profile);
@@ -206,6 +205,7 @@ class WebprofilerController extends ControllerBase {
    * Generates the list page.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
+   *
    * @return array
    */
   public function listAction(Request $request) {
@@ -249,14 +249,14 @@ class WebprofilerController extends ControllerBase {
         array(
           'data' => $this->t('No profiles found'),
           'colspan' => 6,
-        )
+        ),
       );
     }
 
     $build = array();
 
-    $storageId = $this->config('webprofiler.config')->get('storage');
-    $storage = $this->profilerDownloadManager->getStorage($storageId);
+    $storage_id = $this->config('webprofiler.config')->get('storage');
+    $storage = $this->profilerDownloadManager->getStorage($storage_id);
 
     $build['resume'] = array(
       '#type' => 'inline_template',
@@ -266,7 +266,8 @@ class WebprofilerController extends ControllerBase {
       ),
     );
 
-    $build['filters'] = $this->formBuilder()->getForm('Drupal\\webprofiler\\Form\\ProfilesFilterForm');
+    $build['filters'] = $this->formBuilder()
+      ->getForm('Drupal\\webprofiler\\Form\\ProfilesFilterForm');
 
     $build['table'] = array(
       '#type' => 'table',
@@ -286,7 +287,7 @@ class WebprofilerController extends ControllerBase {
           'data' => $this->t('Time'),
           'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
         ),
-        $this->t('Actions')
+        $this->t('Actions'),
       ),
       '#sticky' => TRUE,
       '#attached' => array(

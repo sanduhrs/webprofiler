@@ -34,7 +34,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
 
     $container->addCompilerPass(new StoragePass());
     $container->addCompilerPass(new EventPass(), PassConfig::TYPE_AFTER_REMOVING);
-    $container->addCompilerPass(new EntityPass(), PassConfig::TYPE_AFTER_REMOVING);
     $container->addCompilerPass(new ServicePass(), PassConfig::TYPE_AFTER_REMOVING);
 
     // Add ViewsDataCollector only if Views module is enabled.
@@ -47,7 +46,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'template' => '@webprofiler/Collector/views.html.twig',
           'id' => 'views',
           'title' => 'Views',
-          'priority' => 65
+          'priority' => 65,
         ));
     }
 
@@ -59,7 +58,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'template' => '@webprofiler/Collector/block.html.twig',
           'id' => 'block',
           'title' => 'Block',
-          'priority' => 68
+          'priority' => 68,
         ));
     }
 
@@ -72,7 +71,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
         'template' => '@webprofiler/Collector/state.html.twig',
         'id' => 'state',
         'title' => 'State',
-        'priority' => 135
+        'priority' => 135,
       ));
 
     // Replaces the existing cache_factory service to be able to collect the
@@ -104,5 +103,19 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
+
+    // Replace the regular entity.manager service with a traceable one.
+    $definition = $container->findDefinition('entity.manager');
+    $definition->setClass('Drupal\webprofiler\Entity\EntityManagerWrapper');
+
+    // Replace the regular asset.js.collection_renderer service
+    // with a traceable one.
+    $definition = $container->findDefinition('asset.js.collection_renderer');
+    $definition->setClass('Drupal\webprofiler\Asset\JsCollectionRendererWrapper');
+
+    // Replace the regular asset.js.collection_renderer service
+    // with a traceable one.
+    $definition = $container->findDefinition('asset.css.collection_renderer');
+    $definition->setClass('Drupal\webprofiler\Asset\CssCollectionRendererWrapper');
   }
 }
