@@ -53,8 +53,16 @@ class AssetDataCollector extends DataCollector implements DrupalDataCollectorInt
    * {@inheritdoc}
    */
   public function collect(Request $request, Response $response, \Exception $exception = NULL) {
-    $this->data['js'] = NestedArray::mergeDeepArray($this->jsCollectionRenderer->getAssets());
-    $this->data['css'] = NestedArray::mergeDeepArray($this->cssCollectionRenderer->getAssets());
+    $this->data['js'] = array();
+    $this->data['css'] = array();
+
+    if(is_array($this->jsCollectionRenderer->getAssets())) {
+      $this->data['js'] = NestedArray::mergeDeepArray($this->jsCollectionRenderer->getAssets());
+    }
+
+    if(is_array($this->cssCollectionRenderer->getAssets())) {
+      $this->data['css'] = NestedArray::mergeDeepArray($this->cssCollectionRenderer->getAssets());
+    }
   }
 
   /**
