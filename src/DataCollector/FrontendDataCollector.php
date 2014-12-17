@@ -61,7 +61,36 @@ class FrontendDataCollector extends DataCollector implements DrupalDataCollector
   public function getPanel() {
     $build = array();
 
-    var_dump($this->data['performance']);
+    $build['title'] = array(
+      '#type' => 'inline_template',
+      '#template' => '<h3>{{ message }}</h3>',
+      '#context' => array(
+        'message' => $this->t('Timing API data'),
+      )
+    );
+
+    $cssHeader = array(
+      'metric',
+      'value',
+    );
+
+    $rows = array();
+    $navigationStart = $this->data['performance']['navigationStart'];
+    foreach ($this->data['performance'] as $metric => $value) {
+      $row = array();
+
+      $row[] = $metric;
+      $row[] = $value - $navigationStart . ' ms';
+
+      $rows[] = $row;
+    }
+
+    $build['table'] = array(
+      '#type' => 'table',
+      '#rows' => $rows,
+      '#header' => $cssHeader,
+      '#sticky' => TRUE,
+    );
 
     return $build;
   }
