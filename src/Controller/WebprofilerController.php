@@ -228,13 +228,6 @@ class WebprofilerController extends ControllerBase {
         $row[] = $profile['url'];
         $row[] = $this->date->format($profile['time']);
 
-        $operations = array();
-        $dropbutton = array(
-          '#type' => 'operations',
-          '#links' => $operations,
-        );
-        $row[] = $this->renderer->render($dropbutton);
-
         $rows[] = $row;
       }
     }
@@ -281,7 +274,6 @@ class WebprofilerController extends ControllerBase {
           'data' => $this->t('Time'),
           'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
         ),
-        $this->t('Actions'),
       ),
       '#sticky' => TRUE,
       '#attached' => array(
