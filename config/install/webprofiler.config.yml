@@ -1,4 +1,4 @@
-purge_on_cache_clear: false
+purge_on_cache_clear: true
 storage: profiler.database_storage
 exclude: "/contextual/*\r\n/toolbar/*\r\n/edit/*\r\n*.js\r\n*.css"
 active_toolbar_items:
