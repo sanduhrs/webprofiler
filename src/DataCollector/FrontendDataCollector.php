@@ -8,6 +8,7 @@
 namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\webprofiler\DrupalDataCollectorInterface;
+use Drupal\webprofiler\Frontend\PerformanceData;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,16 +75,15 @@ class FrontendDataCollector extends DataCollector implements DrupalDataCollector
       'value',
     );
 
-    $rows = array();
-    $navigationStart = $this->data['performance']['navigationStart'];
-    foreach ($this->data['performance'] as $metric => $value) {
-      $row = array();
+    $performanceData = new PerformanceData($this->data['performance']);
 
-      $row[] = $metric;
-      $row[] = $value - $navigationStart . ' ms';
-
-      $rows[] = $row;
-    }
+    $rows = array(
+      array($this->t('DNS lookup time'), $performanceData->getDNSTiming() . ' ms'),
+      array($this->t('TCP handshake time'), $performanceData->getTCPTiming() . ' ms'),
+      array($this->t('Time to first byte'), $performanceData->getTtfbTiming() . ' ms'),
+      array($this->t('Data download time'), $performanceData->getDataTiming() . ' ms'),
+      array($this->t('DOM building time'), $performanceData->getDomTiming() . ' ms'),
+    );
 
     $build['table'] = array(
       '#type' => 'table',

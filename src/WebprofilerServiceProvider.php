@@ -46,7 +46,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'template' => '@webprofiler/Collector/views.html.twig',
           'id' => 'views',
           'title' => 'Views',
-          'priority' => 65,
+          'priority' => 75,
         ));
     }
 
@@ -58,7 +58,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'template' => '@webprofiler/Collector/block.html.twig',
           'id' => 'block',
           'title' => 'Block',
-          'priority' => 68,
+          'priority' => 78,
         ));
     }
 
