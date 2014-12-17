@@ -228,13 +228,7 @@ class WebprofilerController extends ControllerBase {
         $row[] = $profile['url'];
         $row[] = $this->date->format($profile['time']);
 
-        $operations = array(
-          'export' => array(
-            'title' => $this->t('Export'),
-            'route_name' => 'webprofiler.single_export',
-            'route_parameters' => array('profile' => $profile['token']),
-          ),
-        );
+        $operations = array();
         $dropbutton = array(
           '#type' => 'operations',
           '#links' => $operations,
@@ -298,49 +292,5 @@ class WebprofilerController extends ControllerBase {
     );
 
     return $build;
-  }
-
-  /**
-   * Downloads a single profile.
-   *
-   * @param Profile $profile
-   *
-   * @return \Symfony\Component\HttpFoundation\Response
-   */
-  public function singleExportAction(Profile $profile) {
-    $this->profiler->disable();
-    $token = $profile->getToken();
-
-    if (!$profile = $this->profiler->loadProfile($token)) {
-      throw new NotFoundHttpException($this->t('Token @token does not exist.', array('@token' => $token)));
-    }
-
-    return new Response($this->profiler->export($profile), 200, array(
-      'Content-Type' => 'text/plain',
-      'Content-Disposition' => 'attachment; filename= ' . $token . '.txt',
-    ));
-  }
-
-  /**
-   * Downloads a tarball with all stored profiles.
-   *
-   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-   */
-  public function allExportAction() {
-    $archiver = new ArchiveTar(file_directory_temp() . '/profiles.tar.gz', 'gz');
-    $profiles = $this->profiler->find('', '', 100, '', '', '');
-
-    $files = array();
-    foreach ($profiles as $profile) {
-      $data = $this->profiler->export($this->profiler->loadProfile($profile['token']));
-      $filename = file_directory_temp() . "/{$profile['token']}.txt";
-      file_put_contents($filename, $data);
-      $files[] = $filename;
-    }
-
-    $archiver->createModify($files, '', file_directory_temp());
-
-    $request = new Request(array('file' => 'profiles.tar.gz'));
-    return $this->fileDownloadController->download($request, 'temporary');
   }
 }
