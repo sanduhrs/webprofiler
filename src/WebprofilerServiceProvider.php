@@ -62,6 +62,17 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
         ));
     }
 
+    // Add RulesDataCollector only if Rules module is enabled.
+    if (FALSE !== $container->hasDefinition('plugin.manager.rules_expression')) {
+      $container->register('webprofiler.rules', 'Drupal\webprofiler\DataCollector\RulesDataCollector')
+        ->addTag('data_collector', array(
+          'template' => '@webprofiler/Collector/rules.html.twig',
+          'id' => 'rules',
+          'title' => 'Rules',
+          'priority' => 170,
+        ));
+    }
+
     // Replace the existing state service with a wrapper to collect the
     // requested data.
     $container->setDefinition('state.default', $container->getDefinition('state'));

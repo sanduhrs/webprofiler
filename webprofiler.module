@@ -54,15 +54,14 @@ function webprofiler_theme() {
 }
 
 /**
- * Implements hook_file_download().
+ * Implements hook_PLUGIN_alter().
  */
-function webprofiler_file_download($uri) {
-  $scheme = file_uri_scheme($uri);
-  $target = file_uri_target($uri);
-  if ($scheme == 'temporary' && $target == 'profiles.tar.gz') {
-    return array(
-      'Content-disposition' => 'attachment; filename="profiles.tar.gz"',
-    );
+function webprofiler_rules_expression_alter(&$plugin) {
+  $config = \Drupal::configFactory()->get('webprofiler.config');
+  $activeToolbarItems = $config->get('active_toolbar_items');
+
+  if('rules' === $activeToolbarItems['rules']) {
+    $plugin['rules_rule']['class'] = 'Drupal\webprofiler\Plugin\RulesExpression\TraceableRule';
   }
 }
 
