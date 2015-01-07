@@ -12,8 +12,30 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ExportCommand extends Command {
+class ExportCommand extends Command implements ContainerAwareInterface {
+
+  private $container;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setContainer(ContainerInterface $container = NULL) {
+    $this->container = $container;
+  }
+
+  /**
+   * @return ContainerInterface
+   */
+  protected function getContainer() {
+    if (NULL === $this->container) {
+      $this->container = $this->getApplication()->getKernel()->getContainer();
+    }
+
+    return $this->container;
+  }
 
   /**
    * {@inheritdoc}
@@ -22,7 +44,8 @@ class ExportCommand extends Command {
     $this
       ->setName('webprofiler:export')
       ->setDescription('Exports Weprofiler profile/s.')
-      ->addArgument('id', InputArgument::OPTIONAL, 'Profile id');
+      ->addArgument('id', InputArgument::OPTIONAL, 'Profile id')
+      ->addOption('destination_directory', 'dd', InputOption::VALUE_REQUIRED, 'Destination directory to store exported file/s.');
   }
 
   /**
@@ -30,13 +53,21 @@ class ExportCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $id = $input->getArgument('id');
+    $profiler = $this->getContainer()->get('profiler');
+
     if ($id) {
       $text = 'Exporting ' . $id;
+      $profile = $profiler->loadProfile($id);
+      if($profile) {
+        $data = $profiler->export($profile);
+      } else {
+        $output->writeln('No profile with id ' . $id);
+      }
     }
     else {
       $text = 'Exporting all';
     }
 
-    $output->writeln($text);
+    $output->writeln($data);
   }
 }
