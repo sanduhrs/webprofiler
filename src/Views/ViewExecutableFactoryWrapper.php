@@ -3,10 +3,10 @@
 namespace Drupal\webprofiler\Views;
 
 use Drupal\Core\Session\AccountInterface;
+use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ViewExecutableFactory;
 use Drupal\views\ViewsData;
-use Drupal\views\ViewStorageInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -29,7 +29,7 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
   /**
    * {@inheritdoc}
    */
-  public function get(ViewStorageInterface $view) {
+  public function get(ViewEntityInterface $view) {
     $view_executable = new TraceableViewExecutable($view, $this->user, $this->viewsData);
     $view_executable->setRequest($this->requestStack->getCurrentRequest());
     $this->views[] = $view_executable;
