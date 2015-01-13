@@ -53,7 +53,7 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
             'region' => $block->getRegion(),
             'status' => $block->get('status'),
             'theme' => $block->getTheme(),
-            'plugin' => $block->getPlugin(),
+            'plugin' => $block->get('plugin'),
             'settings' => $block->get('settings'),
           );
         }
@@ -70,7 +70,7 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
             'region' => $block->getRegion(),
             'status' => $block->get('status'),
             'theme' => $block->getTheme(),
-            'plugin' => $block->getPlugin(),
+            'plugin' => $block->get('plugin'),
             'settings' => $block->get('settings'),
           );
         }
