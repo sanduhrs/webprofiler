@@ -165,4 +165,18 @@ class BlockStorageDecorator extends BlockDecorator implements ConfigEntityStorag
   public function getAggregateQuery($conjunction = 'AND') {
     return $this->getOriginalObject()->getAggregateQuery($conjunction);
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadOverrideFree($id) {
+    return $this->getOriginalObject()->loadOverrideFree($id);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadMultipleOverrideFree(array $ids = NULL) {
+    return $this->getOriginalObject()->loadMultipleOverrideFree($ids);
+  }
 }
