@@ -27,9 +27,9 @@ class ExportCommand extends ContainerAwareCommand {
   protected function configure() {
     $this
       ->setName('webprofiler:export')
-      ->setDescription('Exports Webprofiler profile/s to file.')
-      ->addArgument('id', InputArgument::OPTIONAL, 'Profile id')
-      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, 'Destination directory to store exported file/s.', '/tmp');
+      ->setDescription($this->trans('command.webprofiler.export.description'))
+      ->addArgument('id', InputArgument::OPTIONAL, $this->trans('command.webprofiler.export.argument'))
+      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, $this->trans('command.webprofiler.export.option'), '/tmp');
   }
 
   /**
@@ -50,7 +50,10 @@ class ExportCommand extends ContainerAwareCommand {
         $filename = $this->exportAll($profiler, $directory, $output);
       }
 
-      $output->writeln('<info>Succesfully exported to ' . $filename . '</info>');
+      $output->writeln(sprintf(
+        $this->trans('command.webprofiler.export.messages.success'),
+        $filename));
+
     } catch (\Exception $e) {
       $output->writeln('<error>' . $e->getMessage() . '</error>');
     }
@@ -74,11 +77,15 @@ class ExportCommand extends ContainerAwareCommand {
 
       $filename = $directory . DIRECTORY_SEPARATOR . $id . '.txt';
       if (file_put_contents($filename, $data) === FALSE) {
-        throw new \Exception('Error writing file ' . $filename);
+        throw new \Exception(sprintf(
+          $this->trans('command.webprofiler.export.messages.error_writing'),
+          $filename));
       }
     }
     else {
-      throw new \Exception('No profile with id ' . $id);
+      throw new \Exception(sprintf(
+        $this->trans('command.webprofiler.export.messages.error_no_profile'),
+        $id));
     }
 
     return $filename;
@@ -94,7 +101,7 @@ class ExportCommand extends ContainerAwareCommand {
    * @return string
    */
   private function exportAll(Profiler $profiler, $directory, $output) {
-    $filename = $directory . DIRECTORY_SEPARATOR . 'profiles.tar.gz';
+    $filename = $directory . DIRECTORY_SEPARATOR . 'profiles_' . time() . '.tar.gz';
     $archiver = new ArchiveTar($filename, 'gz');
     $profiles = $profiler->find(NULL, NULL, 1000, NULL, '', '');
     $progress = new ProgressBar($output, count($profiles));
@@ -107,15 +114,15 @@ class ExportCommand extends ContainerAwareCommand {
       $profileFilename = $directory . "/{$profile['token']}.txt";
       file_put_contents($profileFilename, $data);
       $files[] = $profileFilename;
-      $progress->setMessage('Exporting profiles...');
+      $progress->setMessage($this->trans('command.webprofiler.export.messages.progress_exporting'));
       $progress->advance();
     }
 
-    $progress->setMessage('Create archive...');
+    $progress->setMessage($this->trans('command.webprofiler.export.messages.progesss_archive'));
     $progress->advance();
     $archiver->createModify($files, '', $directory);
 
-    $progress->setMessage('Delete temp files...');
+    $progress->setMessage($this->trans('command.webprofiler.export.messages.progress_delete_tmp'));
     $progress->advance();
     foreach ($files as $file) {
       unlink($file);

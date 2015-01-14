@@ -24,11 +24,11 @@ class ListCommand extends ContainerAwareCommand {
   protected function configure() {
     $this
       ->setName('webprofiler:list')
-      ->setDescription('Lists Webprofiler profiles.')
-      ->addOption('ip', NULL, InputOption::VALUE_REQUIRED, 'Filter by IP.', NULL)
-      ->addOption('url', NULL, InputOption::VALUE_REQUIRED, 'Filter by URL.', NULL)
-      ->addOption('method', NULL, InputOption::VALUE_REQUIRED, 'Filter by HTTP method.', NULL)
-      ->addOption('limit', NULL, InputOption::VALUE_REQUIRED, 'Limit printed profiles. Defaults to 10.', 10);
+      ->setDescription($this->trans('command.webprofiler.list.description'))
+      ->addOption('ip', NULL, InputOption::VALUE_REQUIRED, $this->trans('command.webprofiler.list.option_ip'), NULL)
+      ->addOption('url', NULL, InputOption::VALUE_REQUIRED, $this->trans('command.webprofiler.list.option_url'), NULL)
+      ->addOption('method', NULL, InputOption::VALUE_REQUIRED, $this->trans('command.webprofiler.list.option_method'), NULL)
+      ->addOption('limit', NULL, InputOption::VALUE_REQUIRED, $this->trans('command.webprofiler.list.option_limit'), 10);
   }
 
   /**
@@ -44,8 +44,6 @@ class ListCommand extends ContainerAwareCommand {
     $profiler = $this->getContainer()->get('profiler');
     $profiles = $profiler->find($ip, $url, $limit, $method, '', '');
 
-    $dateFormatter = $this->getContainer()->get('date.formatter');
-
     $rows = [];
     foreach ($profiles as $profile) {
       $row = [];
@@ -54,14 +52,20 @@ class ListCommand extends ContainerAwareCommand {
       $row[] = $profile['ip'];
       $row[] = $profile['method'];
       $row[] = $profile['url'];
-      $row[] = $dateFormatter->format($profile['time']);
+      $row[] = date($this->trans('command.webprofiler.list.rows.time'), $profile['time']);
 
       $rows[] = $row;
     }
 
     $table = new Table($output);
     $table
-      ->setHeaders(array('Token', 'Ip', 'Method', 'URL', 'Time'))
+      ->setHeaders(array(
+        $this->trans('command.webprofiler.list.header.token'),
+        $this->trans('command.webprofiler.list.header.ip'),
+        $this->trans('command.webprofiler.list.header.method'),
+        $this->trans('command.webprofiler.list.header.url'),
+        $this->trans('command.webprofiler.list.header.time'),
+      ))
       ->setRows($rows);
     $table->render();
   }
