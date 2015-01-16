@@ -121,4 +121,10 @@ class ConfigFactoryWrapper implements ConfigFactoryInterface {
     return $this->configFactory->addOverride($config_factory_override);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getEditable($name) {
+    return $this->configFactory->getEditable($name);
+  }
 }
