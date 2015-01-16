@@ -2,21 +2,26 @@ commands:
   webprofiler:
     export:
       description: Exports Webprofiler profile/s to file.
-      argument: Profile id
-      option: Destination directory to store exported file/s.
+      arguments:
+        id: 'Profile id.'
+      options:
+        directory: 'Destination directory to store exported file/s.'
       messages:
         success: <info> Succesfully exported to %s </info>
+        exported_count: '<info>Exported %s profiles</info>'
         error_writing: Error writing file %s
         error_no_profile: No profile with id %s
-        progress_exporting: Exporting profiles...
-        progesss_archive: Create archive...
-        progress_delete_tmp: Delete temp files...
+        progress:
+          exporting: 'Exporting profiles...'
+          archive: 'Create archive...'
+          delete_tmp: 'Delete temp files...'
     list:
       description: Lists Webprofiler profiles.
-      option_ip: Filter by IP.
-      option_url: Filter by URL.
-      option_method: Filter by HTTP method.
-      option_limit: Limit printed profiles. Defaults to 10.
+      options:
+        ip: 'Filter by IP.'
+        url: 'Filter by URL.'
+        method: 'Filter by HTTP method.'
+        limit: 'Limit printed profiles.'
       rows:
         time: D, m/d/Y - H:i
       header:
@@ -25,3 +30,11 @@ commands:
        method: Method
        url: URL
        time: Time
+    benchmark:
+      description: 'Benchmark an url.'
+#     arguments:
+#       name: 'Who do you want to greet?'
+      options:
+        iterations: 'Number of iterations.'
+      progress:
+        get: 'Http request...'

@@ -28,8 +28,8 @@ class ExportCommand extends ContainerAwareCommand {
     $this
       ->setName('webprofiler:export')
       ->setDescription($this->trans('commands.webprofiler.export.description'))
-      ->addArgument('id', InputArgument::OPTIONAL, $this->trans('commands.webprofiler.export.argument'))
-      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.export.option'), '/tmp');
+      ->addArgument('id', InputArgument::OPTIONAL, $this->trans('commands.webprofiler.export.arguments.id'))
+      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.export.options.directory'), '/tmp');
   }
 
   /**
@@ -104,7 +104,7 @@ class ExportCommand extends ContainerAwareCommand {
     $filename = $directory . DIRECTORY_SEPARATOR . 'profiles_' . time() . '.tar.gz';
     $archiver = new ArchiveTar($filename, 'gz');
     $profiles = $profiler->find(NULL, NULL, 1000, NULL, '', '');
-    $progress = new ProgressBar($output, count($profiles));
+    $progress = new ProgressBar($output, count($profiles) + 2);
     $progress->setFormat(' %current%/%max% [%bar%] %percent:3s%% %message%');
 
     $files = array();
@@ -114,15 +114,15 @@ class ExportCommand extends ContainerAwareCommand {
       $profileFilename = $directory . "/{$profile['token']}.txt";
       file_put_contents($profileFilename, $data);
       $files[] = $profileFilename;
-      $progress->setMessage($this->trans('commands.webprofiler.export.messages.progress_exporting'));
+      $progress->setMessage($this->trans('commands.webprofiler.export.progress.exporting'));
       $progress->advance();
     }
 
-    $progress->setMessage($this->trans('commands.webprofiler.export.messages.progesss_archive'));
+    $progress->setMessage($this->trans('commands.webprofiler.export.progress.archive'));
     $progress->advance();
     $archiver->createModify($files, '', $directory);
 
-    $progress->setMessage($this->trans('commands.webprofiler.export.messages.progress_delete_tmp'));
+    $progress->setMessage($this->trans('commands.webprofiler.export.progress.delete_tmp'));
     $progress->advance();
     foreach ($files as $file) {
       unlink($file);
@@ -130,6 +130,9 @@ class ExportCommand extends ContainerAwareCommand {
 
     $progress->finish();
     $output->writeln('');
+    $output->writeln(sprintf(
+      $this->trans('commands.webprofiler.export.messages.exported_count'),
+      count($profiles)));
 
     return $filename;
   }

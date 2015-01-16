@@ -25,10 +25,10 @@ class ListCommand extends ContainerAwareCommand {
     $this
       ->setName('webprofiler:list')
       ->setDescription($this->trans('commands.webprofiler.list.description'))
-      ->addOption('ip', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.option_ip'), NULL)
-      ->addOption('url', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.option_url'), NULL)
-      ->addOption('method', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.option_method'), NULL)
-      ->addOption('limit', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.option_limit'), 10);
+      ->addOption('ip', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.options.ip'), NULL)
+      ->addOption('url', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.options.url'), NULL)
+      ->addOption('method', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.options.method'), NULL)
+      ->addOption('limit', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.list.options.limit'), 10);
   }
 
   /**
