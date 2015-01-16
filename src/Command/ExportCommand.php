@@ -27,9 +27,9 @@ class ExportCommand extends ContainerAwareCommand {
   protected function configure() {
     $this
       ->setName('webprofiler:export')
-      ->setDescription($this->trans('command.webprofiler.export.description'))
-      ->addArgument('id', InputArgument::OPTIONAL, $this->trans('command.webprofiler.export.argument'))
-      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, $this->trans('command.webprofiler.export.option'), '/tmp');
+      ->setDescription($this->trans('commands.webprofiler.export.description'))
+      ->addArgument('id', InputArgument::OPTIONAL, $this->trans('commands.webprofiler.export.argument'))
+      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.export.option'), '/tmp');
   }
 
   /**
@@ -51,7 +51,7 @@ class ExportCommand extends ContainerAwareCommand {
       }
 
       $output->writeln(sprintf(
-        $this->trans('command.webprofiler.export.messages.success'),
+        $this->trans('commands.webprofiler.export.messages.success'),
         $filename));
 
     } catch (\Exception $e) {
@@ -78,13 +78,13 @@ class ExportCommand extends ContainerAwareCommand {
       $filename = $directory . DIRECTORY_SEPARATOR . $id . '.txt';
       if (file_put_contents($filename, $data) === FALSE) {
         throw new \Exception(sprintf(
-          $this->trans('command.webprofiler.export.messages.error_writing'),
+          $this->trans('commands.webprofiler.export.messages.error_writing'),
           $filename));
       }
     }
     else {
       throw new \Exception(sprintf(
-        $this->trans('command.webprofiler.export.messages.error_no_profile'),
+        $this->trans('commands.webprofiler.export.messages.error_no_profile'),
         $id));
     }
 
@@ -114,15 +114,15 @@ class ExportCommand extends ContainerAwareCommand {
       $profileFilename = $directory . "/{$profile['token']}.txt";
       file_put_contents($profileFilename, $data);
       $files[] = $profileFilename;
-      $progress->setMessage($this->trans('command.webprofiler.export.messages.progress_exporting'));
+      $progress->setMessage($this->trans('commands.webprofiler.export.messages.progress_exporting'));
       $progress->advance();
     }
 
-    $progress->setMessage($this->trans('command.webprofiler.export.messages.progesss_archive'));
+    $progress->setMessage($this->trans('commands.webprofiler.export.messages.progesss_archive'));
     $progress->advance();
     $archiver->createModify($files, '', $directory);
 
-    $progress->setMessage($this->trans('command.webprofiler.export.messages.progress_delete_tmp'));
+    $progress->setMessage($this->trans('commands.webprofiler.export.messages.progress_delete_tmp'));
     $progress->advance();
     foreach ($files as $file) {
       unlink($file);
