@@ -38,4 +38,25 @@ class BenchmarkData {
     $this->time = $time;
   }
 
+  /**
+   * @return mixed
+   */
+  public function getToken() {
+    return $this->token;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getMemory() {
+    return $this->memory;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getTime() {
+    return $this->time;
+  }
+
 }
