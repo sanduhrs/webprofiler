@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Legacy Webprofiler module file.
+ */
+
+/**
  * Implements hook_theme().
  */
 function webprofiler_theme() {
@@ -11,7 +16,11 @@ function webprofiler_theme() {
     ),
     'webprofiler_toolbar' => array(
       'template' => 'Profiler/webprofiler_toolbar',
-      'variables' => array('token' => NULL, 'templates' => array(), 'profile' => NULL, 'profiler_url' => NULL),
+      'variables' => array(
+        'token' => NULL,
+        'templates' => array(),
+        'profile' => NULL,
+        'profiler_url' => NULL),
     ),
     'webprofiler_dashboard' => array(
       'template' => 'Profiler/webprofiler_dashboard',

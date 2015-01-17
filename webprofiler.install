@@ -41,7 +41,7 @@ function webprofiler_schema() {
       'url' => array(
         'description' => 'Requested URL.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 2048,
         'not null' => TRUE,
       ),
       'time' => array(

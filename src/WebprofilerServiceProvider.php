@@ -34,7 +34,6 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
 
     $container->addCompilerPass(new StoragePass());
     $container->addCompilerPass(new EventPass(), PassConfig::TYPE_AFTER_REMOVING);
-    $container->addCompilerPass(new EntityPass(), PassConfig::TYPE_AFTER_REMOVING);
     $container->addCompilerPass(new ServicePass(), PassConfig::TYPE_AFTER_REMOVING);
 
     // Add ViewsDataCollector only if Views module is enabled.
@@ -47,19 +46,19 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
           'template' => '@webprofiler/Collector/views.html.twig',
           'id' => 'views',
           'title' => 'Views',
-          'priority' => 65
+          'priority' => 75,
         ));
     }
 
     // Add BlockDataCollector only if Block module is enabled.
     if (FALSE !== $container->hasDefinition('plugin.manager.block')) {
       $container->register('webprofiler.block', 'Drupal\webprofiler\DataCollector\BlockDataCollector')
-        ->addArgument(new Reference(('webprofiler.debug.entity.manager')))
+        ->addArgument(new Reference(('entity.manager')))
         ->addTag('data_collector', array(
           'template' => '@webprofiler/Collector/block.html.twig',
           'id' => 'block',
           'title' => 'Block',
-          'priority' => 68
+          'priority' => 78,
         ));
     }
 
@@ -72,7 +71,7 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
         'template' => '@webprofiler/Collector/state.html.twig',
         'id' => 'state',
         'title' => 'State',
-        'priority' => 135
+        'priority' => 135,
       ));
 
     // Replaces the existing cache_factory service to be able to collect the
@@ -104,13 +103,19 @@ class WebprofilerServiceProvider extends ServiceProviderBase {
     $container->register('config.factory', 'Drupal\webprofiler\Config\ConfigFactoryWrapper')
       ->addArgument(new Reference('webprofiler.config'))
       ->addArgument(new Reference('config.factory.default'));
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function alter(ContainerBuilder $container) {
-    $container->getDefinition('twig')
-      ->addMethodCall('addExtension', array(new Reference('webprofiler.twig_extension')));
+    // Replace the regular entity.manager service with a traceable one.
+    $definition = $container->findDefinition('entity.manager');
+    $definition->setClass('Drupal\webprofiler\Entity\EntityManagerWrapper');
+
+    // Replace the regular asset.js.collection_renderer service
+    // with a traceable one.
+    $definition = $container->findDefinition('asset.js.collection_renderer');
+    $definition->setClass('Drupal\webprofiler\Asset\JsCollectionRendererWrapper');
+
+    // Replace the regular asset.js.collection_renderer service
+    // with a traceable one.
+    $definition = $container->findDefinition('asset.css.collection_renderer');
+    $definition->setClass('Drupal\webprofiler\Asset\CssCollectionRendererWrapper');
   }
 }

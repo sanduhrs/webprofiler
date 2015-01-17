@@ -1,0 +1,27 @@
+commands:
+  webprofiler:
+    export:
+      description: Exports Webprofiler profile/s to file.
+      argument: Profile id
+      option: Destination directory to store exported file/s.
+      messages:
+        success: <info> Succesfully exported to %s </info>
+        error_writing: Error writing file %s
+        error_no_profile: No profile with id %s
+        progress_exporting: Exporting profiles...
+        progesss_archive: Create archive...
+        progress_delete_tmp: Delete temp files...
+    list:
+      description: Lists Webprofiler profiles.
+      option_ip: Filter by IP.
+      option_url: Filter by URL.
+      option_method: Filter by HTTP method.
+      option_limit: Limit printed profiles. Defaults to 10.
+      rows:
+        time: D, m/d/Y - H:i
+      header:
+       token: Token
+       ip: IP
+       method: Method
+       url: URL
+       time: Time

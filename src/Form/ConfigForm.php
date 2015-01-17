@@ -139,4 +139,11 @@ class ConfigForm extends ConfigFormBase {
 
     return $options;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEditableConfigNames() {
+    return [];
+  }
 }

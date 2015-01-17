@@ -32,6 +32,8 @@ class ViewsDataCollector extends DataCollector implements DrupalDataCollectorInt
    */
   public function __construct(ViewExecutableFactoryWrapper $view_executable_factory) {
     $this->view_executable_factory = $view_executable_factory;
+
+    $this->data['views'] = array();
   }
 
   /**

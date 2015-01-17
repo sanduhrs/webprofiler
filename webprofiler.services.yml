@@ -1,5 +1,6 @@
 services:
 
+# profiler services
   logger.channel.webprofiler:
     class: Drupal\Core\Logger\LoggerChannel
     factory_method: get
@@ -31,14 +32,17 @@ services:
     class: Drupal\webprofiler\Profiler\Profiler
     arguments: ['@profiler.storage', '@logger.channel.webprofiler', '@config.factory']
 
+# template manager
   templateManager:
     class: Drupal\webprofiler\Profiler\TemplateManager
     arguments: ['@profiler', '@twig', '@twig.loader', '%data_collector.templates%']
 
+# request matcher
   webprofiler.matcher:
     class: Drupal\webprofiler\RequestMatcher\WebprofilerRequestMatcher
     arguments: ['@config.factory', '@path.matcher']
 
+# event subscribers
   webprofiler.profilerListener:
     class: Symfony\Component\HttpKernel\EventListener\ProfilerListener
     arguments: ['@profiler', '@webprofiler.matcher']
@@ -51,6 +55,7 @@ services:
       tags:
         - { name: event_subscriber }
 
+# datacollector services
   webprofiler.drupal:
     class: Drupal\webprofiler\DataCollector\DrupalDataCollector
     tags:
@@ -73,64 +78,76 @@ services:
     tags:
       - { name: data_collector, template:'@webprofiler/Collector/time.html.twig', id:'time', title:'Timeline', priority: 40 }
 
+  webprofiler.frontend:
+    class: Drupal\webprofiler\DataCollector\FrontendDataCollector
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/frontend.html.twig', id:'frontend', title:'Frontend', priority: 50 }
+
   webprofiler.database:
     class: Drupal\webprofiler\DataCollector\DatabaseDataCollector
     arguments: ['@database']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/database.html.twig', id:'database', title:'Database', priority: 50 }
+      - { name: data_collector, template:'@webprofiler/Collector/database.html.twig', id:'database', title:'Database', priority: 60 }
 
   webprofiler.user:
     class: Drupal\webprofiler\DataCollector\UserDataCollector
     arguments: ['@current_user', '@authentication', '@entity.manager', '@config.factory']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/user.html.twig', id:'user', title:'User', priority: 60 }
+      - { name: data_collector, template:'@webprofiler/Collector/user.html.twig', id:'user', title:'User', priority: 70 }
 
   webprofiler.form:
     class: Drupal\webprofiler\DataCollector\FormDataCollector
     arguments: ['@form_builder']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/form.html.twig', id:'form', title:'Forms', priority: 70 }
+      - { name: data_collector, template:'@webprofiler/Collector/form.html.twig', id:'form', title:'Forms', priority: 80 }
 
   webprofiler.drupal_extensions:
     class: Drupal\webprofiler\DataCollector\ExtensionDataCollector
     arguments: ['@module_handler', '@theme_handler']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/extensions.html.twig', id:'drupal_extension', title:'Extensions (modules/themes)', priority: 80 }
+      - { name: data_collector, template:'@webprofiler/Collector/extensions.html.twig', id:'drupal_extension', title:'Extensions (modules/themes)', priority: 90 }
 
   webprofiler.routing:
     class: Drupal\webprofiler\DataCollector\RoutingDataCollector
     arguments: ['@router.route_provider']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/routing.html.twig', id:'routing', title:'Routing', priority: 90 }
+      - { name: data_collector, template:'@webprofiler/Collector/routing.html.twig', id:'routing', title:'Routing', priority: 100 }
 
   webprofiler.cache:
     class: Drupal\webprofiler\DataCollector\CacheDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache', title:'Cache', priority: 100 }
+      - { name: data_collector, template:'@webprofiler/Collector/cache.html.twig', id:'cache', title:'Cache', priority: 110 }
 
   webprofiler.assets:
     class: Drupal\webprofiler\DataCollector\AssetDataCollector
-    arguments: ['@module_handler']
+    arguments: ['@asset.js.collection_renderer', '@asset.css.collection_renderer']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset', title:'Assets', priority: 110}
+      - { name: data_collector, template:'@webprofiler/Collector/asset.html.twig', id:'asset', title:'Assets', priority: 120}
 
   webprofiler.config:
     class: Drupal\webprofiler\DataCollector\ConfigDataCollector
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config', title:'Config', priority: 120 }
+      - { name: data_collector, template:'@webprofiler/Collector/config.html.twig', id:'config', title:'Config', priority: 130 }
 
   webprofiler.event:
     class: Drupal\webprofiler\DataCollector\EventDataCollector
     arguments: ['@event_dispatcher']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', title:'Events', priority: 130 }
+      - { name: data_collector, template:'@webprofiler/Collector/events.html.twig', id:'events', title:'Events', priority: 140 }
 
   webprofiler.service:
     class: Drupal\webprofiler\DataCollector\ServiceDataCollector
     arguments: ['@service_container']
     tags:
-      - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 140 }
+      - { name: data_collector, template:'@webprofiler/Collector/service.html.twig', id:'service', title:'Service', priority: 150 }
 
+  webprofiler.http:
+    class: Drupal\webprofiler\DataCollector\HttpDataCollector
+    arguments: ['@http_client']
+    tags:
+      - { name: data_collector, template:'@webprofiler/Collector/http.html.twig', id:'http', title:'Http', priority: 160 }
+
+# debug services
   stopwatch:
     class: Drupal\webprofiler\Stopwatch
 
@@ -146,30 +163,14 @@ services:
     class: Symfony\Component\HttpKernel\Controller\TraceableControllerResolver
     arguments: ['@controller_resolver', '@stopwatch']
 
-  webprofiler.debug.entity.manager:
-     class: Drupal\webprofiler\Entity\EntityManagerWrapper
-     arguments: ['@container.namespaces', '@module_handler', '@cache.discovery', '@language_manager', '@string_translation', '@class_resolver', '@typed_data_manager', '@entity.definitions.installed', '@event_dispatcher']
-     parent: container.trait
-     tags:
-      - { name: plugin_manager_cache_clear }
+  webprofiler.middleware:
+    class: Drupal\webprofiler\WebprofilerMiddleware
+    tags:
+      - { name: http_middleware, priority: 400 }
 
-  webprofiler.debug.entity.manager.parent:
-     class: Drupal\Core\Entity\EntityManager
-     parent: webprofiler.debug.entity.manager
-     tags:
-      - { name: plugin_manager_cache_clear }
-
-  webprofiler.twig_extension:
-    class: Drupal\webprofiler\Twig\RoutingExtension
-    arguments: ['@url_generator']
-
+# parameter converter service for profile token
   webprofiler.token_converter:
     class: Drupal\webprofiler\Routing\TokenConverter
     arguments: ['@profiler']
     tags:
       - { name: paramconverter }
-
-  webprofiler.middleware:
-    class: Drupal\webprofiler\WebprofilerMiddleware
-    tags:
-      - { name: http_middleware, priority: 400 }

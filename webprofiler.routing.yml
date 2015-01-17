@@ -14,7 +14,7 @@ webprofiler.toolbar:
 webprofiler.profiler:
   path: '/admin/reports/profiler/view/{profile}'
   defaults:
-    _content: '\Drupal\webprofiler\Controller\WebprofilerController::profilerAction'
+    _controller: '\Drupal\webprofiler\Controller\WebprofilerController::profilerAction'
     _title: 'Webprofiler'
   options:
     parameters:
@@ -35,33 +35,11 @@ webprofiler.profiler_panel:
   requirements:
     _permission: 'access webprofiler'
 
-# export single profile
-webprofiler.single_export:
-  path: '/admin/config/development/profiler/export/{profile}'
-  defaults:
-    _content: '\Drupal\webprofiler\Controller\WebprofilerController::singleExportAction'
-    _title: 'Export single profile'
-  options:
-    parameters:
-      profile:
-        type: 'webprofiler:token'
-  requirements:
-    _permission: 'access webprofiler'
-
-# export all profiles
-webprofiler.all_export:
-  path: '/admin/config/development/profiler/exportall'
-  defaults:
-    _content: '\Drupal\webprofiler\Controller\WebprofilerController::allExportAction'
-    _title: 'Export all profiles'
-  requirements:
-    _permission: 'access webprofiler'
-
 # list stored profiles
 webprofiler.admin_list:
   path: '/admin/reports/profiler/list'
   defaults:
-    _content: '\Drupal\webprofiler\Controller\WebprofilerController::listAction'
+    _controller: '\Drupal\webprofiler\Controller\WebprofilerController::listAction'
     _title: 'Webprofiler'
   requirements:
     _permission: 'access webprofiler'
@@ -101,11 +79,25 @@ webprofiler.database.explain:
 webprofiler.database.arguments:
   path: '/admin/reports/profiler/database_arguments/{profile}/{qid}'
   defaults:
-    _content: '\Drupal\webprofiler\Controller\DatabaseController::argumentsAction'
+    _controller: '\Drupal\webprofiler\Controller\DatabaseController::argumentsAction'
     _title: 'Copy query'
   options:
     parameters:
       profile:
         type: 'webprofiler:token'
+  requirements:
+    _permission: 'access webprofiler'
+
+# save frontend data
+webprofiler.frontend.save:
+  path: '/admin/reports/profiler/frontend/{profile}/save'
+  defaults:
+    _controller: '\Drupal\webprofiler\Controller\FrontendController::saveAction'
+    _title: 'Save frontend data'
+  options:
+    parameters:
+      profile:
+        type: 'webprofiler:token'
+  methods:  [POST]
   requirements:
     _permission: 'access webprofiler'
