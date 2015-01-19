@@ -15,6 +15,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Drupal\AppConsole\Command\ContainerAwareCommand;
+use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Yaml\Yaml;
 
 class BenchmarkCommand extends ContainerAwareCommand {
 
@@ -26,7 +29,8 @@ class BenchmarkCommand extends ContainerAwareCommand {
       ->setName('webprofiler:benchmark')
       ->setDescription($this->trans('commands.webprofiler.benchmark.description'))
       ->addArgument('url', InputArgument::REQUIRED, $this->trans('commands.webprofiler.benchmark.arguments.url'))
-      ->addOption('runs', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.benchmark.options.runs'), 100);
+      ->addOption('runs', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.benchmark.options.runs'), 100)
+      ->addOption('file', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.benchmark.options.file'), 100);
   }
 
   /**
@@ -57,8 +61,20 @@ class BenchmarkCommand extends ContainerAwareCommand {
     $progress->finish();
     $output->writeln('');
 
-    $output->writeln('Avg memory: ' . sprintf('%.1f MB', $avg->getMemory() / 1024 / 1024));
-    $output->writeln('Avg time: ' . sprintf('%.0f ms', $avg->getTime()));
+    $gitHash = $this->getGitHash();
+
+    $yaml = Yaml::dump([
+      'date' => date($this->trans('commands.webprofiler.list.rows.time'), time()),
+      'git_commit' => $gitHash,
+      'number_of_runs' => $runs,
+      'url' => $url,
+      'results' => [
+        'time' => sprintf('%.0f ms', $avg->getTime()),
+        'memory' => sprintf('%.1f MB', $avg->getMemory() / 1024 / 1024),
+      ],
+    ]);
+
+    $output->writeln($yaml);
   }
 
   /**
@@ -104,5 +120,23 @@ class BenchmarkCommand extends ContainerAwareCommand {
     }
 
     return new BenchmarkData(NULL, $totalMemory / $profiles, $totalTime / $profiles);
+  }
+
+  /**
+   * @return string
+   */
+  private function getGitHash() {
+    $git_hash = '';
+
+    try {
+      $process = new Process('git rev-parse HEAD');
+      $process->setTimeout(3600);
+      $process->run();
+      $git_hash = $process->getOutput();
+    } catch(\Exception $e) {
+      $git_hash = $this->trans('commands.webprofiler.benchmark.messages.not_git');
+    }
+
+    return $git_hash;
   }
 }

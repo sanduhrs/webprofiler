@@ -11,7 +11,7 @@ commands:
         exported_count: <info>Exported %s profiles</info>
         error_writing: Error writing file %s
         error_no_profile: No profile with id %s
-        progress:
+      progress:
           exporting: Exporting profiles...
           archive: Create archive...
           delete_tmp: Delete temp files...
@@ -37,6 +37,8 @@ commands:
        url: Url to benchmark.
       options:
         runs: Number of runs.
+      messages:
+        not_git: Not in a git repository.
       progress:
         get: Http request...
         compute_avg: Compute average...
