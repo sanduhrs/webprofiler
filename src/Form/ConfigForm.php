@@ -144,6 +144,8 @@ class ConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return [];
+    return [
+      'webprofiler.config',
+    ];
   }
 }
