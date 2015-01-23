@@ -46,11 +46,6 @@ class WebprofilerController extends ControllerBase {
   private $templateManager;
 
   /**
-   * @var \Twig_Loader_Filesystem
-   */
-  private $twigLoader;
-
-  /**
    * @var \Drupal\Core\Datetime\DateFormatter
    */
   private $date;
@@ -78,7 +73,6 @@ class WebprofilerController extends ControllerBase {
       $container->get('profiler'),
       $container->get('router'),
       $container->get('templateManager'),
-      $container->get('twig.loader'),
       $container->get('date.formatter'),
       $container->get('profiler.storage_manager'),
       new FileDownloadController(),
@@ -92,17 +86,15 @@ class WebprofilerController extends ControllerBase {
    * @param \Drupal\webprofiler\Profiler\Profiler $profiler
    * @param \Symfony\Component\Routing\RouterInterface $router
    * @param \Drupal\webprofiler\Profiler\TemplateManager $templateManager
-   * @param \Twig_Loader_Filesystem $twigLoader
    * @param \Drupal\Core\Datetime\DateFormatter $date
    * @param \Drupal\webprofiler\Profiler\ProfilerStorageManager $profilerDownloadManager
    * @param \Drupal\system\FileDownloadController $fileDownloadController
    * @param \Drupal\Core\Render\RendererInterface $renderer
    */
-  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, Twig_Loader_Filesystem $twigLoader, DateFormatter $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController, RendererInterface $renderer) {
+  public function __construct(Profiler $profiler, RouterInterface $router, TemplateManager $templateManager, DateFormatter $date, ProfilerStorageManager $profilerDownloadManager, FileDownloadController $fileDownloadController, RendererInterface $renderer) {
     $this->profiler = $profiler;
     $this->router = $router;
     $this->templateManager = $templateManager;
-    $this->twigLoader = $twigLoader;
     $this->date = $date;
     $this->fileDownloadController = $fileDownloadController;
     $this->profilerDownloadManager = $profilerDownloadManager;
