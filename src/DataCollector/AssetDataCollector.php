@@ -9,6 +9,7 @@ namespace Drupal\webprofiler\DataCollector;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Asset\AssetCollectionRendererInterface;
+use Drupal\Core\Asset\AssetResolver;
 use Drupal\webprofiler\DrupalDataCollectorInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\HttpFoundation\Request;
