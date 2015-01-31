@@ -170,7 +170,8 @@ class BlockDataCollector extends DataCollector implements DrupalDataCollectorInt
         $operations['edit'] = array(
           'title'  => $this->t('Edit'),
           'weight' => 10,
-        ) + $entity->urlInfo('edit-form')->toArray();
+          'url' => $entity->urlInfo('edit-form'),
+        );
       }
 
       $row[] = $entity->id();
