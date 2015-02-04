@@ -7,7 +7,7 @@ commands:
       options:
         directory: Destination directory to store exported file/s.
       messages:
-        success: <info> Succesfully exported to %s </info>
+        success: Succesfully exported to %s
         exported_count: <info>Exported %s profiles</info>
         error_writing: Error writing file %s
         error_no_profile: No profile with id %s

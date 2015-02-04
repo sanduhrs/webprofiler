@@ -21,6 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ExportCommand extends ContainerAwareCommand {
 
+  /** @var string */
+  private $filename;
+
   /**
    * {@inheritdoc}
    */
@@ -44,15 +47,11 @@ class ExportCommand extends ContainerAwareCommand {
 
     try {
       if ($id) {
-        $filename = $this->exportSingle($profiler, $id, $directory);
+        $this->filename = $this->exportSingle($profiler, $id, $directory);
       }
       else {
-        $filename = $this->exportAll($profiler, $directory, $output);
+        $this->filename = $this->exportAll($profiler, $directory, $output);
       }
-
-      $output->writeln(sprintf(
-        $this->trans('commands.webprofiler.export.messages.success'),
-        $filename));
 
     } catch (\Exception $e) {
       $output->writeln('<error>' . $e->getMessage() . '</error>');
@@ -137,5 +136,21 @@ class ExportCommand extends ContainerAwareCommand {
       count($profiles)));
 
     return $filename;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function showMessage($output, $message, $type='info') {
+    if(!$this->filename) {
+      return;
+    }
+
+    $completeMessageKey = 'commands.webprofiler.export.messages.success';
+    $completeMessage = sprintf($this->trans($completeMessageKey), $this->filename);
+
+    if ($completeMessage != $completeMessageKey) {
+      parent::showMessage($output, $completeMessage);
+    }
   }
 }

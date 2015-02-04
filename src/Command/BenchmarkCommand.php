@@ -257,4 +257,10 @@ class BenchmarkCommand extends ContainerAwareCommand {
     return $yaml;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function showMessage($output, $message, $type='info') {
+  }
+
 }

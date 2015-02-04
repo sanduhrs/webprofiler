@@ -69,4 +69,10 @@ class ListCommand extends ContainerAwareCommand {
       ->setRows($rows);
     $table->render();
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function showMessage($output, $message, $type='info') {
+  }
 }
