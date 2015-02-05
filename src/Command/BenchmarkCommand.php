@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Drupal\AppConsole\Command\ContainerAwareCommand;
 use Symfony\Component\CssSelector\CssSelector;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
@@ -44,11 +45,20 @@ class BenchmarkCommand extends ContainerAwareCommand {
     $runs = $input->getOption('runs');
     $file = $input->getOption('file');
     $cache_rebuild = $input->getOption('cache-rebuild');
+
+    // http://username:password@hostname/
     $url = $input->getArgument('url');
+    $url_components = parse_url($url);
+    $login = isset($url_components['user']) && isset($url_components['pass']);
+
     $steps = 3;
 
     if ($cache_rebuild) {
-      $steps = 4;
+      $steps++;
+    }
+
+    if ($login) {
+      $steps++;
     }
 
     /** @var \Drupal\Core\Http\Client $client */
@@ -61,6 +71,37 @@ class BenchmarkCommand extends ContainerAwareCommand {
       $progress->setMessage($this->trans('commands.webprofiler.benchmark.progress.cache_rebuild'));
       $this->RebuildCache();
       $progress->advance();
+    }
+
+    if($login) {
+      $progress->setMessage($this->trans('commands.webprofiler.benchmark.progress.login'));
+      $login_url = "{$url_components['scheme']}://{$url_components['host']}/user/login";
+
+      // Enable cookies storage.
+      $cookieJar = new CookieJar();
+      $client->setDefaultOption('cookies', $cookieJar);
+
+      // Retrieve a form_build_id using the DomCrawler component.
+      $response = $client->get($login_url)->getBody()->getContents();
+      $crawler = new Crawler($response);
+      $form_build_id = $crawler->filter('#user-login-form input[name=form_build_id]')->attr('value');
+      $op = $crawler->filter('#user-login-form input[name=op]')->attr('value');
+
+      // Login a user.
+      $response = $client->post($login_url, [
+        'body' => [
+          'name' => $url_components['user'],
+          'pass' => $url_components['pass'],
+          'form_build_id' => $form_build_id,
+          'form_id' => 'user_login_form',
+          'op' => $op,
+        ]
+      ]);
+      $progress->advance();
+
+      if($response->getStatusCode() != 200) {
+        throw new \Exception($this->trans('commands.webprofiler.benchmark.messages.error_login'));
+      }
     }
 
     $datas = [];
@@ -220,7 +261,7 @@ class BenchmarkCommand extends ContainerAwareCommand {
     $kernelHelper = $this->getHelper('kernel');
     $classLoader  = $kernelHelper->getClassLoader();
     $request      = $kernelHelper->getRequest();
-    \drupal_rebuild($classLoader, $request);
+    drupal_rebuild($classLoader, $request);
   }
 
   /**
