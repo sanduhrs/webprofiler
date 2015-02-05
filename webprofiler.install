@@ -67,7 +67,6 @@ function webprofiler_schema() {
       'created_at' => array('created_at'),
       'ip' => array('ip'),
       'method' => array('method'),
-      'url' => array('url'),
       'parent' => array('parent'),
     ),
     'primary key' => array('token'),
