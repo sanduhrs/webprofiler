@@ -2,6 +2,7 @@
 
 namespace Drupal\webprofiler\Views;
 
+use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
@@ -20,8 +21,8 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
   /**
    * {@inheritdoc}
    */
-  public function __construct(AccountInterface $user, RequestStack $request_stack, ViewsData $views_data) {
-    parent::__construct($user, $request_stack, $views_data);
+  public function __construct(AccountInterface $user, RequestStack $request_stack, ViewsData $views_data, RouteProviderInterface $route_provider) {
+    parent::__construct($user, $request_stack, $views_data, $route_provider);
 
     $this->views = array();
   }
@@ -30,7 +31,7 @@ class ViewExecutableFactoryWrapper extends ViewExecutableFactory {
    * {@inheritdoc}
    */
   public function get(ViewEntityInterface $view) {
-    $view_executable = new TraceableViewExecutable($view, $this->user, $this->viewsData);
+    $view_executable = new TraceableViewExecutable($view, $this->user, $this->viewsData, $this->routeProvider);
     $view_executable->setRequest($this->requestStack->getCurrentRequest());
     $this->views[] = $view_executable;
 
