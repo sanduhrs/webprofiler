@@ -8,11 +8,6 @@
         "mbostock/d3": "3.4.*",
         "isagalaev/highlight.js": "8.*"
     },
-    "autoload": {
-        "files": [
-            "vendor/symfony/stopwatch/Symfony/Component/Stopwatch/Stopwatch.php"
-        ]
-    },
     "repositories": [
         {
             "type": "package",
