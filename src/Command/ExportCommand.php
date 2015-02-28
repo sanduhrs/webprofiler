@@ -32,7 +32,7 @@ class ExportCommand extends ContainerAwareCommand {
       ->setName('webprofiler:export')
       ->setDescription($this->trans('commands.webprofiler.export.description'))
       ->addArgument('id', InputArgument::OPTIONAL, $this->trans('commands.webprofiler.export.arguments.id'))
-      ->addOption('directory', 'd', InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.export.options.directory'), '/tmp');
+      ->addOption('directory', NULL, InputOption::VALUE_REQUIRED, $this->trans('commands.webprofiler.export.options.directory'), '/tmp');
   }
 
   /**
