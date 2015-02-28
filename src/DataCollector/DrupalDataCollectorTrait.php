@@ -30,6 +30,10 @@ trait DrupalDataCollectorTrait {
     return NULL;
   }
 
+  public function getData() {
+    return $this->data;
+  }
+
   /**
    * Builds a simple key/value table.
    *
