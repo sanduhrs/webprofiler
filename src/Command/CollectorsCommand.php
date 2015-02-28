@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains Drupal\webprofiler\Command\QueryCommand.
+ * Contains Drupal\webprofiler\Command\CollectorsCommand.
  */
 
 namespace Drupal\webprofiler\Command;
@@ -16,20 +16,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ExpressionLanguage;
 
 /**
- * Class QueryCommand
+ * Class CollectorsCommand
  */
-class QueryCommand extends ContainerAwareCommand {
+class CollectorsCommand extends ContainerAwareCommand {
 
   /**
    * {@inheritdoc}
    */
   protected function configure() {
     $this
-      ->setName('webprofiler:query')
-      ->setDescription($this->trans('commands.webprofiler.query.description'))
-      ->addArgument('id', InputArgument::REQUIRED, $this->trans('commands.webprofiler.query.arguments.id'))
-      ->addArgument('collector', InputArgument::REQUIRED, $this->trans('commands.webprofiler.query.arguments.collector'))
-      ->addArgument('query', InputArgument::REQUIRED, $this->trans('commands.webprofiler.query.arguments.query'));
+      ->setName('webprofiler:collectors')
+      ->setDescription($this->trans('commands.webprofiler.collectors.description'))
+      ->addArgument('id', InputArgument::REQUIRED, $this->trans('commands.webprofiler.collectors.arguments.id'));;
   }
 
   /**
@@ -37,22 +35,14 @@ class QueryCommand extends ContainerAwareCommand {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $token = $input->getArgument('token');
-    $collector = $input->getArgument('collector');
-    $query = $input->getArgument('query');
 
     /** @var \Drupal\webprofiler\Profiler\Profiler $profiler */
     $profiler = $this->getContainer()->get('profiler');
     $profile = $profiler->loadProfile($token);
 
-    $language = new ExpressionLanguage();
-
     $collectors = $profile->getCollectors();
-    $result = $language->evaluate(
-      $query,
-      $collectors[$collector]->getData()
-    );
 
-    $output->writeln($result);
+    $output->writeln(array_keys($collectors));
   }
 
   /**

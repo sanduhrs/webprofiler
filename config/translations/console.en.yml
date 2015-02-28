@@ -52,3 +52,13 @@ commands:
         git_hash: Compute GIT hash...
         yaml: Generate output...
         done: Done.
+    collectors:
+      description: Lists enabled collectors for a profile.
+      arguments:
+        id: Profile id.
+    query:
+      description: Extract data from a profile.
+      arguments:
+        id: Profile id.
+        collector: Collector name.
+        query: Symfony Expression Language query.
